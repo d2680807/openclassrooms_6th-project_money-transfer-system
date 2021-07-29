@@ -29,6 +29,7 @@
     <li>
       <a href="#about-the-project">About The Project</a>
     </li>
+    <li><a href="#acknowledgements">Acknowledgements</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
@@ -39,13 +40,27 @@
 
 ## About The Project
 
+<p id="about-the-project"></p>
+
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
 Pay My Buddy provides an online account where you can send money to your entourage or get paid by them. When you want to send money with Pay My Buddy it feels like the money is going straight into the recipient’s account ! 🎉
 
+<!-- ACKNOWLEDGEMENTS -->
+
+## Acknowledgements
+
+<p id="acknowledgements"></p>
+
+* [Project Assignment](https://openclassrooms.com/fr/paths/191/projects/740/assignment)
+* [Meeting Report](https://s3-eu-west-1.amazonaws.com/course.oc-static.com/projects/DAJava_P6/Compte+rendu+de+re%CC%81union.pdf)
+* [Agile Board](https://trello.com/b/kaACWvrf/appli-de-transfert-dargent)
+
 <!-- CONTACT -->
 
 ## Contact
+
+<p id="contact"></p>
 
 David - [Mail me here!](mailto:rocambin@gmail.com)
 
