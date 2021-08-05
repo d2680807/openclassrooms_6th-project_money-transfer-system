@@ -58,6 +58,8 @@ Pay My Buddy provides an online account where you can send money to your entoura
 
 <p id="documentation"></p>
 
+### Business Domain Model
+
 [![Business Domain Model][doc-001]](#)
 
 <!-- ACKNOWLEDGEMENTS -->
