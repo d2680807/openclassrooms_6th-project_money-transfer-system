@@ -26,8 +26,12 @@
 <details open="open">
 <summary id="summary">Table of Contents</summary>
   <ol>
+    <li><a href="#about-the-project">About The Project</a></li>
     <li>
-      <a href="#about-the-project">About The Project</a>
+      <a href="#documentation">Documentation</a>
+      <ul>
+        <li><a href="#documentation">Business Domain Model</a></li>
+      </ul>
     </li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -47,6 +51,14 @@
 [![Maquette 002][model-002]](#)
 
 Pay My Buddy provides an online account where you can send money to your entourage or get paid by them. When you want to send money with Pay My Buddy it feels like the money is going straight into the recipient’s account ! 🎉
+
+<!-- DOCUMENTATION -->
+
+## Documentation
+
+<p id="documentation"></p>
+
+[![Business Domain Model][doc-001]](#)
 
 <!-- ACKNOWLEDGEMENTS -->
 
@@ -73,3 +85,4 @@ David - [Mail me here!](mailto:rocambin@gmail.com)
 
 [model-001]: img/maquette_001.png
 [model-002]: img/maquette_002.png
+[doc-001]: img/model-du-domaine-fonctionnel.png
