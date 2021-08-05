@@ -42,7 +42,9 @@
 
 <p id="about-the-project"></p>
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![Maquette 001][model-001]](#)
+
+[![Maquette 002][model-002]](#)
 
 Pay My Buddy provides an online account where you can send money to your entourage or get paid by them. When you want to send money with Pay My Buddy it feels like the money is going straight into the recipient’s account ! 🎉
 
@@ -69,4 +71,5 @@ David - [Mail me here!](mailto:rocambin@gmail.com)
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[product-screenshot]: img/screenshot.png
+[model-001]: img/maquette_001.png
+[model-002]: img/maquette_002.png
