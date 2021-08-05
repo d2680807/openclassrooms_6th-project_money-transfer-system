@@ -62,6 +62,10 @@ Pay My Buddy provides an online account where you can send money to your entoura
 
 [![Business Domain Model][doc-001]](#)
 
+### Physical Data Model
+
+[![Physical Data Model][doc-002]](#)
+
 <!-- ACKNOWLEDGEMENTS -->
 
 ## Acknowledgements
@@ -88,3 +92,4 @@ David - [Mail me here!](mailto:rocambin@gmail.com)
 [model-001]: img/maquette_001.png
 [model-002]: img/maquette_002.png
 [doc-001]: img/model-du-domaine-fonctionnel.png
+[doc-002]: img/modele-physique-de-donnees.png
