@@ -51,7 +51,8 @@
 
 [![Maquette 002][model-002]](#)
 
-Pay My Buddy provides an online account where you can send money to your entourage or get paid by them. When you want to send money with Pay My Buddy it feels like the money is going straight into the recipient’s account ! 🎉
+Pay My Buddy provides an online account where you can send money to your entourage or get paid by them. When you want to
+send money with Pay My Buddy it feels like the money is going straight into the recipient’s account ! 🎉
 
 <!-- DOCUMENTATION -->
 
@@ -91,6 +92,9 @@ David - [Mail me here!](mailto:rocambin@gmail.com)
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
 [model-001]: img/maquette_001.png
+
 [model-002]: img/maquette_002.png
+
 [doc-001]: img/model-du-domaine-fonctionnel.png
+
 [doc-002]: img/modele-physique-de-donnees.png
