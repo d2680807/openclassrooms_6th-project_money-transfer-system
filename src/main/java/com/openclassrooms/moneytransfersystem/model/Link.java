@@ -19,4 +19,10 @@ public class Link {
     private String bankAccount;
     @Column(nullable = false)
     private String swiftCode;
+
+    /*@OneToOne(mappedBy = "link")
+    private UsersLinks usersLinks;*/
+
+    @ManyToMany(mappedBy = "links")
+    private Collection<User> users;
 }
