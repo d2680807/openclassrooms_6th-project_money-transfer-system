@@ -14,4 +14,7 @@ public class Friendship {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "friendship_id")
     private Long id;
+
+    @ManyToMany(mappedBy = "friendships")
+    private Collection<User> users;
 }
