@@ -24,4 +24,7 @@ public class Transfer {
     private float amount;
     @Column(nullable = false)
     private float tax;
+
+    @ManyToMany(mappedBy = "transfers")
+    private Collection<User> users;
 }
