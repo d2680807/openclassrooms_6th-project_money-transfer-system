@@ -32,6 +32,9 @@ public class LoginController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userReadService.readUserByEmail(authentication.getName());
 
+        String balance = String.format("%.2f", user.getBalance());
+        model.addAttribute("balance", balance);
+
         List<TransferView> listTransfers = new ArrayList<>();
         user.getTransfers().stream()
                 .forEach( t -> {
