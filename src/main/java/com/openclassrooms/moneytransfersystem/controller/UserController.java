@@ -2,6 +2,7 @@ package com.openclassrooms.moneytransfersystem.controller;
 
 import com.openclassrooms.moneytransfersystem.model.User;
 import com.openclassrooms.moneytransfersystem.service.user.UserCreationService;
+import com.openclassrooms.moneytransfersystem.service.user.UserDeletionService;
 import com.openclassrooms.moneytransfersystem.service.user.UserReadService;
 import com.openclassrooms.moneytransfersystem.service.user.UserUpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class UserController {
 
     @Autowired
     private UserUpdateService userUpdateService;
+
+    @Autowired
+    private UserDeletionService userDeletionService;
 
     @PostMapping("/createUser")
     public User createUser(@RequestBody User user) {
@@ -55,5 +59,17 @@ public class UserController {
     public User updateUser(@RequestBody User user) {
 
         return userUpdateService.updateUser(user);
+    }
+
+    @DeleteMapping("/users/{id}")
+    public void deleteUser(@PathVariable Long id) {
+
+        userDeletionService.deleteUserById(id);
+    }
+
+    @DeleteMapping("/users")
+    public void deleteUsers() {
+
+        userDeletionService.deleteUsers();
     }
 }
