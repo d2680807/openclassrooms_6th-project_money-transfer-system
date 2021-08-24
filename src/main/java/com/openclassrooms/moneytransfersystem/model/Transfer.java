@@ -4,7 +4,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Collection;
 
 @Data
 @Entity
@@ -18,13 +17,22 @@ public class Transfer {
 
     @Column(nullable = false)
     private LocalDateTime date;
+    @Column(nullable = true)
+    private TransferType type;
     @Column(nullable = false)
     private Long recipient;
     @Column(nullable = false)
-    private float amount;
+    private double amount;
     @Column(nullable = false)
-    private float tax;
+    private double tax;
+    @Column(nullable = true)
+    private String description;
 
-    @ManyToMany(mappedBy = "transfers")
-    private Collection<User> users;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "users_transfers",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "transfer_id")
+    )
+    private User user;
 }

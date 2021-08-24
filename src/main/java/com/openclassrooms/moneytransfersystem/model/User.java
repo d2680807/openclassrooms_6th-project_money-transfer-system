@@ -17,7 +17,7 @@ import java.util.Collection;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     Long id;
 
@@ -26,13 +26,14 @@ public class User {
     @Column(nullable = false)
     String password;
     @Column(nullable = false)
-    boolean active;
-    @Column(nullable = false)
     String firstName;
     @Column(nullable = false)
     String lastName;
     @Column(nullable = false)
     float balance;
+
+    @OneToMany(mappedBy = "user")
+    private Collection<Transfer> transfers;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -41,12 +42,4 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "recipient")
     )
     private Collection<Friendship> friendships;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "users_transfers",
-            joinColumns = @JoinColumn(name = "made_by"),
-            inverseJoinColumns = @JoinColumn(name = "transfer_id")
-    )
-    private Collection<Transfer> transfers;
 }
