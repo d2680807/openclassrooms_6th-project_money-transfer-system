@@ -10,6 +10,14 @@
 <body>
 <div class="container text-center">
     <div>
+        <form th:action="@{/logout}" method="post">
+            <p>
+                Vous êtes connecté sur le compte : <b>[[${#request.userPrincipal.name}]]</b>
+            </p>
+            <input type="submit" value="Déconnexion" />
+        </form>
+    </div>
+    <div>
         <h1>Liste de transferts</h1>
     </div>
     <div>
