@@ -34,25 +34,6 @@ public class User {
     @Column(nullable = false)
     float balance;
 
-    /*@OneToOne(mappedBy = "user")
-    private UsersDetails usersDetails;*/
-
-    /*@ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "users_details",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "detail_id")
-    )
-    private Collection<Detail> details;*/
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "users_links",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "link_id")
-    )
-    private Collection<Link> links;
-
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "friendship",
