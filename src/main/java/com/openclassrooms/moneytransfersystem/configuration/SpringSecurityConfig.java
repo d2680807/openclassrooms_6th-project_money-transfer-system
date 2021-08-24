@@ -1,40 +1,67 @@
 package com.openclassrooms.moneytransfersystem.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    @Autowired
+    private DataSource dataSource;
 
-        auth.inMemoryAuthentication()
-                .withUser("robertdupont@someHost.com")
-                .password(passwordEncoder().encode("jamesbond"))
-                .roles("CLIENT");
-    }
+    @Bean
+    public UserDetailsService userDetailsService() {
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-
-        http.authorizeRequests()
-                .antMatchers("/compte").hasRole("CLIENT")
-                .anyRequest().authenticated()
-                .and()
-                .formLogin();
+        return new CustomUserDetailsService();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
 
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+
+        return authProvider;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+
+        auth.authenticationProvider(authenticationProvider());
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+        http.httpBasic()
+                .and()
+                .authorizeRequests()
+                .anyRequest().permitAll()
+                .and()
+                .formLogin()
+                .usernameParameter("email")
+                .permitAll()
+                .and()
+                .logout().logoutSuccessUrl("/").permitAll()
+                .and()
+                .csrf().disable(); // Enabling Postman POST requests
     }
 }
