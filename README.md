@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-    <img src="img/logo.png" alt="Logo" width="120" height="120">
+    <img src="docs/app/logo.png" alt="Logo" width="120" height="120">
 
 <h3 align="center">Pay My Buddy</h3>
 
@@ -91,10 +91,10 @@ David - [Mail me here!](mailto:rocambin@gmail.com)
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[model-001]: img/maquette_001.png
+[model-001]: docs/app/login-page.png
 
-[model-002]: img/maquette_002.png
+[model-002]: docs/app/home-page.png
 
-[doc-001]: img/model-du-domaine-fonctionnel.png
+[doc-001]: docs/data-model/1-functions.png
 
-[doc-002]: img/modele-physique-de-donnees.png
+[doc-002]: docs/data-model/2-data.png
