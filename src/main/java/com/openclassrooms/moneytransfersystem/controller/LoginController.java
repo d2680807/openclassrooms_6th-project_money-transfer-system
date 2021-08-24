@@ -40,6 +40,18 @@ public class LoginController {
         return "signup_form";
     }
 
+    @PostMapping("/process_register")
+    public String processRegister(User user) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        user.setBalance(0);
+
+        userCreationService.createUser(user);
+
+        return "register_success";
+    }
+
     @GetMapping("/app")
     public String listTransfers(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
