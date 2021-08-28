@@ -34,7 +34,7 @@ public class User {
     @Column(nullable = false)
     private int bicCode;
     @Column(nullable = false)
-    private float balance;
+    private double balance;
 
     private String friendsList;
 
