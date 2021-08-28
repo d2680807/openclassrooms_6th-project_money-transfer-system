@@ -31,4 +31,12 @@ public class Transfer {
             inverseJoinColumns = @JoinColumn(name = "sender")
     )
     private User sender;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "receiver")
+    )
+    private User receiver;
 }
