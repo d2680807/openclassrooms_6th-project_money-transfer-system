@@ -17,10 +17,6 @@ public class Transfer {
 
     @Column(nullable = false)
     private LocalDateTime date;
-    @Column(nullable = true)
-    private TransferType type;
-    @Column(nullable = false)
-    private Long recipient;
     @Column(nullable = false)
     private double amount;
     @Column(nullable = false)
