@@ -1,8 +1,5 @@
 package com.openclassrooms.moneytransfersystem.controller;
 
-import com.openclassrooms.moneytransfersystem.dao.FriendshipRepository;
-import com.openclassrooms.moneytransfersystem.dao.TransferRepository;
-import com.openclassrooms.moneytransfersystem.dao.UserRepository;
 import com.openclassrooms.moneytransfersystem.model.*;
 import com.openclassrooms.moneytransfersystem.service.user.UserCreationService;
 import com.openclassrooms.moneytransfersystem.service.user.UserReadService;
@@ -65,13 +62,9 @@ public class LoginController {
                 .forEach( t -> {
                     TransferView transfer = new TransferView();
                     transfer.setDate(t.getDate());
-                    transfer.setRelation(t.getUser().getFirstName());
+                    transfer.setRelation(t.getSender().getFirstName());
                     transfer.setDescription(t.getDescription());
-                    if (t.getType() == TransferType.INGOING) {
-                        transfer.setAmount("+ " + String.valueOf(t.getAmount()));
-                    } else if (t.getType() == TransferType.OUTGOING) {
-                        transfer.setAmount("- " + String.valueOf(t.getAmount()));
-                    }
+                    transfer.setAmount(String.valueOf(t.getAmount()));
                     listTransfers.add(transfer);
                 });
 
