@@ -19,27 +19,25 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    Long id;
+    private Long id;
 
     @Column(nullable = false)
-    String email;
+    private String email;
     @Column(nullable = false)
-    String password;
+    private String password;
     @Column(nullable = false)
-    String firstName;
+    private String firstName;
     @Column(nullable = false)
-    String lastName;
+    private String lastName;
     @Column(nullable = false)
-    float balance;
+    private int ibanCode;
+    @Column(nullable = false)
+    private int bicCode;
+    @Column(nullable = false)
+    private double balance;
+
+    private String friendsList;
 
     @OneToMany(mappedBy = "user")
     private Collection<Transfer> transfers;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "friendship",
-            joinColumns = @JoinColumn(name = "invited_by"),
-            inverseJoinColumns = @JoinColumn(name = "recipient")
-    )
-    private Collection<Friendship> friendships;
 }

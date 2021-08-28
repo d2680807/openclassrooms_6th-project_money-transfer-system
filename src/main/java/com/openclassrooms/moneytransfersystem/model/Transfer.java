@@ -17,10 +17,6 @@ public class Transfer {
 
     @Column(nullable = false)
     private LocalDateTime date;
-    @Column(nullable = true)
-    private TransferType type;
-    @Column(nullable = false)
-    private Long recipient;
     @Column(nullable = false)
     private double amount;
     @Column(nullable = false)
@@ -28,11 +24,21 @@ public class Transfer {
     @Column(nullable = true)
     private String description;
 
+    @Column(nullable = true)
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "users_transfers",
+            name = "user",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "transfer_id")
+            inverseJoinColumns = @JoinColumn(name = "sender")
     )
-    private User user;
+    private User sender;
+
+    @Column(nullable = true)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "receiver")
+    )
+    private User receiver;
 }
