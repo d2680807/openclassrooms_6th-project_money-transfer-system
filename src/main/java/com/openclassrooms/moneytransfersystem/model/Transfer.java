@@ -26,9 +26,9 @@ public class Transfer {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "users_transfers",
+            name = "user",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "transfer_id")
+            inverseJoinColumns = @JoinColumn(name = "sender")
     )
-    private User user;
+    private User sender;
 }
