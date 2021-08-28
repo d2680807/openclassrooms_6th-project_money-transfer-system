@@ -36,14 +36,8 @@ public class User {
     @Column(nullable = false)
     float balance;
 
+    String friendsList;
+
     @OneToMany(mappedBy = "user")
     private Collection<Transfer> transfers;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "friendship",
-            joinColumns = @JoinColumn(name = "invited_by"),
-            inverseJoinColumns = @JoinColumn(name = "recipient")
-    )
-    private Collection<Friendship> friendships;
 }
