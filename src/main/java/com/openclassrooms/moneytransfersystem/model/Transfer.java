@@ -24,6 +24,7 @@ public class Transfer {
     @Column(nullable = true)
     private String description;
 
+    @Column(nullable = true)
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinTable(
             name = "user",
@@ -32,6 +33,7 @@ public class Transfer {
     )
     private User sender;
 
+    @Column(nullable = true)
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinTable(
             name = "user",

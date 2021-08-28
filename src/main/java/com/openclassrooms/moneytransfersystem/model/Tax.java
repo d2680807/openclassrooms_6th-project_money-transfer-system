@@ -10,5 +10,5 @@ import javax.persistence.Table;
 @Table(name = "tax")
 public class Tax {
 
-    
+
 }
