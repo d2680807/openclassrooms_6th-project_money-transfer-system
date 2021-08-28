@@ -30,6 +30,10 @@ public class User {
     @Column(nullable = false)
     String lastName;
     @Column(nullable = false)
+    int ibanCode;
+    @Column(nullable = false)
+    int bicCode;
+    @Column(nullable = false)
     float balance;
 
     @OneToMany(mappedBy = "user")
