@@ -71,10 +71,10 @@ public class LoginController {
                     TransferView transfer = new TransferView();
                     transfer.setDate(t.getDate());
                     transfer.setRelation(
-                            outgoingRepository.getById(t.getId()) getSender().getFirstName()
+                        outgoingRepository.findByIngoing(t.getId()).getFirstName()
                     );
                     transfer.setDescription(t.getDescription());
-                    transfer.setAmount(String.valueOf(t.getAmount()));
+                    transfer.setAmount(String.valueOf("+" + t.getAmount()));
                     listTransfers.add(transfer);
                 });
 
