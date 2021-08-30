@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "transfer")
-public class Transfer {
+public class Ingoing {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
