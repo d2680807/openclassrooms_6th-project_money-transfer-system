@@ -1,7 +1,6 @@
 package com.openclassrooms.moneytransfersystem.controller;
 
 import com.openclassrooms.moneytransfersystem.dao.TransferRepository;
-import com.openclassrooms.moneytransfersystem.dao.OutgoingRepository;
 import com.openclassrooms.moneytransfersystem.model.*;
 import com.openclassrooms.moneytransfersystem.service.user.UserCreationService;
 import com.openclassrooms.moneytransfersystem.service.user.UserReadService;
@@ -27,9 +26,6 @@ public class LoginController {
 
     @Autowired
     private TransferRepository transferRepository;
-
-    @Autowired
-    private OutgoingRepository outgoingRepository;
 
     @GetMapping("")
     public String viewHomePage() {
