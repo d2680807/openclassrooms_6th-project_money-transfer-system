@@ -72,11 +72,11 @@ public class LoginController {
                     TransferView transfer = new TransferView();
                     transfer.setDate(i.getDate());
                     transfer.setRelation(
-                        transferRepository.findById(i.getId() + 1).getFirstName()
+                        transferRepository.findById(i.getId() + 1).get().getUser().getFirstName()
                     );
                     transfer.setDescription(i.getDescription());
                     String prefix = "+";
-                    if (i.getType() == "OUT") {
+                    if (i.getType().equals("OUT")) {
                         prefix = "-";
                     }
                     transfer.setAmount(String.valueOf(prefix + i.getAmount()));
