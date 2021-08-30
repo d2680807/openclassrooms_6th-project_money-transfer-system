@@ -31,10 +31,6 @@ public class Transfer {
     private Tax tax;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "user",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    )
+    @JoinColumn(name="user_id",referencedColumnName="user_id", insertable=false, updatable=false)
     private User user;
 }
