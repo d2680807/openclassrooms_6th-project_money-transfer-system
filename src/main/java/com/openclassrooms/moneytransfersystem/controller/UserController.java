@@ -61,6 +61,12 @@ public class UserController {
         return userUpdateService.updateUser(user);
     }
 
+    @PutMapping("/balanceBack/{email}/")
+    public void balanceBack(@PathVariable String email, @RequestParam int amount) {
+
+        return userUpdateService.getBalanceBack(email, amount);
+    }
+
     @DeleteMapping("/users/{id}")
     public void deleteUser(@PathVariable Long id) {
 
