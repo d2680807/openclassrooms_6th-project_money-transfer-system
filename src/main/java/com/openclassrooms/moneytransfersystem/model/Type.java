@@ -16,4 +16,7 @@ public class Type {
 
     @Column(nullable = false)
     private String name;
+
+    @OneToOne(mappedBy = "type")
+    private Transfer transfer;
 }
