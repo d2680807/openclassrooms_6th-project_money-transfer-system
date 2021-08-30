@@ -7,12 +7,12 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "ingoing")
+@Table(name = "transfer")
 public class Transfer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ingoing_id")
+    @Column(name = "transfer_id")
     private Long id;
 
     @Column(nullable = false)
@@ -24,14 +24,11 @@ public class Transfer {
     @Column(nullable = true)
     private String description;
 
-    @OneToOne(mappedBy = "ingoing")
-    private Outgoing outgoing;
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinTable(
             name = "user",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", insertable = false, updatable = false)
     )
-    private User receiver;
+    private User user;
 }
