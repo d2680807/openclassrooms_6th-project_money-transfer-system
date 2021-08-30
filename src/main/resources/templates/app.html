@@ -24,9 +24,9 @@
         <h2>Solde votre compte : <b>[[${balance}]] €</b></h2>
     </div>
     <div>
-        <form action="/app" th:action="@{'/balanceBack/{email}?amount='(amount=${#request.userPrincipal.name})}" th:method="post">
-            <span>Transfert sur votre compte bancaire : </span>
-            <input name="amount" type="text" value="Montant" />
+        <form action="/app" th:action="@{'/balanceBack/{email}?amount={amount}'(email=${#request.userPrincipal.name})}" th:method="post">
+            <span>Transfert sur mon compte bancaire : </span>
+            <input id="amount" name="amount" type="text" placeholder="Entrez votre montant..." />
             <input type="submit" value="Transférer" />
         </form>
     </div>
