@@ -24,6 +24,10 @@ public class Transfer {
     @Column(nullable = true)
     private String description;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private Type type;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinTable(
             name = "user",
