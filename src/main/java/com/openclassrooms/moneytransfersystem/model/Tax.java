@@ -18,7 +18,4 @@ public class Tax {
     private String name;
     @Column(nullable = false)
     private double rate;
-
-    @OneToOne(mappedBy = "tax")
-    private Transfer transfer;
 }

@@ -22,13 +22,8 @@ public class Transfer {
     @Column(nullable = true)
     private String description;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "type")
-    private Type type;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "tax")
-    private Tax tax;
+    @JoinColumn(name = "type", insertable=false, updatable=false)
+    private String type;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id",referencedColumnName="user_id", insertable=false, updatable=false)
