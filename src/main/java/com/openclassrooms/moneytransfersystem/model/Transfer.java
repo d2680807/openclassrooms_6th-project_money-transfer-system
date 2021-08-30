@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class TransferView {
+public class Transfer {
 
     LocalDateTime date;
     String relation;
