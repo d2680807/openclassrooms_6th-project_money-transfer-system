@@ -23,15 +23,18 @@ DROP TABLE IF EXISTS `ingoing`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ingoing` (
-  `transfer_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `ingoing_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned DEFAULT NULL,
+  `outgoing_id` int(10) unsigned DEFAULT NULL,
   `date` timestamp NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `tax` decimal(10,1) NOT NULL,
   `description` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`transfer_id`),
+  PRIMARY KEY (`ingoing_id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `ingoing_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE
+  KEY `outgoing_id` (`outgoing_id`),
+  CONSTRAINT `ingoing_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `ingoing_ibfk_2` FOREIGN KEY (`outgoing_id`) REFERENCES `outgoing` (`outgoing_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -52,14 +55,17 @@ DROP TABLE IF EXISTS `outgoing`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `outgoing` (
-  `transfer_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `outgoing_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned DEFAULT NULL,
+  `ingoing_id` int(10) unsigned DEFAULT NULL,
   `date` timestamp NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `tax` decimal(10,1) NOT NULL,
   `description` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`transfer_id`),
-  KEY `user_id` (`user_id`)
+  PRIMARY KEY (`outgoing_id`),
+  KEY `user_id` (`user_id`),
+  KEY `ingoing_id` (`ingoing_id`),
+  CONSTRAINT `outgoing_ibfk_1` FOREIGN KEY (`ingoing_id`) REFERENCES `ingoing` (`ingoing_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -137,4 +143,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-08-30  9:55:21
+-- Dump completed on 2021-08-30 10:27:25

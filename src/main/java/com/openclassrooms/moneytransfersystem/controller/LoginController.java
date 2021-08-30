@@ -1,5 +1,6 @@
 package com.openclassrooms.moneytransfersystem.controller;
 
+import com.openclassrooms.moneytransfersystem.dao.OutgoingRepository;
 import com.openclassrooms.moneytransfersystem.model.*;
 import com.openclassrooms.moneytransfersystem.service.user.UserCreationService;
 import com.openclassrooms.moneytransfersystem.service.user.UserReadService;
@@ -22,6 +23,9 @@ public class LoginController {
 
     @Autowired
     private UserReadService userReadService;
+
+    @Autowired
+    private OutgoingRepository outgoingRepository;
 
     @GetMapping("")
     public String viewHomePage() {
@@ -58,11 +62,13 @@ public class LoginController {
         model.addAttribute("balance", balance);
 
         List<TransferView> listTransfers = new ArrayList<>();
-        user.getTransfers().stream()
+        user.getIngoingTransfers().stream()
                 .forEach( t -> {
                     TransferView transfer = new TransferView();
                     transfer.setDate(t.getDate());
-                    transfer.setRelation(t.getSender().getFirstName());
+                    transfer.setRelation(
+                            outgoingRepository.getById(t.getId()) getSender().getFirstName()
+                    );
                     transfer.setDescription(t.getDescription());
                     transfer.setAmount(String.valueOf(t.getAmount()));
                     listTransfers.add(transfer);
