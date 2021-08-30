@@ -67,27 +67,19 @@ public class LoginController {
         model.addAttribute("balance", balance);
 
         List<TransferView> listTransfers = new ArrayList<>();
-        user.getTransferTransfers().stream()
+        user.getTransfers().stream()
                 .forEach( i -> {
                     TransferView transfer = new TransferView();
                     transfer.setDate(i.getDate());
                     transfer.setRelation(
-                        outgoingRepository.findByIngoing(i.getId()).getFirstName()
+                        transferRepository.findById(i.getId() + 1).getFirstName()
                     );
                     transfer.setDescription(i.getDescription());
-                    transfer.setAmount(String.valueOf("+" + i.getAmount()));
-                    listTransfers.add(transfer);
-                });
-
-        user.getOutgoingTransfers().stream()
-                .forEach( o -> {
-                    TransferView transfer = new TransferView();
-                    transfer.setDate(o.getDate());
-                    transfer.setRelation(
-                            ingoingRepository.findByOutgoing(o.getId()).getFirstName()
-                    );
-                    transfer.setDescription(o.getDescription());
-                    transfer.setAmount(String.valueOf("-" + o.getAmount()));
+                    String prefix = "+";
+                    if (i.getType() == "OUT") {
+                        prefix = "-";
+                    }
+                    transfer.setAmount(String.valueOf(prefix + i.getAmount()));
                     listTransfers.add(transfer);
                 });
 
