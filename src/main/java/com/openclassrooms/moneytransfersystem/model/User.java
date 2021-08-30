@@ -9,9 +9,6 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "user")
 public class User {
