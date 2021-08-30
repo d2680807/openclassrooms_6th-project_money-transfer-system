@@ -51,6 +51,7 @@ public class LoginController {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         user.setBalance(0);
+        user.setFriendsList("[]");
 
         userCreationService.createUser(user);
 

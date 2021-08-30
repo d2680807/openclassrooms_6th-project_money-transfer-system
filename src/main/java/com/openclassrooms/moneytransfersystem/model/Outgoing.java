@@ -32,7 +32,7 @@ public class Outgoing {
     @JoinTable(
             name = "user",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+            inverseJoinColumns = @JoinColumn(name = "user_id", insertable = false, updatable = false)
     )
     private User user;
 }
