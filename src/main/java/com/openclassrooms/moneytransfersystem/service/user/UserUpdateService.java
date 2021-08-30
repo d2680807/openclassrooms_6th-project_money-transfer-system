@@ -37,4 +37,11 @@ public class UserUpdateService {
 
         return userUpdated;
     }
+
+    public void getBalanceBack(String email, int amount) {
+
+        User userUpdated = userRepository.findByEmail(email);
+        userUpdated.setBalance(userUpdated.getBalance() - amount);
+        userRepository.save(userUpdated);
+    }
 }
