@@ -24,6 +24,10 @@ public class Outgoing {
     @Column(nullable = true)
     private String description;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ingoing_id")
+    private Ingoing ingoing;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinTable(
             name = "user",
