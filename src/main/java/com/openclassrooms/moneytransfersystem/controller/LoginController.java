@@ -66,10 +66,10 @@ public class LoginController {
         String balance = String.format("%.2f", user.getBalance());
         model.addAttribute("balance", balance);
 
-        List<Transfer> listTransfers = new ArrayList<>();
-        user.getIngoingTransfers().stream()
+        List<TransferView> listTransfers = new ArrayList<>();
+        user.getTransferTransfers().stream()
                 .forEach( i -> {
-                    Transfer transfer = new Transfer();
+                    TransferView transfer = new TransferView();
                     transfer.setDate(i.getDate());
                     transfer.setRelation(
                         outgoingRepository.findByIngoing(i.getId()).getFirstName()
@@ -81,7 +81,7 @@ public class LoginController {
 
         user.getOutgoingTransfers().stream()
                 .forEach( o -> {
-                    Transfer transfer = new Transfer();
+                    TransferView transfer = new TransferView();
                     transfer.setDate(o.getDate());
                     transfer.setRelation(
                             ingoingRepository.findByOutgoing(o.getId()).getFirstName()
@@ -91,7 +91,7 @@ public class LoginController {
                     listTransfers.add(transfer);
                 });
 
-        Collections.sort(listTransfers, Comparator.comparing(Transfer::getDate));
+        Collections.sort(listTransfers, Comparator.comparing(TransferView::getDate));
         model.addAttribute("listTransfers", listTransfers);
 
         return "app";

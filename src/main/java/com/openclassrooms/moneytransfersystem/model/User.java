@@ -1,9 +1,6 @@
 package com.openclassrooms.moneytransfersystem.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -36,7 +33,7 @@ public class User {
     private String friendsList;
 
     @OneToMany(mappedBy = "sender")
-    private Collection<Ingoing> ingoingTransfers;
+    private Collection<Transfer> transferTransfers;
 
     @OneToMany(mappedBy = "receiver")
     private Collection<Outgoing> outgoingTransfers;
