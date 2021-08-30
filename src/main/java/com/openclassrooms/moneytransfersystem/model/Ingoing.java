@@ -24,21 +24,11 @@ public class Ingoing {
     @Column(nullable = true)
     private String description;
 
-    //@Column(nullable = true)
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinTable(
             name = "user",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "sender")_
+            inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private User sender;
-
-    //@Column(nullable = true)
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "user",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "receiver")
-    )
-    private User receiver;
+    private User user;
 }
