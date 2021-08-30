@@ -12,7 +12,7 @@ public class Outgoing {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "transfer_id")
+    @Column(name = "outgoing_id")
     private Long id;
 
     @Column(nullable = false)

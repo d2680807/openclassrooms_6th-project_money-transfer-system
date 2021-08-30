@@ -12,7 +12,7 @@ public class Ingoing {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "transfer_id")
+    @Column(name = "ingoing_id")
     private Long id;
 
     @Column(nullable = false)
@@ -23,6 +23,9 @@ public class Ingoing {
     private double tax;
     @Column(nullable = true)
     private String description;
+
+    @OneToOne(mappedBy = "ingoing")
+    private Outgoing outgoing;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinTable(
