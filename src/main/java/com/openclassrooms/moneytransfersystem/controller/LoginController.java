@@ -67,14 +67,26 @@ public class LoginController {
 
         List<TransferView> listTransfers = new ArrayList<>();
         user.getIngoingTransfers().stream()
-                .forEach( t -> {
+                .forEach( i -> {
                     TransferView transfer = new TransferView();
-                    transfer.setDate(t.getDate());
+                    transfer.setDate(i.getDate());
                     transfer.setRelation(
-                        outgoingRepository.findByIngoing(t.getId()).getFirstName()
+                        outgoingRepository.findByIngoing(i.getId()).getFirstName()
                     );
-                    transfer.setDescription(t.getDescription());
-                    transfer.setAmount(String.valueOf("+" + t.getAmount()));
+                    transfer.setDescription(i.getDescription());
+                    transfer.setAmount(String.valueOf("+" + i.getAmount()));
+                    listTransfers.add(transfer);
+                });
+
+        user.getOutgoingTransfers().stream()
+                .forEach( o -> {
+                    TransferView transfer = new TransferView();
+                    transfer.setDate(o.getDate());
+                    transfer.setRelation(
+                            ingoingRepository.findByOutgoing(o.getId()).getFirstName()
+                    );
+                    transfer.setDescription(o.getDescription());
+                    transfer.setAmount(String.valueOf("-" + o.getAmount()));
                     listTransfers.add(transfer);
                 });
 
