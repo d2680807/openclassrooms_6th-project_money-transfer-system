@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "transfer")
+@Table(name = "ingoing")
 public class Ingoing {
 
     @Id
