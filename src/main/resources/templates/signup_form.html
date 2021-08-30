@@ -49,6 +49,22 @@
                 </div>
             </div>
 
+            <div class="form-group row">
+                <label class="col-4 col-form-label">IBAN : </label>
+                <div class="col-8">
+                    <input type="text" th:field="*{ibanCode}" class="form-control"
+                           required minlength="2" maxlength="20" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-4 col-form-label">BIC : </label>
+                <div class="col-8">
+                    <input type="text" th:field="*{bicCode}" class="form-control"
+                           required minlength="2" maxlength="20" />
+                </div>
+            </div>
+
             <div>
                 <button type="submit" class="btn btn-primary">Terminer l'inscription</button>
             </div>

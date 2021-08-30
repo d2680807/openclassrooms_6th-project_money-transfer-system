@@ -1,7 +1,6 @@
 package com.openclassrooms.moneytransfersystem.controller;
 
-import com.openclassrooms.moneytransfersystem.dao.IngoingRepository;
-import com.openclassrooms.moneytransfersystem.dao.OutgoingRepository;
+import com.openclassrooms.moneytransfersystem.dao.TransferRepository;
 import com.openclassrooms.moneytransfersystem.model.*;
 import com.openclassrooms.moneytransfersystem.service.user.UserCreationService;
 import com.openclassrooms.moneytransfersystem.service.user.UserReadService;
@@ -26,10 +25,7 @@ public class LoginController {
     private UserReadService userReadService;
 
     @Autowired
-    private IngoingRepository ingoingRepository;
-
-    @Autowired
-    private OutgoingRepository outgoingRepository;
+    private TransferRepository transferRepository;
 
     @GetMapping("")
     public String viewHomePage() {
@@ -51,6 +47,7 @@ public class LoginController {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         user.setBalance(0);
+        user.setFriendsList("[]");
 
         userCreationService.createUser(user);
 
@@ -65,32 +62,30 @@ public class LoginController {
         String balance = String.format("%.2f", user.getBalance());
         model.addAttribute("balance", balance);
 
-        List<Transfer> listTransfers = new ArrayList<>();
-        user.getIngoingTransfers().stream()
-                .forEach( i -> {
-                    Transfer transfer = new Transfer();
-                    transfer.setDate(i.getDate());
-                    transfer.setRelation(
-                        outgoingRepository.findByIngoing(i.getId()).getFirstName()
-                    );
-                    transfer.setDescription(i.getDescription());
-                    transfer.setAmount(String.valueOf("+" + i.getAmount()));
+        List<TransferView> listTransfers = new ArrayList<>();
+        user.getTransfers().stream()
+                .forEach( t -> {
+                    TransferView transfer = new TransferView();
+                    String prefix;
+                    if (t.getType().equals("OUT")) {
+                        prefix = "-";
+                        transfer.setRelation(
+                                transferRepository.findById(t.getId() + 1).get().getUser().getFirstName()
+                        );
+                    } else {
+                        prefix = "+";
+                        transfer.setRelation(
+                                transferRepository.findById(t.getId() - 1).get().getUser().getFirstName()
+                        );
+                    }
+                    transfer.setDate(t.getDate());
+
+                    transfer.setDescription(t.getDescription());
+                    transfer.setAmount(String.valueOf(prefix + t.getAmount()));
                     listTransfers.add(transfer);
                 });
 
-        user.getOutgoingTransfers().stream()
-                .forEach( o -> {
-                    Transfer transfer = new Transfer();
-                    transfer.setDate(o.getDate());
-                    transfer.setRelation(
-                            ingoingRepository.findByOutgoing(o.getId()).getFirstName()
-                    );
-                    transfer.setDescription(o.getDescription());
-                    transfer.setAmount(String.valueOf("-" + o.getAmount()));
-                    listTransfers.add(transfer);
-                });
-
-        Collections.sort(listTransfers, Comparator.comparing(Transfer::getDate));
+        Collections.sort(listTransfers, Comparator.comparing(TransferView::getDate));
         model.addAttribute("listTransfers", listTransfers);
 
         return "app";

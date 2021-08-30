@@ -43,7 +43,7 @@ public class UserController {
         return userReadService.readUserById(id);
     }
 
-    @GetMapping("/users")
+    @GetMapping("/user")
     public User readUserByEmail(@RequestParam String email) {
 
         return userReadService.readUserByEmail(email);
