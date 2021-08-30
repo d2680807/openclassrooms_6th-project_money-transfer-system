@@ -24,16 +24,16 @@ public class Transfer {
     @Column(nullable = true)
     private String description;
 
-    @Column(nullable = true)
+    //@Column(nullable = true)
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinTable(
             name = "user",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "sender")
+            inverseJoinColumns = @JoinColumn(name = "sender")_
     )
     private User sender;
 
-    @Column(nullable = true)
+    //@Column(nullable = true)
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinTable(
             name = "user",
