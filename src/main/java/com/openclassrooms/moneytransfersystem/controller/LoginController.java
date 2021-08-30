@@ -1,5 +1,7 @@
 package com.openclassrooms.moneytransfersystem.controller;
 
+import com.openclassrooms.moneytransfersystem.dao.IngoingRepository;
+import com.openclassrooms.moneytransfersystem.dao.OutgoingRepository;
 import com.openclassrooms.moneytransfersystem.model.*;
 import com.openclassrooms.moneytransfersystem.service.user.UserCreationService;
 import com.openclassrooms.moneytransfersystem.service.user.UserReadService;
@@ -22,6 +24,12 @@ public class LoginController {
 
     @Autowired
     private UserReadService userReadService;
+
+    @Autowired
+    private IngoingRepository ingoingRepository;
+
+    @Autowired
+    private OutgoingRepository outgoingRepository;
 
     @GetMapping("")
     public String viewHomePage() {
@@ -57,18 +65,32 @@ public class LoginController {
         String balance = String.format("%.2f", user.getBalance());
         model.addAttribute("balance", balance);
 
-        List<TransferView> listTransfers = new ArrayList<>();
-        user.getTransfers().stream()
-                .forEach( t -> {
-                    TransferView transfer = new TransferView();
-                    transfer.setDate(t.getDate());
-                    transfer.setRelation(t.getSender().getFirstName());
-                    transfer.setDescription(t.getDescription());
-                    transfer.setAmount(String.valueOf(t.getAmount()));
+        List<Transfer> listTransfers = new ArrayList<>();
+        user.getIngoingTransfers().stream()
+                .forEach( i -> {
+                    Transfer transfer = new Transfer();
+                    transfer.setDate(i.getDate());
+                    transfer.setRelation(
+                        outgoingRepository.findByIngoing(i.getId()).getFirstName()
+                    );
+                    transfer.setDescription(i.getDescription());
+                    transfer.setAmount(String.valueOf("+" + i.getAmount()));
                     listTransfers.add(transfer);
                 });
 
-        Collections.sort(listTransfers, Comparator.comparing(TransferView::getDate));
+        user.getOutgoingTransfers().stream()
+                .forEach( o -> {
+                    Transfer transfer = new Transfer();
+                    transfer.setDate(o.getDate());
+                    transfer.setRelation(
+                            ingoingRepository.findByOutgoing(o.getId()).getFirstName()
+                    );
+                    transfer.setDescription(o.getDescription());
+                    transfer.setAmount(String.valueOf("-" + o.getAmount()));
+                    listTransfers.add(transfer);
+                });
+
+        Collections.sort(listTransfers, Comparator.comparing(Transfer::getDate));
         model.addAttribute("listTransfers", listTransfers);
 
         return "app";
