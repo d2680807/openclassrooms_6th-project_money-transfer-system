@@ -19,14 +19,16 @@ public class Transfer {
     private LocalDateTime date;
     @Column(nullable = false)
     private double amount;
-    @Column(nullable = false)
-    private double tax;
     @Column(nullable = true)
     private String description;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "type")
     private Type type;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tax")
+    private Tax tax;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinTable(
