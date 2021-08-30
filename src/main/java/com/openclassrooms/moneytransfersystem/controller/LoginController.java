@@ -1,5 +1,6 @@
 package com.openclassrooms.moneytransfersystem.controller;
 
+import com.openclassrooms.moneytransfersystem.dao.IngoingRepository;
 import com.openclassrooms.moneytransfersystem.dao.OutgoingRepository;
 import com.openclassrooms.moneytransfersystem.model.*;
 import com.openclassrooms.moneytransfersystem.service.user.UserCreationService;
@@ -23,6 +24,9 @@ public class LoginController {
 
     @Autowired
     private UserReadService userReadService;
+
+    @Autowired
+    private IngoingRepository ingoingRepository;
 
     @Autowired
     private OutgoingRepository outgoingRepository;
