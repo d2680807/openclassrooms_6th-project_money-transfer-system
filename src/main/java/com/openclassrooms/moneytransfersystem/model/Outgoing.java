@@ -34,5 +34,5 @@ public class Outgoing {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", insertable = false, updatable = false)
     )
-    private User user;
+    private User sender;
 }

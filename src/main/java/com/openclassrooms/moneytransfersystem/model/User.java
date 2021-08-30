@@ -38,9 +38,9 @@ public class User {
 
     private String friendsList;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "sender")
     private Collection<Ingoing> ingoingTransfers;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "receiver")
     private Collection<Outgoing> outgoingTransfers;
 }
