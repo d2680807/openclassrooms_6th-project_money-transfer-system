@@ -23,17 +23,26 @@
     <div>
         <h2>Solde votre compte : <b>[[${balance}]] €</b></h2>
     </div>
-    <div>
-        <form action="/app" th:action="@{'/balanceBack/{email}?amount={amount}'(email=${#request.userPrincipal.name})}" th:method="post">
-            <span>Transfert sur mon compte bancaire : </span>
-            <input id="amount" name="amount" type="text" placeholder="Entrez votre montant..." />
-            <input type="submit" value="Transférer" />
+        <form th:action="@{/process_balance_back}" th:object="${transfer}"
+              method="post" style="max-width: 600px; margin: 0 auto;">
+            <div class="m-3">
+                <div class="form-group row">
+                    <label class="col-4 col-form-label"><span>Transfert sur mon compte bancaire : </span> </label>
+                    <div class="col-8">
+                        <input type="hidden" th:field="*{email}" class="form-control" required />
+                        <input type="text" th:field="*{amount}" class="form-control" required />
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">Transférer</button>
+                </div>
+            </div>
         </form>
     </div>
-    <div>
+    <div style="margin-left: 40px;">
         <h1>Liste de transferts</h1>
     </div>
-    <div>
+    <div style="margin-left: 40px;margin-right: 40px;">
         <table class="table table-striped table-bordered">
             <thead class="thead-dark">
             <tr>
