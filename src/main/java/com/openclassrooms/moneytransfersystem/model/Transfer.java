@@ -20,6 +20,8 @@ public class Transfer {
     @Column(nullable = false)
     private double amount;
     @Column(nullable = true)
+    private double tax;
+    @Column(nullable = true)
     private String description;
 
     @JoinColumn(name = "type", insertable=false, updatable=false)

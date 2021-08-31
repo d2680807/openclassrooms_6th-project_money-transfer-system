@@ -1,8 +1,10 @@
 package com.openclassrooms.moneytransfersystem.service.user;
 
+import com.openclassrooms.moneytransfersystem.dao.TaxRepository;
 import com.openclassrooms.moneytransfersystem.dao.TransferRepository;
 import com.openclassrooms.moneytransfersystem.dao.UserRepository;
 import com.openclassrooms.moneytransfersystem.model.Transfer;
+import com.openclassrooms.moneytransfersystem.model.TransferBack;
 import com.openclassrooms.moneytransfersystem.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +22,9 @@ public class UserUpdateService {
 
     @Autowired
     private TransferRepository transferRepository;
+
+    @Autowired
+    private TaxRepository taxRepository;
 
     Logger logger = LoggerFactory.getLogger(UserUpdateService.class);
 
@@ -44,25 +49,26 @@ public class UserUpdateService {
         return userUpdated;
     }
 
-    public void getBalanceBack(Transfer transfer) {
+    public void getBalanceBack(TransferBack transferBack) {
 
-        // Reduce Balance
-        User userUpdated = transfer.getUser();
-        userUpdated.setBalance(userUpdated.getBalance() - transfer.getAmount());
+        User userUpdated = userRepository.findByEmail(transferBack.getEmail());
+        userUpdated.setBalance(userUpdated.getBalance() - transferBack.getAmount());
         userRepository.save(userUpdated);
 
         // IN Transfer
+        Transfer transfer = new Transfer();
+        transfer.setId(userUpdated.getId());
         transfer.setDate(LocalDateTime.now());
-        transfer.setDescription("Retrait de solde vers compte bancaire");
         transfer.setType("OUT");
-        transfer.setId(transfer.getUser().getId());
+        transfer.setAmount(transferBack.getAmount());
+        transfer.setTax(taxRepository.findByName("DEFAULT").getRate());
+        transfer.setDescription("Retrait de solde vers compte bancaire");
+
         transferRepository.save(transfer);
 
         // OUT Transfer
-        transfer.setDate(LocalDateTime.now());
-        transfer.setDescription("Retrait de solde vers compte bancaire");
-        transfer.setType("IN");
         transfer.setId(userRepository.findByEmail("app@test.com").getId());
+        transfer.setType("IN");
         transferRepository.save(transfer);
     }
 }

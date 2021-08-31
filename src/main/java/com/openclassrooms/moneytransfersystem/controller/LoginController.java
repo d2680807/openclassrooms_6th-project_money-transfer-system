@@ -60,9 +60,9 @@ public class LoginController {
     }
 
     @PostMapping("/process_balance_back")
-    public String processRegister(Transfer transfer) {
+    public String processRegister(TransferBack transferBack) {
 
-        userUpdateService.getBalanceBack(transfer);
+        userUpdateService.getBalanceBack(transferBack);
 
         return "app";
     }

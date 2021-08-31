@@ -5,5 +5,6 @@ import lombok.Data;
 @Data
 public class TransferBack {
 
-    
+    String email;
+    double amount;
 }
