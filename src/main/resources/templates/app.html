@@ -23,13 +23,14 @@
     <div>
         <h2>Solde votre compte : <b>[[${balance}]] €</b></h2>
     </div>
-        <form th:action="@{/process_balance_back}" th:object="${transfer}"
+        <form th:action="@{/process_balance_back}" th:object="${transferBack}"
               method="post" style="max-width: 600px; margin: 0 auto;">
             <div class="m-3">
                 <div class="form-group row">
                     <label class="col-4 col-form-label"><span>Transfert sur mon compte bancaire : </span> </label>
                     <div class="col-8">
-                        <input type="hidden" th:field="*{email}" class="form-control" required />
+                        <!--<span for="email" th:name="email" th:field="*{email}">[[${#request.userPrincipal.name}]]</span>-->
+                        <input type="text" th:field="*{email}" class="form-control" value="[[${balance}]]" th:value="${#request.userPrincipal.name}" required />
                         <input type="text" th:field="*{amount}" class="form-control" required />
                     </div>
                 </div>

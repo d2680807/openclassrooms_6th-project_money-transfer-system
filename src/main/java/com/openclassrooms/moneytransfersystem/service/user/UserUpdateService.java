@@ -51,11 +51,12 @@ public class UserUpdateService {
 
     public void getBalanceBack(TransferBack transferBack) {
 
+        logger.debug("Transfer back for " + transferBack.getEmail() + ": " + transferBack.getAmount());
+
         User userUpdated = userRepository.findByEmail(transferBack.getEmail());
         userUpdated.setBalance(userUpdated.getBalance() - transferBack.getAmount());
         userRepository.save(userUpdated);
 
-        // IN Transfer
         Transfer transfer = new Transfer();
         transfer.setId(userUpdated.getId());
         transfer.setDate(LocalDateTime.now());
@@ -63,10 +64,8 @@ public class UserUpdateService {
         transfer.setAmount(transferBack.getAmount());
         transfer.setTax(taxRepository.findByName("DEFAULT").getRate());
         transfer.setDescription("Retrait de solde vers compte bancaire");
-
         transferRepository.save(transfer);
 
-        // OUT Transfer
         transfer.setId(userRepository.findByEmail("app@test.com").getId());
         transfer.setType("IN");
         transferRepository.save(transfer);

@@ -64,7 +64,7 @@ public class LoginController {
 
         userUpdateService.getBalanceBack(transferBack);
 
-        return "app";
+        return "index";
     }
 
     @GetMapping("/app")
@@ -100,7 +100,7 @@ public class LoginController {
 
         Collections.sort(listTransfers, Comparator.comparing(TransferView::getDate));
         model.addAttribute("listTransfers", listTransfers);
-        model.addAttribute("transfer", new Transfer());
+        model.addAttribute("transferBack", new TransferBack());
 
         return "app";
     }
