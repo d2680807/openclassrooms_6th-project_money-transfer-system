@@ -51,23 +51,49 @@ public class UserUpdateService {
 
     public void getBalanceBack(TransferBack transferBack) {
 
-        logger.debug("Transfer back for " + transferBack.getEmail() + ": " + transferBack.getAmount());
+        //System.out.println("test: " + userRepository.findById(transferBack.getUserId()));
 
-        User userUpdated = userRepository.findByEmail(transferBack.getEmail());
-        userUpdated.setBalance(userUpdated.getBalance() - transferBack.getAmount());
-        userRepository.save(userUpdated);
+        logger.debug("[service-balance-back] User ID: " + transferBack.getUserId());
+        logger.debug("[service-balance-back] Balance: " + transferBack.getAmount());
 
-        Transfer transfer = new Transfer();
-        transfer.setId(userUpdated.getId());
-        transfer.setDate(LocalDateTime.now());
-        transfer.setType("OUT");
-        transfer.setAmount(transferBack.getAmount());
-        transfer.setTax(taxRepository.findByName("DEFAULT").getRate());
-        transfer.setDescription("Retrait de solde vers compte bancaire");
-        transferRepository.save(transfer);
+        Optional<User> optionalUser = userRepository.findById(transferBack.getUserId());
+        User userUpdated = new User();
+        if (optionalUser.isPresent()) {
+            userUpdated.setId(optionalUser.get().getId());
+            userUpdated.setEmail(optionalUser.get().getEmail());
+            userUpdated.setPassword(optionalUser.get().getPassword());
+            userUpdated.setFirstName(optionalUser.get().getFirstName());
+            userUpdated.setLastName(optionalUser.get().getLastName());
+            userUpdated.setIbanCode(optionalUser.get().getIbanCode());
+            userUpdated.setBicCode(optionalUser.get().getBicCode());
+            userUpdated.setFriendsList(optionalUser.get().getFriendsList());
+            userUpdated.setBalance(optionalUser.get().getBalance() - transferBack.getAmount());
+            userRepository.save(userUpdated);
 
-        transfer.setId(userRepository.findByEmail("app@test.com").getId());
-        transfer.setType("IN");
-        transferRepository.save(transfer);
+            Transfer transfer = new Transfer();
+            transfer.setUser(userUpdated);
+            transfer.setDate(LocalDateTime.now());
+            transfer.setType("OUT");
+            transfer.setAmount(transferBack.getAmount());
+            transfer.setTax(taxRepository.findByName("DEFAULT").getRate());
+            transfer.setDescription("Retrait de solde vers compte bancaire");
+            transferRepository.save(transfer);
+            //logger.debug(transfer.getUser().toString());
+            /*logger.debug("[service-balance-back] OUT: " + transfer.getUser().getId() + "|"
+                    + transfer.getDate() + "|" + transfer.getType() + "|"
+                    + transfer.getAmount() + "|" + transfer.getDescription());*/
+
+            Transfer inTransfer = new Transfer();
+            inTransfer.setDate(LocalDateTime.now());
+            inTransfer.setAmount(transferBack.getAmount());
+            inTransfer.setTax(taxRepository.findByName("DEFAULT").getRate());
+            inTransfer.setDescription("Retrait de solde vers compte bancaire");
+            inTransfer.setUser(userRepository.findByEmail("app@test.com"));
+            inTransfer.setType("IN");
+            transferRepository.save(inTransfer);
+            /*logger.debug("[service-balance-back] IN: " + transfer.getUser().getId() + "|"
+                    + transfer.getDate() + "|" + transfer.getType() + "|"
+                    + transfer.getAmount() + "|" + transfer.getDescription());*/
+        }
     }
 }

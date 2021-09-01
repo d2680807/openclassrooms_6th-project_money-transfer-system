@@ -29,8 +29,7 @@
                 <div class="form-group row">
                     <label class="col-4 col-form-label"><span>Transfert sur mon compte bancaire : </span> </label>
                     <div class="col-8">
-                        <!--<span for="email" th:name="email" th:field="*{email}">[[${#request.userPrincipal.name}]]</span>-->
-                        <input type="text" th:field="*{email}" class="form-control" value="[[${balance}]]" th:value="${#request.userPrincipal.name}" required />
+                        <input type="hidden" th:field="*{userId}" class="form-control" required />
                         <input type="text" th:field="*{amount}" class="form-control" required />
                     </div>
                 </div>
