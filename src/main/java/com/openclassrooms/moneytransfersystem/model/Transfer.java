@@ -20,12 +20,14 @@ public class Transfer {
     @Column(nullable = false)
     private double amount;
     @Column(nullable = true)
+    private double tax;
+    @Column(nullable = true)
     private String description;
 
     @JoinColumn(name = "type", insertable=false, updatable=false)
     private String type;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="user_id",referencedColumnName="user_id", insertable=false, updatable=false)
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name="user_id", updatable=false)
     private User user;
 }
