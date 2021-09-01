@@ -6,5 +6,6 @@ import lombok.Data;
 public class TransferBack {
 
     Long userId;
+    Long recipient;
     double amount;
 }

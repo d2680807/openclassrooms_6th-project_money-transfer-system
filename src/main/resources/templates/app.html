@@ -49,9 +49,29 @@
                     </div>
                 </div>
                 <div>
-                    <button type="submit" class="btn btn-primary">Recharger</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: #5cb85c">Recharger</button>
                 </div>
             </div>
+        </form>
+    </div>
+    <div>
+        <form name='f' th:object="${transferBack}" method='POST'>
+            <table>
+                <tr>
+                    <td>Transférer vers un ami :</td>
+                    <td>
+                        <select th:field="*{recipient}">
+                            <option value="">Choisissez un ami</option>
+                            <option th:each="friend : ${friends}"
+                                    th:value="${friend}"
+                                    th:utext="${friend}"/>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input name="submit" type="submit" value="Transférer" /></td>
+                </tr>
+            </table>
         </form>
     </div>
     <div style="margin-left: 40px;">
