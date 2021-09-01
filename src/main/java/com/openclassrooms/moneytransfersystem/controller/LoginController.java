@@ -74,6 +74,17 @@ public class LoginController {
         return "index";
     }
 
+    @PostMapping("/process_topup")
+    public String processTopup(TransferBack transferBack) {
+
+        logger.debug("[process_balance_back] User ID: " + transferBack.getUserId());
+        logger.debug("[process_balance_back] Amount: " + transferBack.getAmount());
+
+        userUpdateService.getTopup(transferBack);
+
+        return "index";
+    }
+
     @GetMapping("/app")
     public String listTransfers(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

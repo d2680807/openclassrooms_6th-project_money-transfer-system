@@ -38,6 +38,21 @@
                 </div>
             </div>
         </form>
+        <form th:action="@{/process_topup}" th:object="${transferBack}"
+              method="post" style="max-width: 600px; margin: 0 auto;">
+            <div class="m-3">
+                <div class="form-group row">
+                    <label class="col-4 col-form-label"><span>Recharger depuis votre compte bancaire : </span> </label>
+                    <div class="col-8">
+                        <input type="hidden" th:field="*{userId}" class="form-control" required />
+                        <input type="text" th:field="*{amount}" class="form-control" required />
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">Recharger</button>
+                </div>
+            </div>
+        </form>
     </div>
     <div style="margin-left: 40px;">
         <h1>Liste de transferts</h1>
