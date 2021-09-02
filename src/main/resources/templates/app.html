@@ -65,17 +65,19 @@
                 <div style="border-left:1px solid gray;"></div>
 
                 <div>
-                    <form name='f' th:object="${transferBack}" method='POST'>
+                    <form name='f' th:action="@{/process_transfer}" th:object="${transferBack}" method='POST'>
                         <div class="m-3">
                             <div class="form-group row">
                                 <label class="col-4 col-form-label"><span>Transfer vers un ami :</span> </label>
                                 <div class="col-8">
-                                    <select class="form-select" th:field="*{recipient}">
+                                    <select required="required" class="form-select" th:field="*{recipient}">
                                         <option value="">Choisissez un ami</option>
                                         <option th:each="friend : ${friends}"
                                                 th:value="${friend}"
                                                 th:utext="${friend}"/>
                                     </select>
+                                    <input type="text" th:field="*{amount}" class="form-control" required />
+                                    <input type="text" th:field="*{description}" class="form-control" required />
                                 </div>
                             </div>
                             <div>

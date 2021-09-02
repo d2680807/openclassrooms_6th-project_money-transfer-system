@@ -88,6 +88,12 @@ public class LoginController {
         return "index";
     }
 
+    @PostMapping("/process_transfer")
+    public String processTransfer(TransferBack transferBack) {
+
+        return "index";
+    }
+
     @GetMapping("/app")
     public String listTransfers(Model model) throws JsonProcessingException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
