@@ -102,7 +102,7 @@ public class LoginController {
     }
 
     @PostMapping("/process_friendship")
-    public String processFriendship(TransferBack transferBack) {
+    public String processFriendship(TransferBack transferBack) throws JsonProcessingException {
 
         logger.debug("[process_friendship] User ID: " + transferBack.getUserId());
         logger.debug("[process_friendship] Recipient: " + transferBack.getRecipient());
