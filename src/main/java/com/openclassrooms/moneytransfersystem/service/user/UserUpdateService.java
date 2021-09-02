@@ -53,6 +53,11 @@ public class UserUpdateService {
 
         //System.out.println("test: " + userRepository.findById(transferBack.getUserId()));
 
+        if (transferBack.getAmount() == 0) {
+
+            return;
+        }
+
         logger.debug("[service-balance-back] User ID: " + transferBack.getUserId());
         logger.debug("[service-balance-back] Balance: " + transferBack.getAmount());
 
@@ -100,6 +105,11 @@ public class UserUpdateService {
     public void getTopup(TransferBack transferBack) {
 
         //System.out.println("test: " + userRepository.findById(transferBack.getUserId()));
+
+        if (transferBack.getAmount() == 0) {
+
+            return;
+        }
 
         Optional<User> optionalUser = userRepository.findById(transferBack.getUserId());
         User userUpdated = new User();
