@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Controller
@@ -113,7 +114,7 @@ public class LoginController {
                                 transferRepository.findById(t.getId() - 1).get().getUser().getFirstName()
                         );
                     }
-                    transfer.setDate(t.getDate());
+                    transfer.setDate(t.getDate().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM, yyyy", Locale.FRENCH)));
 
                     transfer.setDescription(t.getDescription());
                     transfer.setAmount(String.valueOf(prefix + t.getAmount()));
