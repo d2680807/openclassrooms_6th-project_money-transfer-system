@@ -19,14 +19,14 @@ public class TransferReadService {
 
     public Transfer readTransferById(Long id) {
 
-        logger.debug("[readUserById] id:" + id);
+        logger.debug("[readTransferById] id:" + id);
 
         return transferRepository.getById(id);
     }
 
     public Collection<Transfer> readTransfers() {
 
-        logger.debug("[readUsers] find: all");
+        logger.debug("[readTransfers] find: all");
 
         return transferRepository.findAll();
     }
