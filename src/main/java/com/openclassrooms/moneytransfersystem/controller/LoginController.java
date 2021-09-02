@@ -1,5 +1,7 @@
 package com.openclassrooms.moneytransfersystem.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.moneytransfersystem.dao.TransferRepository;
 import com.openclassrooms.moneytransfersystem.model.*;
 import com.openclassrooms.moneytransfersystem.service.user.UserCreationService;
@@ -74,8 +76,19 @@ public class LoginController {
         return "index";
     }
 
+    @PostMapping("/process_topup")
+    public String processTopup(TransferBack transferBack) {
+
+        logger.debug("[process_balance_back] User ID: " + transferBack.getUserId());
+        logger.debug("[process_balance_back] Amount: " + transferBack.getAmount());
+
+        userUpdateService.getTopup(transferBack);
+
+        return "index";
+    }
+
     @GetMapping("/app")
-    public String listTransfers(Model model) {
+    public String listTransfers(Model model) throws JsonProcessingException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         logger.debug("[app] User Email: " + authentication.getName());
         User user = userReadService.readUserByEmail(authentication.getName());
@@ -115,6 +128,10 @@ public class LoginController {
         logger.debug("[app-transfer-back] User ID: " + transferBack.getUserId());
         logger.debug("[app-transfer-back] Amount: " + transferBack.getAmount());
         model.addAttribute("transferBack", transferBack);
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> friends = mapper.readValue(user.getFriendsList(), List.class);
+        model.addAttribute("friends", friends);
 
         return "app";
     }

@@ -96,4 +96,49 @@ public class UserUpdateService {
                     + transfer.getAmount() + "|" + transfer.getDescription());*/
         }
     }
+
+    public void getTopup(TransferBack transferBack) {
+
+        //System.out.println("test: " + userRepository.findById(transferBack.getUserId()));
+
+        Optional<User> optionalUser = userRepository.findById(transferBack.getUserId());
+        User userUpdated = new User();
+        if (optionalUser.isPresent()) {
+            userUpdated.setId(optionalUser.get().getId());
+            userUpdated.setEmail(optionalUser.get().getEmail());
+            userUpdated.setPassword(optionalUser.get().getPassword());
+            userUpdated.setFirstName(optionalUser.get().getFirstName());
+            userUpdated.setLastName(optionalUser.get().getLastName());
+            userUpdated.setIbanCode(optionalUser.get().getIbanCode());
+            userUpdated.setBicCode(optionalUser.get().getBicCode());
+            userUpdated.setFriendsList(optionalUser.get().getFriendsList());
+            userUpdated.setBalance(optionalUser.get().getBalance() + transferBack.getAmount());
+            userRepository.save(userUpdated);
+
+            Transfer transfer = new Transfer();
+            transfer.setUser(userUpdated);
+            transfer.setDate(LocalDateTime.now());
+            transfer.setType("IN");
+            transfer.setAmount(transferBack.getAmount());
+            transfer.setTax(taxRepository.findByName("DEFAULT").getRate());
+            transfer.setDescription("Rechargement depuis votre compte bancaire");
+            transferRepository.save(transfer);
+            //logger.debug(transfer.getUser().toString());
+            /*logger.debug("[service-balance-back] OUT: " + transfer.getUser().getId() + "|"
+                    + transfer.getDate() + "|" + transfer.getType() + "|"
+                    + transfer.getAmount() + "|" + transfer.getDescription());*/
+
+            Transfer inTransfer = new Transfer();
+            inTransfer.setDate(LocalDateTime.now());
+            inTransfer.setAmount(transferBack.getAmount());
+            inTransfer.setTax(taxRepository.findByName("DEFAULT").getRate());
+            inTransfer.setDescription("Rechargement depuis votre compte bancaire");
+            inTransfer.setUser(userRepository.findByEmail("app@test.com"));
+            inTransfer.setType("OUT");
+            transferRepository.save(inTransfer);
+            /*logger.debug("[service-balance-back] IN: " + transfer.getUser().getId() + "|"
+                    + transfer.getDate() + "|" + transfer.getType() + "|"
+                    + transfer.getAmount() + "|" + transfer.getDescription());*/
+        }
+    }
 }
