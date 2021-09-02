@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Controller
@@ -87,6 +88,19 @@ public class LoginController {
         return "index";
     }
 
+    @PostMapping("/process_transfer")
+    public String processTransfer(TransferBack transferBack) {
+
+        logger.debug("[process_transfer] User ID: " + transferBack.getUserId());
+        logger.debug("[process_transfer] Recipient: " + transferBack.getRecipient());
+        logger.debug("[process_transfer] Amount: " + transferBack.getAmount());
+        logger.debug("[process_transfer] Description: " + transferBack.getDescription());
+
+        userUpdateService.friendTransfer(transferBack);
+
+        return "index";
+    }
+
     @GetMapping("/app")
     public String listTransfers(Model model) throws JsonProcessingException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -113,7 +127,7 @@ public class LoginController {
                                 transferRepository.findById(t.getId() - 1).get().getUser().getFirstName()
                         );
                     }
-                    transfer.setDate(t.getDate());
+                    transfer.setDate(t.getDate().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM, yyyy", Locale.FRENCH)));
 
                     transfer.setDescription(t.getDescription());
                     transfer.setAmount(String.valueOf(prefix + t.getAmount()));

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Data
 public class TransferView {
 
-    LocalDateTime date;
+    String date;
     String relation;
     String description;
     String amount;
