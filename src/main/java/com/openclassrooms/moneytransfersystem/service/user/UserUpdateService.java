@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -50,8 +51,6 @@ public class UserUpdateService {
     }
 
     public void getBalanceBack(TransferBack transferBack) {
-
-        //System.out.println("test: " + userRepository.findById(transferBack.getUserId()));
 
         if (transferBack.getAmount() == 0) {
 
@@ -104,8 +103,6 @@ public class UserUpdateService {
 
     public void getTopup(TransferBack transferBack) {
 
-        //System.out.println("test: " + userRepository.findById(transferBack.getUserId()));
-
         if (transferBack.getAmount() == 0) {
 
             return;
@@ -149,6 +146,51 @@ public class UserUpdateService {
             /*logger.debug("[service-balance-back] IN: " + transfer.getUser().getId() + "|"
                     + transfer.getDate() + "|" + transfer.getType() + "|"
                     + transfer.getAmount() + "|" + transfer.getDescription());*/
+        }
+    }
+
+    public void friendTransfer(TransferBack transferBack) {
+
+        if (transferBack.getAmount() == 0) {
+
+            return;
+        }
+
+        Optional<User> optionalUser = userRepository.findById(transferBack.getUserId());
+        User userUpdated = new User();
+        User recipient = userRepository.findByEmail(transferBack.getRecipient());;
+        if (optionalUser.isPresent() && !Objects.isNull(recipient)) {
+            userUpdated.setId(optionalUser.get().getId());
+            userUpdated.setEmail(optionalUser.get().getEmail());
+            userUpdated.setPassword(optionalUser.get().getPassword());
+            userUpdated.setFirstName(optionalUser.get().getFirstName());
+            userUpdated.setLastName(optionalUser.get().getLastName());
+            userUpdated.setIbanCode(optionalUser.get().getIbanCode());
+            userUpdated.setBicCode(optionalUser.get().getBicCode());
+            userUpdated.setFriendsList(optionalUser.get().getFriendsList());
+            userUpdated.setBalance(optionalUser.get().getBalance() - transferBack.getAmount());
+            userRepository.save(userUpdated);
+
+            Transfer transfer = new Transfer();
+            transfer.setUser(userUpdated);
+            transfer.setDate(LocalDateTime.now());
+            transfer.setType("OUT");
+            transfer.setAmount(transferBack.getAmount());
+            transfer.setTax(taxRepository.findByName("DEFAULT").getRate());
+            transfer.setDescription(transferBack.getDescription());
+            transferRepository.save(transfer);
+
+            recipient.setBalance(optionalUser.get().getBalance() + transferBack.getAmount());
+            userRepository.save(recipient);
+
+            Transfer inTransfer = new Transfer();
+            inTransfer.setDate(LocalDateTime.now());
+            inTransfer.setAmount(transferBack.getAmount());
+            inTransfer.setTax(taxRepository.findByName("DEFAULT").getRate());
+            inTransfer.setDescription(transferBack.getDescription());
+            inTransfer.setUser(recipient);
+            inTransfer.setType("IN");
+            transferRepository.save(inTransfer);
         }
     }
 }

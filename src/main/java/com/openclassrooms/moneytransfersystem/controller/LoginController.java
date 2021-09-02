@@ -91,12 +91,12 @@ public class LoginController {
     @PostMapping("/process_transfer")
     public String processTransfer(TransferBack transferBack) {
 
-        logger.debug("[process_balance_back] User ID: " + transferBack.getUserId());
-        logger.debug("[process_balance_back] Recipient: " + transferBack.getRecipient());
-        logger.debug("[process_balance_back] Amount: " + transferBack.getAmount());
-        logger.debug("[process_balance_back] Description: " + transferBack.getDescription());
+        logger.debug("[process_transfer] User ID: " + transferBack.getUserId());
+        logger.debug("[process_transfer] Recipient: " + transferBack.getRecipient());
+        logger.debug("[process_transfer] Amount: " + transferBack.getAmount());
+        logger.debug("[process_transfer] Description: " + transferBack.getDescription());
 
-        userUpdateService.getBalanceBack(transferBack);
+        userUpdateService.friendTransfer(transferBack);
 
         return "index";
     }
