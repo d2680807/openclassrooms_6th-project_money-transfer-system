@@ -68,9 +68,9 @@
                     <form name='f' th:action="@{/process_transfer}" th:object="${transferBack}" method='POST'>
                         <div class="m-3">
                             <div class="form-group row">
-                                <label class="col-4 col-form-label"><span>Transfer vers un ami :</span> </label>
+                                <label class="col-4 col-form-label"><span>Transférer vers un ami :</span> </label>
                                 <div class="col-8">
-                                    <select required="required" class="form-select" th:field="*{recipient}">
+                                    <select required="required" class="form-control form-control-lg" th:field="*{recipient}">
                                         <option value="">Choisissez un ami</option>
                                         <option th:each="friend : ${friends}"
                                                 th:value="${friend}"
