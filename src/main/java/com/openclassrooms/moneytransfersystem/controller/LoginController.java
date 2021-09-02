@@ -101,6 +101,17 @@ public class LoginController {
         return "index";
     }
 
+    @PostMapping("/process_friendship")
+    public String processFriendship(TransferBack transferBack) throws JsonProcessingException {
+
+        logger.debug("[process_friendship] User ID: " + transferBack.getUserId());
+        logger.debug("[process_friendship] Recipient: " + transferBack.getRecipient());
+
+        userUpdateService.addFriend(transferBack);
+
+        return "index";
+    }
+
     @GetMapping("/app")
     public String listTransfers(Model model) throws JsonProcessingException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

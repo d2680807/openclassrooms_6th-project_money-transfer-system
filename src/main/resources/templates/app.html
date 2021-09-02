@@ -25,7 +25,7 @@
                 <h2>Solde votre compte : <b>[[${balance}]] €</b></h2>
             </div>
 
-            <div style="display: flex;">
+            <div style="display: flex;align-items: center;">
                 <div>
                     <form th:action="@{/process_balance_back}" th:object="${transferBack}"
                           method="post" style="max-width: 600px; margin: 0 auto;">
@@ -34,12 +34,12 @@
                                 <label class="col-4 col-form-label"><span>Retirer sur mon compte bancaire : </span> </label>
                                 <div class="col-8">
                                     <input type="hidden" th:field="*{userId}" class="form-control" required />
-                                    <input type="text" th:field="*{amount}" class="form-control" required />
+                                    <input type="text"  placeholder="Entrez le montant..." th:field="*{amount}" class="form-control" required />
                                 </div>
                             </div>
 
                             <div>
-                                <button type="submit" class="btn btn-primary">Retirer mon solde</button>
+                                <button type="submit" class="btn btn-primary" style="width: 100%;">Retirer mon solde</button>
                             </div>
                         </div>
                     </form>
@@ -51,24 +51,41 @@
                                 <label class="col-4 col-form-label"><span>Recharger depuis le compte bancaire : </span> </label>
                                 <div class="col-8">
                                     <input type="hidden" th:field="*{userId}" class="form-control" required />
-                                    <input type="text" th:field="*{amount}" class="form-control" required />
+                                    <input type="text"  placeholder="Entrez le montant..." th:field="*{amount}" class="form-control" required />
                                 </div>
                             </div>
 
                             <div>
-                                <button type="submit" class="btn btn-primary" style="background-color: #5cb85c; border-color: #5cb85c;">Recharger mon compte</button>
+                                <button type="submit" class="btn btn-primary" style="background-color: #5cb85c; border-color: #5cb85c;width: 100%;">Recharger mon compte</button>
                             </div>
                         </div>
                     </form>
                 </div>
 
-                <div style="border-left:1px solid gray;"></div>
+                <div style="border-left:1px solid gray;height: 300px;"></div>
 
                 <div>
+                    <form th:action="@{/process_friendship}" th:object="${transferBack}"
+                          method="post" style="max-width: 600px; margin: 0 auto;">
+                        <div class="m-3">
+                            <div class="form-group row">
+                                <label class="col-4 col-form-label"><span>Si le courriel est déjà existant : </span> </label>
+                                <div class="col-8">
+                                    <input type="hidden" th:field="*{userId}" class="form-control" required />
+                                    <input type="text" placeholder="Entrez le courriel..." th:field="*{recipient}" class="form-control" required />
+                                </div>
+                            </div>
+
+                            <div>
+                                <button type="submit" class="btn btn-primary" style="width: 100%;" >Ajouter un ami</button>
+                            </div>
+                        </div>
+                    </form>
+
                     <form th:action="@{/process_transfer}" th:object="${transferBack}" method="post">
                         <div class="m-3">
                             <div class="form-group row">
-                                <label class="col-4 col-form-label"><span>Transférer vers un ami :</span> </label>
+                                <label class="col-4 col-form-label"><span>Transférer une somme à un ami :</span> </label>
                                 <div class="col-8">
                                     <input type="hidden" th:field="*{userId}" class="form-control" required />
                                     <select required="required" class="form-control form-control-lg" th:field="*{recipient}">
@@ -77,12 +94,12 @@
                                                 th:value="${friend}"
                                                 th:utext="${friend}"/>
                                     </select>
-                                    <input type="text" th:field="*{amount}" class="form-control" required />
-                                    <input type="text" th:field="*{description}" class="form-control" required />
+                                    <input style="margin-top: 10px;" type="text" placeholder="Entrez le montant..." th:field="*{amount}" class="form-control" required />
+                                    <input style="margin-top: 10px;" type="text" placeholder="Entrez une description..." th:field="*{description}" class="form-control" required />
                                 </div>
                             </div>
                             <div>
-                                <input type="submit" class="btn btn-primary" value="Transférer" />
+                                <input type="submit" class="btn btn-primary" style="background-color: #5cb85c; border-color: #5cb85c;width: 100%;" value="Transférer la somme" />
                             </div>
                         </div>
                     </form>

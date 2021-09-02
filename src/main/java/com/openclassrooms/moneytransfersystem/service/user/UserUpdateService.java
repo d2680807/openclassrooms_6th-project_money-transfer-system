@@ -1,5 +1,7 @@
 package com.openclassrooms.moneytransfersystem.service.user;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.moneytransfersystem.dao.TaxRepository;
 import com.openclassrooms.moneytransfersystem.dao.TransferRepository;
 import com.openclassrooms.moneytransfersystem.dao.UserRepository;
@@ -12,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserUpdateService {
@@ -191,6 +195,31 @@ public class UserUpdateService {
             inTransfer.setUser(recipient);
             inTransfer.setType("IN");
             transferRepository.save(inTransfer);
+        }
+    }
+
+    public void addFriend(TransferBack transferBack) throws JsonProcessingException {
+
+        Optional<User> optionalUser = userRepository.findById(transferBack.getUserId());
+        User userUpdated = new User();
+        User recipient = userRepository.findByEmail(transferBack.getRecipient());
+
+        if (optionalUser.isPresent() && !Objects.isNull(recipient)) {
+            userUpdated.setId(optionalUser.get().getId());
+            userUpdated.setEmail(optionalUser.get().getEmail());
+            userUpdated.setPassword(optionalUser.get().getPassword());
+            userUpdated.setFirstName(optionalUser.get().getFirstName());
+            userUpdated.setLastName(optionalUser.get().getLastName());
+            userUpdated.setIbanCode(optionalUser.get().getIbanCode());
+            userUpdated.setBicCode(optionalUser.get().getBicCode());
+            userUpdated.setBalance(optionalUser.get().getBalance());
+
+            ObjectMapper mapper = new ObjectMapper();
+            Set<String> friends = mapper.readValue(optionalUser.get().getFriendsList(), Set.class);
+            friends.add(transferBack.getRecipient());
+            userUpdated.setFriendsList(mapper.writeValueAsString(friends));
+
+            userRepository.save(userUpdated);
         }
     }
 }
