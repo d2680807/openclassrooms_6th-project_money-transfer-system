@@ -18,7 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -122,10 +121,10 @@ public class LoginController {
         String balance = String.format("%.2f", user.getBalance());
         model.addAttribute("balance", balance);
 
-        List<TransferView> listTransfers = new ArrayList<>();
+        List<ListElement> listTransfers = new ArrayList<>();
         user.getTransfers().stream()
                 .forEach( t -> {
-                    TransferView transfer = new TransferView();
+                    ListElement transfer = new ListElement();
                     String prefix;
                     if (t.getType().equals("OUT")) {
                         prefix = "-";
@@ -145,7 +144,7 @@ public class LoginController {
                     listTransfers.add(transfer);
                 });
 
-        Collections.sort(listTransfers, Comparator.comparing(TransferView::getDate));
+        Collections.sort(listTransfers, Comparator.comparing(ListElement::getDate));
         model.addAttribute("listTransfers", listTransfers);
 
         TransferBack transferBack = new TransferBack();
