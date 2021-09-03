@@ -19,14 +19,14 @@ public class UserCreationService {
 
     public User createUser(User user) {
 
-        logger.debug("Create single " + User.class.getName() + ": " + user);
+        logger.debug("[createUser] user: " + user);
 
         return userRepository.save(user);
     }
 
     public Collection<User> createUsers(Collection<User> users) {
 
-        logger.debug("Create multiple " + User.class.getName() + ": " + users);
+        logger.debug("[createUsers] users:" + users);
 
         return userRepository.saveAll(users);
     }

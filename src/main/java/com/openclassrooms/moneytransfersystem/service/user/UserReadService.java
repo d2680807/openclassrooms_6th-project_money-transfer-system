@@ -19,21 +19,21 @@ public class UserReadService {
 
     public User readUserById(Long id) {
 
-        logger.debug("Read " + User.class.getName() + " by id:" + id);
+        logger.debug("[readUserById] id: " + id);
 
         return userRepository.getById(id);
     }
 
     public User readUserByEmail(String email) {
 
-        logger.debug("Read " + User.class.getName() + " by id:" + email);
+        logger.debug("[readUserByEmail] email: " + email);
 
         return userRepository.findByEmail(email);
     }
 
     public Collection<User> readUsers() {
 
-        logger.debug("Read all " + User.class.getName());
+        logger.debug("[readUsers] read: all");
 
         return userRepository.findAll();
     }

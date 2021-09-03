@@ -43,12 +43,11 @@ public class UserUpdateService {
             //userUpdated.setEmail(optionalUser.get().getEmail());
             userRepository.save(userUpdated);
         } else {
-            logger.debug("Tried to update single " + User.class.getName()
-                    + " id: " + user.getId() + " (not found)");
+            logger.debug("[updateUser] id not found: " + user.getId());
 
             return new User();
         }
-        logger.debug("Update single " + User.class.getName() + ": " + userUpdated);
+        logger.debug("[updateUser] user: " + userUpdated);
 
         return userUpdated;
     }

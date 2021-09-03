@@ -18,14 +18,14 @@ public class UserDeletionService {
     public void deleteUserById(Long id) {
 
         if(userRepository.existsById(id)) {
-            logger.debug("Delete " + User.class.getName() + " by id: " + id);
+            logger.debug("[deleteUserById] id: " + id);
             userRepository.deleteById(id);
         }
     }
 
     public void deleteUsers() {
 
-        logger.debug("Delete all " + User.class.getName());
+        logger.debug("[deleteUsers] delete: all");
         userRepository.deleteAll();
     }
 }
