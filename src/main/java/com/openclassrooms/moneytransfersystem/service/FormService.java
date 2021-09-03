@@ -141,10 +141,7 @@ public class FormService {
 
     public void transferToFriend(Requirement requirement) {
 
-        if (requirement.getAmount() == 0) {
-
-            return;
-        }
+        if (requirement.getAmount() == 0) {return;}
 
         Optional<User> optionalUser = userRepository.findById(requirement.getUserId());
         User userUpdated = new User();
