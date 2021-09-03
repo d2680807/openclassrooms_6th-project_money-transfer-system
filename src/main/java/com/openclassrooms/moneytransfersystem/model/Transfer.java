@@ -1,5 +1,6 @@
 package com.openclassrooms.moneytransfersystem.model;
 
+import com.openclassrooms.moneytransfersystem.model.utility.TransferType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,13 +20,13 @@ public class Transfer {
     private LocalDateTime date;
     @Column(nullable = false)
     private double amount;
-    @Column(nullable = true)
+    @Column(nullable = false)
     private double tax;
     @Column(nullable = true)
     private String description;
-
-    @JoinColumn(name = "type", insertable=false, updatable=false)
-    private String type;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TransferType type;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="user_id", updatable=false)

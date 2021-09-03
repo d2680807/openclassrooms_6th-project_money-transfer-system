@@ -90,7 +90,7 @@
                                     <input type="hidden" th:field="*{userId}" class="form-control" required />
                                     <select required="required" class="form-control form-control-lg" th:field="*{recipient}">
                                         <option value="">Choisissez un ami</option>
-                                        <option th:each="friend : ${friends}"
+                                        <option th:each="friend : ${friendsList}"
                                                 th:value="${friend}"
                                                 th:utext="${friend}"/>
                                     </select>

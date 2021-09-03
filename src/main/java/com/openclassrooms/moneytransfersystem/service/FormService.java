@@ -9,6 +9,7 @@ import com.openclassrooms.moneytransfersystem.model.Transfer;
 import com.openclassrooms.moneytransfersystem.model.User;
 import com.openclassrooms.moneytransfersystem.model.utility.ListElement;
 import com.openclassrooms.moneytransfersystem.model.utility.Requirement;
+import com.openclassrooms.moneytransfersystem.model.utility.TransferType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,15 +74,15 @@ public class FormService {
 
                 if (isTopup) {
                     user.setBalance(optionalUser.get().getBalance() + requirement.getAmount());
-                    outTransfer.setType("IN");
+                    outTransfer.setType(TransferType.IN);
                     outTransfer.setDescription("Rechargement depuis votre compte bancaire");
-                    inTransfer.setType("OUT");
+                    inTransfer.setType(TransferType.OUT);
                     inTransfer.setDescription("Rechargement depuis votre compte bancaire");
                 } else {
                     user.setBalance(optionalUser.get().getBalance() - requirement.getAmount());
-                    outTransfer.setType("OUT");
+                    outTransfer.setType(TransferType.OUT);
                     outTransfer.setDescription("Retrait de solde vers compte bancaire");
-                    inTransfer.setType("IN");
+                    inTransfer.setType(TransferType.IN);
                     inTransfer.setDescription("Retrait de solde vers compte bancaire");
                 }
 
@@ -122,7 +123,7 @@ public class FormService {
                 .forEach( t -> {
                     ListElement transfer = new ListElement();
                     String prefix;
-                    if (t.getType().equals("OUT")) {
+                    if (t.getType().toString().equals(TransferType.OUT)) {
                         prefix = "-";
                         transfer.setRelation(transferRepository.findById(t.getId() + 1).get().getUser().getFirstName());
                     } else {
@@ -162,7 +163,7 @@ public class FormService {
             Transfer outTransfer = new Transfer();
             outTransfer.setUser(userUpdated);
             outTransfer.setDate(LocalDateTime.now());
-            outTransfer.setType("OUT");
+            outTransfer.setType(TransferType.OUT);
             outTransfer.setAmount(requirement.getAmount());
             outTransfer.setTax(taxRepository.findByName("DEFAULT").getRate());
             outTransfer.setDescription(requirement.getDescription());
@@ -180,7 +181,7 @@ public class FormService {
             inTransfer.setTax(taxRepository.findByName("DEFAULT").getRate());
             inTransfer.setDescription(requirement.getDescription());
             inTransfer.setUser(recipient);
-            inTransfer.setType("IN");
+            inTransfer.setType(TransferType.IN);
             transferRepository.save(inTransfer);
             logger.debug("[transferToFriend] inTransfer: " + inTransfer);
         }

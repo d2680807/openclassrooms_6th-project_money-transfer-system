@@ -80,11 +80,11 @@ public class LoginController {
         logger.debug("[viewApplication] balance: " + balance);
 
         Requirement requirement = formService.getRequirement(authenticationName);
-        model.addAttribute("transferBack", requirement);
+        model.addAttribute("requirement", requirement);
         logger.debug("[viewApplication] user id: " + requirement.getUserId());
 
         Set<String> friendsList = formService.getFriendsList(authenticationName);
-        model.addAttribute("friends", friendsList);
+        model.addAttribute("friendsList", friendsList);
         logger.debug("[viewApplication] friends: " + friendsList);
 
         List<ListElement> transfersList = formService.getTransfersList(authenticationName);
