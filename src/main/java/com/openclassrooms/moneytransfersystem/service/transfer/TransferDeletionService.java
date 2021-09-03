@@ -1,8 +1,8 @@
 package com.openclassrooms.moneytransfersystem.service.transfer;
 
 import com.openclassrooms.moneytransfersystem.dao.TransferRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ public class TransferDeletionService {
     @Autowired
     private TransferRepository transferRepository;
 
-    Logger logger = LoggerFactory.getLogger(TransferDeletionService.class);
+    Logger logger = LogManager.getLogger(TransferDeletionService.class);
 
     public void deleteTransferById(Long id) {
 

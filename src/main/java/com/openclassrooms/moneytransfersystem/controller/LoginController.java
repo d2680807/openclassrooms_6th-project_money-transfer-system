@@ -9,8 +9,8 @@ import com.openclassrooms.moneytransfersystem.service.FormService;
 import com.openclassrooms.moneytransfersystem.service.user.UserCreationService;
 import com.openclassrooms.moneytransfersystem.service.user.UserReadService;
 import com.openclassrooms.moneytransfersystem.service.user.UserUpdateService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +19,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Controller
@@ -40,7 +39,7 @@ public class LoginController {
     @Autowired
     private FormService formService;
 
-    Logger logger = LoggerFactory.getLogger(LoginController.class);
+    Logger logger = LogManager.getLogger(LoginController.class);
 
     @GetMapping("")
     public String viewHomePage() {

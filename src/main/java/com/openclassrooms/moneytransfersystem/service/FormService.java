@@ -10,8 +10,9 @@ import com.openclassrooms.moneytransfersystem.model.User;
 import com.openclassrooms.moneytransfersystem.model.utility.ListElement;
 import com.openclassrooms.moneytransfersystem.model.utility.Requirement;
 import com.openclassrooms.moneytransfersystem.model.utility.TransferType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.openclassrooms.moneytransfersystem.service.user.UserUpdateService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ public class FormService {
 
     private JsonService jsonService;
 
-    Logger logger = LoggerFactory.getLogger(FormService.class);
+    Logger logger = LogManager.getLogger(UserUpdateService.class);
 
     public String getBalance(String authenticationName) {
 

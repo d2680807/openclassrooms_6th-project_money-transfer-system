@@ -2,8 +2,8 @@ package com.openclassrooms.moneytransfersystem.service.user;
 
 import com.openclassrooms.moneytransfersystem.dao.UserRepository;
 import com.openclassrooms.moneytransfersystem.model.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class UserCreationService {
     @Autowired
     private UserRepository userRepository;
 
-    Logger logger = LoggerFactory.getLogger(UserCreationService.class);
+    Logger logger = LogManager.getLogger(UserCreationService.class);
 
     public User createUser(User user) {
 
