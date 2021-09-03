@@ -7,6 +7,7 @@ import com.openclassrooms.moneytransfersystem.dao.TransferRepository;
 import com.openclassrooms.moneytransfersystem.dao.UserRepository;
 import com.openclassrooms.moneytransfersystem.model.Transfer;
 import com.openclassrooms.moneytransfersystem.model.User;
+import com.openclassrooms.moneytransfersystem.model.utility.ListElement;
 import com.openclassrooms.moneytransfersystem.model.utility.Requirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Service
 public class FormService {
@@ -31,6 +31,14 @@ public class FormService {
     private TaxRepository taxRepository;
 
     Logger logger = LoggerFactory.getLogger(FormService.class);
+
+    public String getBalance(String authenticationName) {
+
+        User user = userRepository.findByEmail(authenticationName);
+        String balance = String.format("%.2f", user.getBalance());
+
+        return balance;
+    }
 
     public void updateBalance(Requirement requirement, boolean isTopup) {
 
@@ -84,6 +92,47 @@ public class FormService {
                 transferRepository.save(inTransfer);
             }
         }
+    }
+
+    public Requirement getRequirement(String authenticationName) {
+
+        Requirement requirement = new Requirement();
+        requirement.setUserId(userRepository.findByEmail(authenticationName).getId());
+
+        return requirement;
+    }
+
+    public Set<String> getFriendsList(String authenticationName) throws JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = userRepository.findByEmail(authenticationName).getFriendsList();
+        Set<String> friends = mapper.readValue(jsonString, Set.class);
+
+        return friends;
+    }
+
+    public List<ListElement> getTransfersList(String authenticationName) {
+
+        List<ListElement> transfersList = new ArrayList<>();
+        userRepository.findByEmail(authenticationName).getTransfers().stream()
+                .forEach( t -> {
+                    ListElement transfer = new ListElement();
+                    String prefix;
+                    if (t.getType().equals("OUT")) {
+                        prefix = "-";
+                        transfer.setRelation(transferRepository.findById(t.getId() + 1).get().getUser().getFirstName());
+                    } else {
+                        prefix = "+";
+                        transfer.setRelation(transferRepository.findById(t.getId() - 1).get().getUser().getFirstName());
+                    }
+                    transfer.setDate(t.getDate().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM, yyyy", Locale.FRENCH)));
+                    transfer.setDescription(t.getDescription());
+                    transfer.setAmount(String.valueOf(prefix + t.getAmount()));
+                    transfersList.add(transfer);
+                });
+        Collections.sort(transfersList, Comparator.comparing(ListElement::getDate));
+
+        return transfersList;
     }
 
     public void transferToFriend(Requirement requirement) {

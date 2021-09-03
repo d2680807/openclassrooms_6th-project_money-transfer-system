@@ -1,7 +1,6 @@
 package com.openclassrooms.moneytransfersystem.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.moneytransfersystem.dao.TransferRepository;
 import com.openclassrooms.moneytransfersystem.model.*;
 import com.openclassrooms.moneytransfersystem.model.utility.ListElement;
@@ -71,48 +70,26 @@ public class LoginController {
 
     @GetMapping("/app")
     public String viewApplication(Model model) throws JsonProcessingException {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        logger.debug("[app] User Email: " + authentication.getName());
-        User user = userReadService.readUserByEmail(authentication.getName());
+        String authenticationName = authentication.getName();
+        logger.debug("[viewApplication] authentication: " + authenticationName);
 
-        String balance = String.format("%.2f", user.getBalance());
+        String balance = formService.getBalance(authenticationName);
         model.addAttribute("balance", balance);
+        logger.debug("[viewApplication] balance: " + balance);
 
-        List<ListElement> listTransfers = new ArrayList<>();
-        user.getTransfers().stream()
-                .forEach( t -> {
-                    ListElement transfer = new ListElement();
-                    String prefix;
-                    if (t.getType().equals("OUT")) {
-                        prefix = "-";
-                        transfer.setRelation(
-                                transferRepository.findById(t.getId() + 1).get().getUser().getFirstName()
-                        );
-                    } else {
-                        prefix = "+";
-                        transfer.setRelation(
-                                transferRepository.findById(t.getId() - 1).get().getUser().getFirstName()
-                        );
-                    }
-                    transfer.setDate(t.getDate().format(DateTimeFormatter.ofPattern("EEEE, dd MMMM, yyyy", Locale.FRENCH)));
-
-                    transfer.setDescription(t.getDescription());
-                    transfer.setAmount(String.valueOf(prefix + t.getAmount()));
-                    listTransfers.add(transfer);
-                });
-
-        Collections.sort(listTransfers, Comparator.comparing(ListElement::getDate));
-        model.addAttribute("listTransfers", listTransfers);
-
-        Requirement requirement = new Requirement();
-        requirement.setUserId(user.getId());
-        logger.debug("[app-transfer-back] User ID: " + requirement.getUserId());
-        logger.debug("[app-transfer-back] Amount: " + requirement.getAmount());
+        Requirement requirement = formService.getRequirement(authenticationName);
         model.addAttribute("transferBack", requirement);
+        logger.debug("[viewApplication] user id: " + requirement.getUserId());
 
-        ObjectMapper mapper = new ObjectMapper();
-        List<String> friends = mapper.readValue(user.getFriendsList(), List.class);
-        model.addAttribute("friends", friends);
+        Set<String> friendsList = formService.getFriendsList(authenticationName);
+        model.addAttribute("friends", friendsList);
+        logger.debug("[viewApplication] friends: " + friendsList);
+
+        List<ListElement> transfersList = formService.getTransfersList(authenticationName);
+        model.addAttribute("transfersList", transfersList);
+        logger.debug("[viewApplication] transfersList: " + friendsList);
 
         logger.debug("[viewHomePage] display: app page");
 
@@ -124,7 +101,6 @@ public class LoginController {
 
         logger.debug("[processTopup] user id: " + requirement.getUserId());
         logger.debug("[processTopup] amount: " + requirement.getAmount());
-
         formService.updateBalance(requirement, true);
 
         return "index";
@@ -135,7 +111,6 @@ public class LoginController {
 
         logger.debug("[processBalanceBack] user id: " + requirement.getUserId());
         logger.debug("[processBalanceBack] amount: " + requirement.getAmount());
-
         formService.updateBalance(requirement, false);
 
         return "index";
@@ -146,7 +121,6 @@ public class LoginController {
 
         logger.debug("[processFriendship] user id: " + requirement.getUserId());
         logger.debug("[processFriendship] recipient: " + requirement.getRecipient());
-
         formService.addFriend(requirement);
 
         return "index";
@@ -159,7 +133,6 @@ public class LoginController {
         logger.debug("[processTransfer] recipient: " + requirement.getRecipient());
         logger.debug("[processTransfer] amount: " + requirement.getAmount());
         logger.debug("[processTransfer] description: " + requirement.getDescription());
-
         formService.transferToFriend(requirement);
 
         return "index";

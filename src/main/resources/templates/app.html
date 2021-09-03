@@ -121,7 +121,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="transfer: ${listTransfers}">
+                    <tr th:each="transfer: ${transfersList}">
                         <td th:text="${transfer.date}">Date</td>
                         <td th:text="${transfer.relation}">Relation</td>
                         <td th:text="${transfer.description}">Description</td>
