@@ -1,7 +1,6 @@
 package com.openclassrooms.moneytransfersystem.service.user;
 
 import com.openclassrooms.moneytransfersystem.dao.UserRepository;
-import com.openclassrooms.moneytransfersystem.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

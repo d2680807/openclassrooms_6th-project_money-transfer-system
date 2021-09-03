@@ -2,8 +2,6 @@ package com.openclassrooms.moneytransfersystem.model;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 @Data
 public class ListElement {
 

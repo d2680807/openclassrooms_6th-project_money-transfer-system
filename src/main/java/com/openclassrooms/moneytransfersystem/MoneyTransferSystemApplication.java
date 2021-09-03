@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MoneyTransferSystemApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(MoneyTransferSystemApplication.class, args);
     }
-
 }
