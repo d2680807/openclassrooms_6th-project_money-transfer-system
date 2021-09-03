@@ -49,7 +49,7 @@ public class LoginController {
 
         model.addAttribute("user", new User());
 
-        return "signup_form";
+        return "signup";
     }
 
     @PostMapping("/process_register")
@@ -62,7 +62,7 @@ public class LoginController {
 
         userCreationService.createUser(user);
 
-        return "register_success";
+        return "success";
     }
 
     @PostMapping("/process_balance_back")
