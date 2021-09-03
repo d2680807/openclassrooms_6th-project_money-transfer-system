@@ -6,6 +6,7 @@ import com.openclassrooms.moneytransfersystem.dao.TransferRepository;
 import com.openclassrooms.moneytransfersystem.model.*;
 import com.openclassrooms.moneytransfersystem.model.utility.ListElement;
 import com.openclassrooms.moneytransfersystem.model.utility.Requirement;
+import com.openclassrooms.moneytransfersystem.service.FormService;
 import com.openclassrooms.moneytransfersystem.service.user.UserCreationService;
 import com.openclassrooms.moneytransfersystem.service.user.UserReadService;
 import com.openclassrooms.moneytransfersystem.service.user.UserUpdateService;
@@ -36,6 +37,9 @@ public class LoginController {
 
     @Autowired
     private TransferRepository transferRepository;
+
+    @Autowired
+    private FormService formService;
 
     Logger logger = LoggerFactory.getLogger(LoginController.class);
 
@@ -121,7 +125,7 @@ public class LoginController {
         logger.debug("[processTopup] user id: " + requirement.getUserId());
         logger.debug("[processTopup] amount: " + requirement.getAmount());
 
-        userUpdateService.getTopup(requirement);
+        formService.updateBalance(requirement, true);
 
         return "index";
     }
@@ -132,7 +136,18 @@ public class LoginController {
         logger.debug("[processBalanceBack] user id: " + requirement.getUserId());
         logger.debug("[processBalanceBack] amount: " + requirement.getAmount());
 
-        userUpdateService.getBalanceBack(requirement);
+        formService.updateBalance(requirement, false);
+
+        return "index";
+    }
+
+    @PostMapping("/process_friendship")
+    public String processFriendship(Requirement requirement) throws JsonProcessingException {
+
+        logger.debug("[processFriendship] user id: " + requirement.getUserId());
+        logger.debug("[processFriendship] recipient: " + requirement.getRecipient());
+
+        formService.addFriend(requirement);
 
         return "index";
     }
@@ -145,18 +160,7 @@ public class LoginController {
         logger.debug("[processTransfer] amount: " + requirement.getAmount());
         logger.debug("[processTransfer] description: " + requirement.getDescription());
 
-        userUpdateService.friendTransfer(requirement);
-
-        return "index";
-    }
-
-    @PostMapping("/process_friendship")
-    public String processFriendship(Requirement requirement) throws JsonProcessingException {
-
-        logger.debug("[processFriendship] user id: " + requirement.getUserId());
-        logger.debug("[processFriendship] recipient: " + requirement.getRecipient());
-
-        userUpdateService.addFriend(requirement);
+        formService.transferToFriend(requirement);
 
         return "index";
     }
