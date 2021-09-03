@@ -21,4 +21,10 @@ public class TaxDeletionService {
             taxRepository.deleteById(id);
         }
     }
+
+    public void deleteTaxes() {
+
+        logger.debug("[deleteTaxes] delete: all");
+        taxRepository.deleteAll();
+    }
 }
