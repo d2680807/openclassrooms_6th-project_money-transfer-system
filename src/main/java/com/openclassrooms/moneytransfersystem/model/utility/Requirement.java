@@ -1,4 +1,4 @@
-package com.openclassrooms.moneytransfersystem.model;
+package com.openclassrooms.moneytransfersystem.model.utility;
 
 import lombok.Data;
 

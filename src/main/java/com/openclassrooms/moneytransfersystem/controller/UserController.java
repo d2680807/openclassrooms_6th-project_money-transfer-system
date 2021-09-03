@@ -1,6 +1,6 @@
 package com.openclassrooms.moneytransfersystem.controller;
 
-import com.openclassrooms.moneytransfersystem.model.Requirement;
+import com.openclassrooms.moneytransfersystem.model.utility.Requirement;
 import com.openclassrooms.moneytransfersystem.model.User;
 import com.openclassrooms.moneytransfersystem.service.user.UserCreationService;
 import com.openclassrooms.moneytransfersystem.service.user.UserDeletionService;
