@@ -34,6 +34,7 @@ public class FormService {
 
     public String getBalance(String authenticationName) {
 
+        logger.debug("[getBalance] authenticationName: " + authenticationName);
         User user = userRepository.findByEmail(authenticationName);
         String balance = String.format("%.2f", user.getBalance());
 
@@ -46,9 +47,6 @@ public class FormService {
 
             return;
         } else {
-            logger.debug("[service-balance-back] User ID: " + requirement.getUserId());
-            logger.debug("[service-balance-back] Balance: " + requirement.getAmount());
-
             Optional<User> optionalUser = userRepository.findById(requirement.getUserId());
             User user = new User();
             if (optionalUser.isPresent()) {
@@ -90,12 +88,16 @@ public class FormService {
                 userRepository.save(user);
                 transferRepository.save(outTransfer);
                 transferRepository.save(inTransfer);
+                logger.debug("[updateBalance] updated user: " + user);
+                logger.debug("[updateBalance] outgoing: " + outTransfer);
+                logger.debug("[updateBalance] ingoing: " +inTransfer);
             }
         }
     }
 
     public Requirement getRequirement(String authenticationName) {
 
+        logger.debug("[getRequirement] authenticationName: " + authenticationName);
         Requirement requirement = new Requirement();
         requirement.setUserId(userRepository.findByEmail(authenticationName).getId());
 
@@ -104,6 +106,7 @@ public class FormService {
 
     public Set<String> getFriendsList(String authenticationName) throws JsonProcessingException {
 
+        logger.debug("[getFriendsList] authenticationName: " + authenticationName);
         ObjectMapper mapper = new ObjectMapper();
         String jsonString = userRepository.findByEmail(authenticationName).getFriendsList();
         Set<String> friends = mapper.readValue(jsonString, Set.class);
@@ -113,6 +116,7 @@ public class FormService {
 
     public List<ListElement> getTransfersList(String authenticationName) {
 
+        logger.debug("[getTransfersList] authenticationName: " + authenticationName);
         List<ListElement> transfersList = new ArrayList<>();
         userRepository.findByEmail(authenticationName).getTransfers().stream()
                 .forEach( t -> {
@@ -156,18 +160,22 @@ public class FormService {
             userUpdated.setFriendsList(optionalUser.get().getFriendsList());
             userUpdated.setBalance(optionalUser.get().getBalance() - requirement.getAmount());
             userRepository.save(userUpdated);
+            logger.debug("[transferToFriend] userUpdated: " + userUpdated);
 
-            Transfer transfer = new Transfer();
-            transfer.setUser(userUpdated);
-            transfer.setDate(LocalDateTime.now());
-            transfer.setType("OUT");
-            transfer.setAmount(requirement.getAmount());
-            transfer.setTax(taxRepository.findByName("DEFAULT").getRate());
-            transfer.setDescription(requirement.getDescription());
-            transferRepository.save(transfer);
+            Transfer outTransfer = new Transfer();
+            outTransfer.setUser(userUpdated);
+            outTransfer.setDate(LocalDateTime.now());
+            outTransfer.setType("OUT");
+            outTransfer.setAmount(requirement.getAmount());
+            outTransfer.setTax(taxRepository.findByName("DEFAULT").getRate());
+            outTransfer.setDescription(requirement.getDescription());
+            transferRepository.save(outTransfer);
+            logger.debug("[transferToFriend] outTransfer: " + outTransfer);
 
             recipient.setBalance(optionalUser.get().getBalance() + requirement.getAmount());
             userRepository.save(recipient);
+            logger.debug("[transferToFriend] recipient: " + recipient);
+
 
             Transfer inTransfer = new Transfer();
             inTransfer.setDate(LocalDateTime.now());
@@ -177,6 +185,7 @@ public class FormService {
             inTransfer.setUser(recipient);
             inTransfer.setType("IN");
             transferRepository.save(inTransfer);
+            logger.debug("[transferToFriend] inTransfer: " + inTransfer);
         }
     }
 
@@ -200,6 +209,7 @@ public class FormService {
             friendsList.add(requirement.getRecipient());
             userUpdated.setFriendsList(jsonService.toJson(friendsList, false));
             userRepository.save(userUpdated);
+            logger.debug("[addFriend] friendsList: " + friendsList);
         }
     }
 }
