@@ -2,6 +2,7 @@ package com.openclassrooms.moneytransfersystem.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.openclassrooms.moneytransfersystem.dao.TaxRepository;
 import com.openclassrooms.moneytransfersystem.dao.TransferRepository;
 import com.openclassrooms.moneytransfersystem.dao.UserRepository;
@@ -208,11 +209,18 @@ public class FormService {
             userUpdated.setBicCode(optionalUser.get().getBicCode());
             userUpdated.setBalance(optionalUser.get().getBalance());
 
-            Set<String> friendsList = jsonService.toSetOfString(optionalUser.get().getFriendsList());
-            friendsList.add(requirement.getRecipient());
-            userUpdated.setFriendsList(jsonService.toJson(friendsList, false));
-            userRepository.save(userUpdated);
+            String optionalJsonString = optionalUser.get().getFriendsList();
+            logger.debug("[addFriend] optionalJsonString: " + optionalJsonString);
+            ObjectMapper mapper = new ObjectMapper();
+            Set<String> friendsList = new HashSet<>();
+            friendsList.addAll(mapper.readValue(optionalJsonString, Set.class));
             logger.debug("[addFriend] friendsList: " + friendsList);
+            friendsList.add(requirement.getRecipient());
+            logger.debug("[addFriend] recipient: " + friendsList);
+            ObjectWriter objectWriter = mapper.writer();
+            userUpdated.setFriendsList(objectWriter.writeValueAsString(friendsList));
+            logger.debug("[addFriend] friendsListUpdated: " + friendsList);
+            userRepository.save(userUpdated);
         }
     }
 }

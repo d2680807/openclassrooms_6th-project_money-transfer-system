@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -23,7 +24,7 @@ public class JsonService {
         return defaultObjectMapper;
     }
 
-    public static ObjectMapper mapper = getDefaultObjectMapper();
+    private ObjectMapper mapper = getDefaultObjectMapper();
 
     public String toJson(Set<String> list, boolean indented) throws JsonProcessingException {
 
@@ -38,7 +39,8 @@ public class JsonService {
     public Set<String> toSetOfString(String jsonString) throws JsonProcessingException {
 
         logger.debug("[toSetOfString] jsonString: " + jsonString);
-        Set<String> list = mapper.readValue(jsonString, Set.class);
+        Set<String> list = new HashSet<>();
+        list.addAll(mapper.readValue(jsonString, Set.class));
 
         return list;
     }
