@@ -66,47 +66,47 @@ public class LoginController {
     }
 
     @PostMapping("/process_balance_back")
-    public String processRegister(TransferBack transferBack) {
+    public String processRegister(Requirements requirements) {
 
-        logger.debug("[process_balance_back] User ID: " + transferBack.getUserId());
-        logger.debug("[process_balance_back] Amount: " + transferBack.getAmount());
+        logger.debug("[process_balance_back] User ID: " + requirements.getUserId());
+        logger.debug("[process_balance_back] Amount: " + requirements.getAmount());
 
-        userUpdateService.getBalanceBack(transferBack);
+        userUpdateService.getBalanceBack(requirements);
 
         return "index";
     }
 
     @PostMapping("/process_topup")
-    public String processTopup(TransferBack transferBack) {
+    public String processTopup(Requirements requirements) {
 
-        logger.debug("[process_balance_back] User ID: " + transferBack.getUserId());
-        logger.debug("[process_balance_back] Amount: " + transferBack.getAmount());
+        logger.debug("[process_balance_back] User ID: " + requirements.getUserId());
+        logger.debug("[process_balance_back] Amount: " + requirements.getAmount());
 
-        userUpdateService.getTopup(transferBack);
+        userUpdateService.getTopup(requirements);
 
         return "index";
     }
 
     @PostMapping("/process_transfer")
-    public String processTransfer(TransferBack transferBack) {
+    public String processTransfer(Requirements requirements) {
 
-        logger.debug("[process_transfer] User ID: " + transferBack.getUserId());
-        logger.debug("[process_transfer] Recipient: " + transferBack.getRecipient());
-        logger.debug("[process_transfer] Amount: " + transferBack.getAmount());
-        logger.debug("[process_transfer] Description: " + transferBack.getDescription());
+        logger.debug("[process_transfer] User ID: " + requirements.getUserId());
+        logger.debug("[process_transfer] Recipient: " + requirements.getRecipient());
+        logger.debug("[process_transfer] Amount: " + requirements.getAmount());
+        logger.debug("[process_transfer] Description: " + requirements.getDescription());
 
-        userUpdateService.friendTransfer(transferBack);
+        userUpdateService.friendTransfer(requirements);
 
         return "index";
     }
 
     @PostMapping("/process_friendship")
-    public String processFriendship(TransferBack transferBack) throws JsonProcessingException {
+    public String processFriendship(Requirements requirements) throws JsonProcessingException {
 
-        logger.debug("[process_friendship] User ID: " + transferBack.getUserId());
-        logger.debug("[process_friendship] Recipient: " + transferBack.getRecipient());
+        logger.debug("[process_friendship] User ID: " + requirements.getUserId());
+        logger.debug("[process_friendship] Recipient: " + requirements.getRecipient());
 
-        userUpdateService.addFriend(transferBack);
+        userUpdateService.addFriend(requirements);
 
         return "index";
     }
@@ -147,11 +147,11 @@ public class LoginController {
         Collections.sort(listTransfers, Comparator.comparing(ListElement::getDate));
         model.addAttribute("listTransfers", listTransfers);
 
-        TransferBack transferBack = new TransferBack();
-        transferBack.setUserId(user.getId());
-        logger.debug("[app-transfer-back] User ID: " + transferBack.getUserId());
-        logger.debug("[app-transfer-back] Amount: " + transferBack.getAmount());
-        model.addAttribute("transferBack", transferBack);
+        Requirements requirements = new Requirements();
+        requirements.setUserId(user.getId());
+        logger.debug("[app-transfer-back] User ID: " + requirements.getUserId());
+        logger.debug("[app-transfer-back] Amount: " + requirements.getAmount());
+        model.addAttribute("transferBack", requirements);
 
         ObjectMapper mapper = new ObjectMapper();
         List<String> friends = mapper.readValue(user.getFriendsList(), List.class);

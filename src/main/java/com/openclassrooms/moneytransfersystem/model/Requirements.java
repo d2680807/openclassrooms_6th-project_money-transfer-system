@@ -3,7 +3,7 @@ package com.openclassrooms.moneytransfersystem.model;
 import lombok.Data;
 
 @Data
-public class TransferBack {
+public class Requirements {
 
     Long userId;
     String recipient;

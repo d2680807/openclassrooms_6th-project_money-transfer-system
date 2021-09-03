@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.moneytransfersystem.dao.TaxRepository;
 import com.openclassrooms.moneytransfersystem.dao.TransferRepository;
 import com.openclassrooms.moneytransfersystem.dao.UserRepository;
+import com.openclassrooms.moneytransfersystem.model.Requirements;
 import com.openclassrooms.moneytransfersystem.model.Transfer;
-import com.openclassrooms.moneytransfersystem.model.TransferBack;
 import com.openclassrooms.moneytransfersystem.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -54,17 +53,17 @@ public class UserUpdateService {
         return userUpdated;
     }
 
-    public void getBalanceBack(TransferBack transferBack) {
+    public void getBalanceBack(Requirements requirements) {
 
-        if (transferBack.getAmount() == 0) {
+        if (requirements.getAmount() == 0) {
 
             return;
         }
 
-        logger.debug("[service-balance-back] User ID: " + transferBack.getUserId());
-        logger.debug("[service-balance-back] Balance: " + transferBack.getAmount());
+        logger.debug("[service-balance-back] User ID: " + requirements.getUserId());
+        logger.debug("[service-balance-back] Balance: " + requirements.getAmount());
 
-        Optional<User> optionalUser = userRepository.findById(transferBack.getUserId());
+        Optional<User> optionalUser = userRepository.findById(requirements.getUserId());
         User userUpdated = new User();
         if (optionalUser.isPresent()) {
             userUpdated.setId(optionalUser.get().getId());
@@ -75,14 +74,14 @@ public class UserUpdateService {
             userUpdated.setIbanCode(optionalUser.get().getIbanCode());
             userUpdated.setBicCode(optionalUser.get().getBicCode());
             userUpdated.setFriendsList(optionalUser.get().getFriendsList());
-            userUpdated.setBalance(optionalUser.get().getBalance() - transferBack.getAmount());
+            userUpdated.setBalance(optionalUser.get().getBalance() - requirements.getAmount());
             userRepository.save(userUpdated);
 
             Transfer transfer = new Transfer();
             transfer.setUser(userUpdated);
             transfer.setDate(LocalDateTime.now());
             transfer.setType("OUT");
-            transfer.setAmount(transferBack.getAmount());
+            transfer.setAmount(requirements.getAmount());
             transfer.setTax(taxRepository.findByName("DEFAULT").getRate());
             transfer.setDescription("Retrait de solde vers compte bancaire");
             transferRepository.save(transfer);
@@ -93,7 +92,7 @@ public class UserUpdateService {
 
             Transfer inTransfer = new Transfer();
             inTransfer.setDate(LocalDateTime.now());
-            inTransfer.setAmount(transferBack.getAmount());
+            inTransfer.setAmount(requirements.getAmount());
             inTransfer.setTax(taxRepository.findByName("DEFAULT").getRate());
             inTransfer.setDescription("Retrait de solde vers compte bancaire");
             inTransfer.setUser(userRepository.findByEmail("app@test.com"));
@@ -105,14 +104,14 @@ public class UserUpdateService {
         }
     }
 
-    public void getTopup(TransferBack transferBack) {
+    public void getTopup(Requirements requirements) {
 
-        if (transferBack.getAmount() == 0) {
+        if (requirements.getAmount() == 0) {
 
             return;
         }
 
-        Optional<User> optionalUser = userRepository.findById(transferBack.getUserId());
+        Optional<User> optionalUser = userRepository.findById(requirements.getUserId());
         User userUpdated = new User();
         if (optionalUser.isPresent()) {
             userUpdated.setId(optionalUser.get().getId());
@@ -123,14 +122,14 @@ public class UserUpdateService {
             userUpdated.setIbanCode(optionalUser.get().getIbanCode());
             userUpdated.setBicCode(optionalUser.get().getBicCode());
             userUpdated.setFriendsList(optionalUser.get().getFriendsList());
-            userUpdated.setBalance(optionalUser.get().getBalance() + transferBack.getAmount());
+            userUpdated.setBalance(optionalUser.get().getBalance() + requirements.getAmount());
             userRepository.save(userUpdated);
 
             Transfer transfer = new Transfer();
             transfer.setUser(userUpdated);
             transfer.setDate(LocalDateTime.now());
             transfer.setType("IN");
-            transfer.setAmount(transferBack.getAmount());
+            transfer.setAmount(requirements.getAmount());
             transfer.setTax(taxRepository.findByName("DEFAULT").getRate());
             transfer.setDescription("Rechargement depuis votre compte bancaire");
             transferRepository.save(transfer);
@@ -141,7 +140,7 @@ public class UserUpdateService {
 
             Transfer inTransfer = new Transfer();
             inTransfer.setDate(LocalDateTime.now());
-            inTransfer.setAmount(transferBack.getAmount());
+            inTransfer.setAmount(requirements.getAmount());
             inTransfer.setTax(taxRepository.findByName("DEFAULT").getRate());
             inTransfer.setDescription("Rechargement depuis votre compte bancaire");
             inTransfer.setUser(userRepository.findByEmail("app@test.com"));
@@ -153,16 +152,16 @@ public class UserUpdateService {
         }
     }
 
-    public void friendTransfer(TransferBack transferBack) {
+    public void friendTransfer(Requirements requirements) {
 
-        if (transferBack.getAmount() == 0) {
+        if (requirements.getAmount() == 0) {
 
             return;
         }
 
-        Optional<User> optionalUser = userRepository.findById(transferBack.getUserId());
+        Optional<User> optionalUser = userRepository.findById(requirements.getUserId());
         User userUpdated = new User();
-        User recipient = userRepository.findByEmail(transferBack.getRecipient());;
+        User recipient = userRepository.findByEmail(requirements.getRecipient());;
         if (optionalUser.isPresent() && !Objects.isNull(recipient)) {
             userUpdated.setId(optionalUser.get().getId());
             userUpdated.setEmail(optionalUser.get().getEmail());
@@ -172,37 +171,37 @@ public class UserUpdateService {
             userUpdated.setIbanCode(optionalUser.get().getIbanCode());
             userUpdated.setBicCode(optionalUser.get().getBicCode());
             userUpdated.setFriendsList(optionalUser.get().getFriendsList());
-            userUpdated.setBalance(optionalUser.get().getBalance() - transferBack.getAmount());
+            userUpdated.setBalance(optionalUser.get().getBalance() - requirements.getAmount());
             userRepository.save(userUpdated);
 
             Transfer transfer = new Transfer();
             transfer.setUser(userUpdated);
             transfer.setDate(LocalDateTime.now());
             transfer.setType("OUT");
-            transfer.setAmount(transferBack.getAmount());
+            transfer.setAmount(requirements.getAmount());
             transfer.setTax(taxRepository.findByName("DEFAULT").getRate());
-            transfer.setDescription(transferBack.getDescription());
+            transfer.setDescription(requirements.getDescription());
             transferRepository.save(transfer);
 
-            recipient.setBalance(optionalUser.get().getBalance() + transferBack.getAmount());
+            recipient.setBalance(optionalUser.get().getBalance() + requirements.getAmount());
             userRepository.save(recipient);
 
             Transfer inTransfer = new Transfer();
             inTransfer.setDate(LocalDateTime.now());
-            inTransfer.setAmount(transferBack.getAmount());
+            inTransfer.setAmount(requirements.getAmount());
             inTransfer.setTax(taxRepository.findByName("DEFAULT").getRate());
-            inTransfer.setDescription(transferBack.getDescription());
+            inTransfer.setDescription(requirements.getDescription());
             inTransfer.setUser(recipient);
             inTransfer.setType("IN");
             transferRepository.save(inTransfer);
         }
     }
 
-    public void addFriend(TransferBack transferBack) throws JsonProcessingException {
+    public void addFriend(Requirements requirements) throws JsonProcessingException {
 
-        Optional<User> optionalUser = userRepository.findById(transferBack.getUserId());
+        Optional<User> optionalUser = userRepository.findById(requirements.getUserId());
         User userUpdated = new User();
-        User recipient = userRepository.findByEmail(transferBack.getRecipient());
+        User recipient = userRepository.findByEmail(requirements.getRecipient());
 
         if (optionalUser.isPresent() && !Objects.isNull(recipient)) {
             userUpdated.setId(optionalUser.get().getId());
@@ -216,7 +215,7 @@ public class UserUpdateService {
 
             ObjectMapper mapper = new ObjectMapper();
             Set<String> friends = mapper.readValue(optionalUser.get().getFriendsList(), Set.class);
-            friends.add(transferBack.getRecipient());
+            friends.add(requirements.getRecipient());
             userUpdated.setFriendsList(mapper.writeValueAsString(friends));
 
             userRepository.save(userUpdated);

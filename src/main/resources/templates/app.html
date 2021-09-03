@@ -27,7 +27,7 @@
 
             <div style="display: flex;align-items: center;">
                 <div>
-                    <form th:action="@{/process_balance_back}" th:object="${transferBack}"
+                    <form th:action="@{/process_balance_back}" th:object="${requirements}"
                           method="post" style="max-width: 600px; margin: 0 auto;">
                         <div class="m-3">
                             <div class="form-group row">
@@ -44,7 +44,7 @@
                         </div>
                     </form>
 
-                    <form th:action="@{/process_topup}" th:object="${transferBack}"
+                    <form th:action="@{/process_topup}" th:object="${requirements}"
                           method="post" style="max-width: 600px; margin: 0 auto;">
                         <div class="m-3">
                             <div class="form-group row">
@@ -65,7 +65,7 @@
                 <div style="border-left:1px solid gray;height: 300px;"></div>
 
                 <div>
-                    <form th:action="@{/process_friendship}" th:object="${transferBack}"
+                    <form th:action="@{/process_friendship}" th:object="${requirements}"
                           method="post" style="max-width: 600px; margin: 0 auto;">
                         <div class="m-3">
                             <div class="form-group row">
@@ -82,7 +82,7 @@
                         </div>
                     </form>
 
-                    <form th:action="@{/process_transfer}" th:object="${transferBack}" method="post">
+                    <form th:action="@{/process_transfer}" th:object="${requirements}" method="post">
                         <div class="m-3">
                             <div class="form-group row">
                                 <label class="col-4 col-form-label"><span>Transférer une somme à un ami :</span> </label>
