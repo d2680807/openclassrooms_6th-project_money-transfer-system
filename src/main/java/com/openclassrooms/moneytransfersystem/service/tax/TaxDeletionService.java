@@ -12,7 +12,7 @@ public class TaxDeletionService {
     @Autowired
     private TaxRepository taxRepository;
 
-    Logger logger = LoggerFactory.getLogger(TaxDeletionService.class);
+    private Logger logger = LoggerFactory.getLogger(TaxDeletionService.class);
 
     public void deleteTaxById(Long id) {
 
