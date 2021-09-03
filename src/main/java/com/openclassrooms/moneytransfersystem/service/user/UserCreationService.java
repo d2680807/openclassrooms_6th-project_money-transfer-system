@@ -5,6 +5,7 @@ import com.openclassrooms.moneytransfersystem.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -19,6 +20,11 @@ public class UserCreationService {
 
     public User createUser(User user) {
 
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        user.setBalance(0);
+        user.setFriendsList("[]");
         logger.debug("[createUser] user: " + user);
 
         return userRepository.save(user);

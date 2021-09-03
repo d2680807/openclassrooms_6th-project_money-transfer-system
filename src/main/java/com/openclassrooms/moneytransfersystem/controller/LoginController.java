@@ -58,14 +58,8 @@ public class LoginController {
     @PostMapping("/process_register")
     public String processRegister(User user) {
 
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-        user.setBalance(0);
-        user.setFriendsList("[]");
-        logger.debug("[processRegister] user: " + user);
-
         userCreationService.createUser(user);
+        logger.debug("[processRegister] user: " + user);
 
         return "success";
     }
