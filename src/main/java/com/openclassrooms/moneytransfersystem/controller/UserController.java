@@ -68,6 +68,12 @@ public class UserController {
         formService.updateBalance(requirement, false);
     }
 
+    @PutMapping("/topup")
+    public void getTopup(@RequestBody Requirement requirement) {
+
+        formService.updateBalance(requirement, true);
+    }
+
     @DeleteMapping("/users/{id}")
     public void deleteUser(@PathVariable Long id) {
 
