@@ -26,8 +26,7 @@ public class TransferUpdateService {
             transferUpdated = optionalTransfer.get();
             transferRepository.save(transferUpdated);
         } else {
-            logger.debug("Tried to update single " + Transfer.class.getName()
-                    + " id: " + transfer.getId() + " (not found)");
+            logger.debug("[updateTransfer] id not found: " + transfer.getId());
 
             return new Transfer();
         }

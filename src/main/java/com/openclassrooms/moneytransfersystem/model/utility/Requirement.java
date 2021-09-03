@@ -1,9 +1,9 @@
-package com.openclassrooms.moneytransfersystem.model;
+package com.openclassrooms.moneytransfersystem.model.utility;
 
 import lombok.Data;
 
 @Data
-public class TransferBack {
+public class Requirement {
 
     Long userId;
     String recipient;

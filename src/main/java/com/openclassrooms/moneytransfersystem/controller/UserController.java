@@ -1,8 +1,8 @@
 package com.openclassrooms.moneytransfersystem.controller;
 
-import com.openclassrooms.moneytransfersystem.model.Transfer;
-import com.openclassrooms.moneytransfersystem.model.TransferBack;
+import com.openclassrooms.moneytransfersystem.model.utility.Requirement;
 import com.openclassrooms.moneytransfersystem.model.User;
+import com.openclassrooms.moneytransfersystem.service.FormService;
 import com.openclassrooms.moneytransfersystem.service.user.UserCreationService;
 import com.openclassrooms.moneytransfersystem.service.user.UserDeletionService;
 import com.openclassrooms.moneytransfersystem.service.user.UserReadService;
@@ -17,15 +17,14 @@ public class UserController {
 
     @Autowired
     private UserCreationService userCreationService;
-
     @Autowired
     private UserReadService userReadService;
-
     @Autowired
     private UserUpdateService userUpdateService;
-
     @Autowired
     private UserDeletionService userDeletionService;
+    @Autowired
+    private FormService formService;
 
     @PostMapping("/createUser")
     public User createUser(@RequestBody User user) {
@@ -64,9 +63,19 @@ public class UserController {
     }
 
     @PutMapping("/balanceBack")
-    public void getBalanceBack(@RequestBody TransferBack transferBack) {
+    public void getBalanceBack(@RequestParam double amount) {
 
-        userUpdateService.getBalanceBack(transferBack);
+        Requirement requirement = new Requirement();
+        requirement.setAmount(amount);
+        formService.updateBalance(requirement, false);
+    }
+
+    @PutMapping("/topup")
+    public void getTopup(@RequestParam double amount) {
+
+        Requirement requirement = new Requirement();
+        requirement.setAmount(amount);
+        formService.updateBalance(requirement, true);
     }
 
     @DeleteMapping("/users/{id}")

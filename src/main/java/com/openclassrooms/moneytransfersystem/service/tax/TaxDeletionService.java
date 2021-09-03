@@ -12,7 +12,7 @@ public class TaxDeletionService {
     @Autowired
     private TaxRepository taxRepository;
 
-    Logger logger = LoggerFactory.getLogger(TaxDeletionService.class);
+    private Logger logger = LoggerFactory.getLogger(TaxDeletionService.class);
 
     public void deleteTaxById(Long id) {
 
@@ -20,5 +20,11 @@ public class TaxDeletionService {
             logger.debug("[deleteTaxById] id:" + id);
             taxRepository.deleteById(id);
         }
+    }
+
+    public void deleteTaxes() {
+
+        logger.debug("[deleteTaxes] delete: all");
+        taxRepository.deleteAll();
     }
 }
