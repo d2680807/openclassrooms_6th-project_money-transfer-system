@@ -23,12 +23,12 @@ public class FormService {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private TransferRepository transferRepository;
-
     @Autowired
     private TaxRepository taxRepository;
+
+    private JsonService jsonService;
 
     Logger logger = LoggerFactory.getLogger(FormService.class);
 
@@ -196,11 +196,9 @@ public class FormService {
             userUpdated.setBicCode(optionalUser.get().getBicCode());
             userUpdated.setBalance(optionalUser.get().getBalance());
 
-            ObjectMapper mapper = new ObjectMapper();
-            Set<String> friends = mapper.readValue(optionalUser.get().getFriendsList(), Set.class);
-            friends.add(requirement.getRecipient());
-            userUpdated.setFriendsList(mapper.writeValueAsString(friends));
-
+            Set<String> friendsList = jsonService.toSetOfString(optionalUser.get().getFriendsList());
+            friendsList.add(requirement.getRecipient());
+            userUpdated.setFriendsList(jsonService.toJson(friendsList, false));
             userRepository.save(userUpdated);
         }
     }
