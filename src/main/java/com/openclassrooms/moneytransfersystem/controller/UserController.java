@@ -63,14 +63,18 @@ public class UserController {
     }
 
     @PutMapping("/balanceBack")
-    public void getBalanceBack(@RequestBody Requirement requirement) {
+    public void getBalanceBack(@RequestParam double amount) {
 
+        Requirement requirement = new Requirement();
+        requirement.setAmount(amount);
         formService.updateBalance(requirement, false);
     }
 
     @PutMapping("/topup")
-    public void getTopup(@RequestBody Requirement requirement) {
+    public void getTopup(@RequestParam double amount) {
 
+        Requirement requirement = new Requirement();
+        requirement.setAmount(amount);
         formService.updateBalance(requirement, true);
     }
 
