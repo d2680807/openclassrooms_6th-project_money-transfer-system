@@ -84,9 +84,9 @@ public class LoginController {
 
         Set<String> friendsList = formService.getFriendsList(authenticationName);
         model.addAttribute("friendsList", friendsList);
-        logger.debug("[viewApplication] friends: " + friendsList);
+        logger.debug("[viewApplication] friendsList: " + friendsList);
 
-        List<ListElement> transfersList = formService.getTransfersList(authenticationName);
+        List<ListElement> transfersList = formService.getTransfersList(authentication.getName());
         model.addAttribute("transfersList", transfersList);
         logger.debug("[viewApplication] transfersList: " + friendsList);
 

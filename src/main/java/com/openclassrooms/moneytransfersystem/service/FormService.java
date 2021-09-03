@@ -124,9 +124,13 @@ public class FormService {
                 .forEach( t -> {
                     ListElement transfer = new ListElement();
                     String prefix;
-                    if (t.getType().toString().equals(TransferType.OUT)) {
+                    String relation;
+                    if (t.getType().toString().equals(TransferType.OUT.toString())) {
                         prefix = "-";
-                        transfer.setRelation(transferRepository.findById(t.getId() + 1).get().getUser().getFirstName());
+                        logger.debug("[getTransfersList] transfer id: " + t.getId());
+                        relation = transferRepository.findById(t.getId() + 1).get().getUser().getFirstName();
+                        logger.debug("[getTransfersList] relation: " + relation );
+                        transfer.setRelation(relation);
                     } else {
                         prefix = "+";
                         transfer.setRelation(transferRepository.findById(t.getId() - 1).get().getUser().getFirstName());
