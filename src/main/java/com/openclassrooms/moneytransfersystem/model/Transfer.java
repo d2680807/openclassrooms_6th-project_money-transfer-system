@@ -1,7 +1,6 @@
 package com.openclassrooms.moneytransfersystem.model;
 
 import com.openclassrooms.moneytransfersystem.model.utility.TransferType;
-import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

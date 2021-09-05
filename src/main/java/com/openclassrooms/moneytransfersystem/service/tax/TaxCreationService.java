@@ -7,6 +7,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 @Service
 public class TaxCreationService {
 
@@ -20,5 +22,12 @@ public class TaxCreationService {
         logger.debug("[createTax] tax: " + tax);
 
         return taxRepository.save(tax);
+    }
+
+    public Collection<Tax> createTaxes(Collection<Tax> taxes) {
+
+        logger.debug("[createTaxes] taxes: " + taxes);
+
+        return taxRepository.saveAll(taxes);
     }
 }

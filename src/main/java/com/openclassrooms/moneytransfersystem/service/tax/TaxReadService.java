@@ -19,9 +19,9 @@ public class TaxReadService {
 
     public Tax readTaxById(Long id) {
 
-        logger.debug("[readTaxById] id:" + id);
+        logger.debug("[readTaxById] id: " + id);
 
-        return taxRepository.getById(id);
+        return taxRepository.findById(id).get();
     }
 
     public Collection<Tax> readTaxes() {

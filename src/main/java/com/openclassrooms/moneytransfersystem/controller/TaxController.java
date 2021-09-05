@@ -28,6 +28,12 @@ public class TaxController {
         return taxCreationService.createTax(tax);
     }
 
+    @PostMapping("/createTaxes")
+    public Collection<Tax> createTax(@RequestBody Collection<Tax>  taxes) {
+
+        return taxCreationService.createTaxes(taxes);
+    }
+
     @GetMapping("/taxes/{id}")
     public Tax readTaxById(@PathVariable Long id) {
 
