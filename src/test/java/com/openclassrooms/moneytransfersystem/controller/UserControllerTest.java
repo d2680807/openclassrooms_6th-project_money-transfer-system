@@ -35,6 +35,7 @@ public class UserControllerTest {
         user.setLastName("POTTER");
         user.setIbanCode(123456);
         user.setBicCode(123456);
+        user.setFriendsList("[]");
 
         mockMvc.perform(post("/createUser")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
@@ -53,6 +54,7 @@ public class UserControllerTest {
         user.setLastName("GRANGER");
         user.setIbanCode(123456);
         user.setBicCode(123456);
+        user.setFriendsList("[]");
 
         List<User> users = new ArrayList<>();
         users.add(user);
@@ -62,12 +64,6 @@ public class UserControllerTest {
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(users)))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    public void shouldGetUsers() throws Exception {
-
-        mockMvc.perform(get("/users")).andExpect(status().isOk());
     }
 
     @Test
