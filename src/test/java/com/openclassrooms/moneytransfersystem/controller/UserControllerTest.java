@@ -2,8 +2,6 @@ package com.openclassrooms.moneytransfersystem.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.moneytransfersystem.model.User;
-import com.openclassrooms.moneytransfersystem.service.user.UserCreationService;
-import com.openclassrooms.moneytransfersystem.service.user.UserReadService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -26,11 +24,6 @@ public class UserControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Autowired
-    private UserReadService userReadService;
-    @Autowired
-    private UserCreationService userCreationService;
 
     @Test
     public void shouldCreateUser() throws Exception {
