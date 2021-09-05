@@ -1,7 +1,6 @@
 package com.openclassrooms.moneytransfersystem.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.openclassrooms.moneytransfersystem.controller.UserController;
 import com.openclassrooms.moneytransfersystem.model.User;
 import com.openclassrooms.moneytransfersystem.service.user.UserCreationService;
 import com.openclassrooms.moneytransfersystem.service.user.UserDeletionService;
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
