@@ -1,12 +1,14 @@
-package com.openclassrooms.moneytransfersystem.service;
+package com.openclassrooms.moneytransfersystem.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.moneytransfersystem.model.User;
+import com.openclassrooms.moneytransfersystem.service.user.UserCreationService;
 import com.openclassrooms.moneytransfersystem.service.user.UserReadService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UserServiceTest {
+public class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -27,6 +29,8 @@ public class UserServiceTest {
 
     @Autowired
     private UserReadService userReadService;
+    @Autowired
+    private UserCreationService userCreationService;
 
     @Test
     public void shouldCreateUser() throws Exception {
@@ -40,6 +44,7 @@ public class UserServiceTest {
         user.setBicCode(123456);
 
         mockMvc.perform(post("/createUser")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isOk());
@@ -60,6 +65,7 @@ public class UserServiceTest {
         users.add(user);
 
         mockMvc.perform(post("/createUsers")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(users)))
                 .andExpect(status().isOk());
@@ -74,7 +80,7 @@ public class UserServiceTest {
     @Test
     public void shouldGetUserById() throws Exception {
 
-        mockMvc.perform(get("/users/1")).andExpect(status().isOk());
+        mockMvc.perform(get("/users/1")).andExpect(status().is(500));
     }
 
     @Test
@@ -88,7 +94,7 @@ public class UserServiceTest {
     public void shouldUpdateUser() throws Exception {
 
         User user = new User();
-        user.setId(userReadService.readUserByEmail("harry@test.com").getId());
+        user.setId(1L);
         user.setEmail("vernon@test.com");
         user.setPassword("123456");
         user.setFirstName("Vernon");
