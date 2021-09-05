@@ -29,25 +29,6 @@ public class UserServiceTest {
     private UserReadService userReadService;
 
     @Test
-    public void shouldGetUsers() throws Exception {
-
-        mockMvc.perform(get("/users")).andExpect(status().isOk());
-    }
-
-    @Test
-    public void shouldGetUserById() throws Exception {
-
-        mockMvc.perform(get("/users/16")).andExpect(status().isOk());
-    }
-
-    @Test
-    public void shouldGetUserByEmail() throws Exception {
-
-        mockMvc.perform(get("/user")
-                .param("email", "david@test.com")).andExpect(status().isOk());
-    }
-
-    @Test
     public void shouldCreateUser() throws Exception {
 
         User user = new User();
@@ -82,6 +63,25 @@ public class UserServiceTest {
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(users)))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldGetUsers() throws Exception {
+
+        mockMvc.perform(get("/users")).andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldGetUserById() throws Exception {
+
+        mockMvc.perform(get("/users/1")).andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldGetUserByEmail() throws Exception {
+
+        mockMvc.perform(get("/user")
+                .param("email", "harry@test.com")).andExpect(status().isOk());
     }
 
     @Test
