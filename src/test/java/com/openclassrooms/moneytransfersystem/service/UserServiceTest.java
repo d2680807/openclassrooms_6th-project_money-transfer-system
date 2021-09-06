@@ -54,20 +54,20 @@ public class UserServiceTest {
         user.setFriendsList("[]");
 
         User userSaved = new User();
-        user.setEmail("harry@test.com");
-        user.setPassword("123456");
-        user.setFirstName("Harry");
-        user.setLastName("POTTER");
-        user.setIbanCode(123456);
-        user.setBicCode(123456);
-        user.setFriendsList("[]");
+        userSaved.setEmail("harry@test.com");
+        userSaved.setPassword("123456");
+        userSaved.setFirstName("Harry");
+        userSaved.setLastName("POTTER");
+        userSaved.setIbanCode(123456);
+        userSaved.setBicCode(123456);
+        userSaved.setFriendsList("[]");
 
         Mockito.when(userCreationService.createUser(user)).thenReturn(userSaved);
 
         mockMvc.perform(post("/createUser")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(user))
-                ).andExpect(status().isOk())
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(user))
+        ).andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(userSaved))).andReturn();
     }
 
@@ -101,9 +101,9 @@ public class UserServiceTest {
         Mockito.when(userCreationService.createUsers(users)).thenReturn(usersSaved);
 
         mockMvc.perform(post("/createUsers")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(users))
-                ).andExpect(status().isOk())
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(users))
+        ).andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(usersSaved))).andReturn();
     }
 
