@@ -29,9 +29,6 @@ public class TaxControllerTest {
     @Test
     public void shouldCreateTax() throws Exception {
 
-        User user = new User();
-        user.setId(57L);
-
         Tax tax = new Tax();
         tax.setName("Test");
         tax.setRate(0.10);

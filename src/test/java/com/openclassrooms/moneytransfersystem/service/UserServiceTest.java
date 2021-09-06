@@ -87,13 +87,13 @@ public class UserServiceTest {
         users.add(user);
 
         User userSaved = new User();
-        user.setEmail("harry@test.com");
-        user.setPassword("123456");
-        user.setFirstName("Harry");
-        user.setLastName("POTTER");
-        user.setIbanCode(123456);
-        user.setBicCode(123456);
-        user.setFriendsList("[]");
+        userSaved.setEmail("harry@test.com");
+        userSaved.setPassword("123456");
+        userSaved.setFirstName("Harry");
+        userSaved.setLastName("POTTER");
+        userSaved.setIbanCode(123456);
+        userSaved.setBicCode(123456);
+        userSaved.setFriendsList("[]");
 
         List<User> usersSaved = new ArrayList<>();
         usersSaved.add(userSaved);
