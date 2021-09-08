@@ -5,11 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.moneytransfersystem.dao.UserRepository;
 import com.openclassrooms.moneytransfersystem.model.User;
 import com.openclassrooms.moneytransfersystem.model.utility.Requirement;
+import com.openclassrooms.moneytransfersystem.service.user.UserDeletionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.text.NumberFormat;
@@ -24,18 +26,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 public class FormServiceTest {
 
     @Autowired
-    private FormService formService;
-    @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private UserRepository userRepository;
+    private FormService formService;
+    @Autowired
+    private UserDeletionService userDeletionService;
 
     @BeforeEach
     public void shouldInitialize() throws Exception {
 
-        userRepository.deleteAll();
+        userDeletionService.deleteUsers();
 
         User harry = new User();
         harry.setEmail("harry@jkr.com");
@@ -88,15 +90,17 @@ public class FormServiceTest {
     @Test
     void shouldGetBalanceBack() throws ParseException {
 
+        double amount = 50;
+
         NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
         Number balance = format.parse(formService
                 .getBalance("harry@jkr.com"));
         String expectedBalance = String.format("%.2f",
-                balance.doubleValue() - 10) ;
+                balance.doubleValue() - amount) ;
 
         Requirement requirement = formService
                 .getRequirement("harry@jkr.com");
-        requirement.setAmount(10);
+        requirement.setAmount(amount);
         formService
                 .updateBalance(requirement, false);
 
@@ -141,15 +145,17 @@ public class FormServiceTest {
     @Test
     void shouldTransferToFriend() throws ParseException {
 
+        double amount = 200;
+
         NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
         Number balance = format.parse(formService
                 .getBalance("harry@jkr.com"));
         String expectedBalance = String.format("%.2f",
-                balance.doubleValue() - 10) ;
+                balance.doubleValue() - amount) ;
 
         Requirement requirement = formService.getRequirement("harry@jkr.com");
         requirement.setRecipient("ron@jkr.com");
-        requirement.setAmount(10);
+        requirement.setAmount(amount);
         formService
                 .transferToFriend(requirement);
 
