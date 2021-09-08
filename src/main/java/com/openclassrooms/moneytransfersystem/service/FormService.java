@@ -122,7 +122,7 @@ public class FormService {
         logger.debug("[getTransfersList] authenticationName: " + authenticationName);
         List<ListElement> transfersList = new ArrayList<>();
         userRepository.findByEmail(authenticationName).getTransfers().stream()
-                .forEach( t -> {
+                .forEach(t -> {
                     ListElement transfer = new ListElement();
                     String prefix;
                     String relation;
@@ -130,7 +130,7 @@ public class FormService {
                         prefix = "-";
                         logger.debug("[getTransfersList] transfer id: " + t.getId());
                         relation = transferRepository.findById(t.getId() + 1).get().getUser().getFirstName();
-                        logger.debug("[getTransfersList] relation: " + relation );
+                        logger.debug("[getTransfersList] relation: " + relation);
                         transfer.setRelation(relation);
                     } else {
                         prefix = "+";

@@ -72,15 +72,4 @@ public class FormServiceTest {
 
         assertEquals(expectedFriendsList, actualFriendsList);
     }
-
-    @Test
-    void shouldGetTransfersList() throws JsonProcessingException {
-
-        List<ListElement> expectedTransfersList = new ArrayList<>();
-
-        List<ListElement> actualTransfersList = formService
-                .getTransfersList("test@test.com");
-
-        assertEquals(expectedTransfersList, actualTransfersList);
-    }
 }
