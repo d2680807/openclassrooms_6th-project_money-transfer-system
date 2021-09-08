@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -76,7 +77,9 @@ public class UserServiceTest {
 
         User user = new User();
         user.setEmail("harry@test.com");
-        user.setPassword("123456");
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode("123456");
+        user.setPassword(encodedPassword);
         user.setFirstName("Harry");
         user.setLastName("POTTER");
         user.setIbanCode(123456);
