@@ -72,4 +72,44 @@ public class FormServiceTest {
 
         assertEquals(expectedFriendsList, actualFriendsList);
     }
+
+    @Test
+    void shouldTransferToFriend() throws ParseException {
+
+        NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
+        Number balance = format.parse(formService
+                .getBalance("test@test.com"));
+        String expectedBalance = String.format("%.2f",
+                balance.doubleValue() - 10) ;
+
+        Requirement requirement = new Requirement();
+        requirement.setUserId(57L);
+        requirement.setRecipient("harry@test.com");
+        requirement.setAmount(10);
+        formService
+                .transferToFriend(requirement);
+
+        String actualBalance = formService
+                .getBalance("test@test.com");
+
+        assertEquals(expectedBalance, actualBalance);
+    }
+
+    @Test
+    void shouldAddFriend() throws ParseException, JsonProcessingException {
+
+        Set<String> expectedFriendsList = new HashSet<>();
+        expectedFriendsList.add("harry@test.com");
+
+        Requirement requirement = new Requirement();
+        requirement.setUserId(57L);
+        requirement.setRecipient("harry@test.com");
+        formService
+                .addFriend(requirement);
+
+        Set<String> actualFriendsList = formService
+                .getFriendsList("test@test.com");
+
+        assertEquals(expectedFriendsList, actualFriendsList);
+    }
 }

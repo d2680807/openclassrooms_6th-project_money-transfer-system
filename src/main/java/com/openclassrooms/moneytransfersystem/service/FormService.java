@@ -148,11 +148,14 @@ public class FormService {
 
     public void transferToFriend(Requirement requirement) {
 
+        logger.debug("[transferToFriend] amount: " + requirement.getAmount());
         if (requirement.getAmount() == 0) {return;}
 
         Optional<User> optionalUser = userRepository.findById(requirement.getUserId());
         User userUpdated = new User();
         User recipient = userRepository.findByEmail(requirement.getRecipient());;
+        logger.debug("[transferToFriend] optionalUser: " + optionalUser);
+        logger.debug("[transferToFriend] recipient: " + recipient);
         if (optionalUser.isPresent() && !Objects.isNull(recipient)) {
             userUpdated.setId(optionalUser.get().getId());
             userUpdated.setEmail(optionalUser.get().getEmail());
