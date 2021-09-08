@@ -200,4 +200,14 @@ public class UserServiceTest {
 
         Mockito.verify(userDeletionService, Mockito.times(1)).deleteUserById(1L);
     }
+
+    @Test
+    public void shouldDeleteUsers() throws Exception {
+
+        Mockito.doNothing().when(userDeletionService).deleteUsers();
+
+        mockMvc.perform(delete("/users")).andExpect(status().isOk());
+
+        Mockito.verify(userDeletionService, Mockito.times(1)).deleteUsers();
+    }
 }

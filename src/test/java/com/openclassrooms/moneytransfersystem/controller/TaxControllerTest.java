@@ -82,4 +82,10 @@ public class TaxControllerTest {
 
         mockMvc.perform(delete("/taxes/2")).andExpect(status().isOk());
     }
+
+    @Test
+    public void shouldDeleteTaxes() throws Exception {
+
+        mockMvc.perform(delete("/taxes")).andExpect(status().isOk());
+    }
 }

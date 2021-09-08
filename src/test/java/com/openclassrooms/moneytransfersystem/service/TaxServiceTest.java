@@ -158,4 +158,14 @@ public class TaxServiceTest {
 
         Mockito.verify(taxDeletionService, Mockito.times(1)).deleteTaxById(1L);
     }
+
+    @Test
+    public void shouldDeleteTaxes() throws Exception {
+
+        Mockito.doNothing().when(taxDeletionService).deleteTaxes();
+
+        mockMvc.perform(delete("/taxes")).andExpect(status().isOk());
+
+        Mockito.verify(taxDeletionService, Mockito.times(1)).deleteTaxes();
+    }
 }

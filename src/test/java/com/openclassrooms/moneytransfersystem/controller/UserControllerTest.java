@@ -102,4 +102,10 @@ public class UserControllerTest {
 
         mockMvc.perform(delete("/users/1")).andExpect(status().isOk());
     }
+
+    @Test
+    public void shouldDeleteUsers() throws Exception {
+
+        mockMvc.perform(delete("/users")).andExpect(status().isOk());
+    }
 }

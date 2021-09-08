@@ -107,6 +107,27 @@ public class FormServiceTest {
     }
 
     @Test
+    void shouldCancelBalanceBack() throws ParseException {
+
+        NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
+        Number balance = format.parse(formService
+                .getBalance("harry@jkr.com"));
+        String expectedBalance = String.format("%.2f",
+                balance.doubleValue()) ;
+
+        Requirement requirement = formService
+                .getRequirement("harry@jkr.com");
+        requirement.setAmount(0);
+        formService
+                .updateBalance(requirement, false);
+
+        String actualBalance = formService
+                .getBalance("harry@jkr.com");
+
+        assertEquals(expectedBalance, actualBalance);
+    }
+
+    @Test
     void shouldGetFriendsList() throws JsonProcessingException {
 
         Set<String> expectedFriendsList = new HashSet<>();

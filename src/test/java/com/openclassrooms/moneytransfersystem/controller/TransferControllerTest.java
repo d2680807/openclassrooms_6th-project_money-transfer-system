@@ -104,4 +104,10 @@ public class TransferControllerTest {
 
         mockMvc.perform(delete("/transfers/1")).andExpect(status().isOk());
     }
+
+    @Test
+    public void shouldDeleteTransfers() throws Exception {
+
+        mockMvc.perform(delete("/transfers")).andExpect(status().isOk());
+    }
 }

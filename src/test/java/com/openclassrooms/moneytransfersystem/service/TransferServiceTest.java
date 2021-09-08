@@ -107,4 +107,14 @@ public class TransferServiceTest {
 
         Mockito.verify(transferDeletionService, Mockito.times(1)).deleteTransferById(1L);
     }
+
+    @Test
+    public void shouldDeleteTransfers() throws Exception {
+
+        Mockito.doNothing().when(transferDeletionService).deleteTransfers();
+
+        mockMvc.perform(delete("/transfers")).andExpect(status().isOk());
+
+        Mockito.verify(transferDeletionService, Mockito.times(1)).deleteTransfers();
+    }
 }
