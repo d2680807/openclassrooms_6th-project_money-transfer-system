@@ -33,6 +33,10 @@ public class UserCreationService {
     public Collection<User> createUsers(Collection<User> users) {
 
         logger.debug("[createUsers] users:" + users);
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        users.forEach(u -> {
+            u.setPassword(passwordEncoder.encode(u.getPassword()));
+        });
 
         return userRepository.saveAll(users);
     }

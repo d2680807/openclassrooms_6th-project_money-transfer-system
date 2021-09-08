@@ -30,10 +30,21 @@ public class FormService {
     private TransferRepository transferRepository;
     @Autowired
     private TaxRepository taxRepository;
-
+    @Autowired
     private JsonService jsonService;
 
     Logger logger = LogManager.getLogger(UserUpdateService.class);
+
+    // Test purposes
+    public void resetData() {
+
+        transferRepository.deleteAll();
+        transferRepository.resetIncrement();
+        taxRepository.deleteAll();
+        taxRepository.resetIncrement();
+        userRepository.deleteAll();
+        userRepository.resetIncrement();
+    }
 
     public String getBalance(String authenticationName) {
 
