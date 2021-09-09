@@ -21,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public class TransferServiceTest {
     @BeforeEach
     public void shouldInitialize() throws Exception {
 
+        transferRepository.deleteAll();
         userRepository.deleteAll();
 
         User user = new User();
@@ -74,7 +76,7 @@ public class TransferServiceTest {
 
         Transfer transfer = new Transfer();
         transfer.setUser(user);
-        transfer.setDate(LocalDateTime.now());
+        transfer.setDate(LocalDateTime.of(2021, 12, 25, 00, 00, 00));
         transfer.setType(TransferType.OUT);
         transfer.setAmount(50);
         transfer.setTax(0.05);
@@ -102,20 +104,23 @@ public class TransferServiceTest {
     @Test
     public void shouldGetTransferById() throws Exception {
 
-        Transfer testTransfer = transferRepository.findByUserId(userRepository.findByEmail("harry@jkr.com").getId());
+        Long transferId = transferRepository.findByUserId(userRepository.findByEmail("harry@jkr.com").getId()).getId();
 
         Transfer transfer = new Transfer();
-        transfer.setId(testTransfer.getId());
+        transfer.setId(transferId);
         transfer.setUser(userRepository.findByEmail("harry@jkr.com"));
-        transfer.setDate(LocalDateTime.now());
+        transfer.setDate(LocalDateTime.of(2021, 12, 25, 00, 00, 00));
         transfer.setType(TransferType.OUT);
         transfer.setAmount(50);
         transfer.setTax(0.05);
         transfer.setDescription("Remboursement pour le cine.");
 
-        Mockito.when(transferReadService.readTransferById(testTransfer.getId())).thenReturn(transfer);
+        Mockito.when(transferReadService.readTransferById(transferId)).thenReturn(transfer);
 
-        MvcResult mvcResult = mockMvc.perform(get("/transfers/" + testTransfer.getId())).andExpect(status().isOk()).andReturn();
+        MvcResult mvcResult = mockMvc.perform(get("/transfers/" + transferId))
+                .andExpect(status().isOk()).andReturn();
+
+        System.err.print("0909" + mvcResult.getResponse().getContentAsString());
 
         String actualResponse = mvcResult.getResponse().getContentAsString();
         String expectedResponse = objectMapper.writeValueAsString(transfer);

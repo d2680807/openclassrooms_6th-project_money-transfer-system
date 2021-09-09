@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.moneytransfersystem.model.Tax;
 import com.openclassrooms.moneytransfersystem.model.User;
 import com.openclassrooms.moneytransfersystem.service.tax.TaxCreationService;
+import com.openclassrooms.moneytransfersystem.service.tax.TaxDeletionService;
 import com.openclassrooms.moneytransfersystem.service.tax.TaxReadService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class TaxControllerTest {
     private TaxReadService taxReadService;
     @Autowired
     private TaxCreationService taxCreationService;
+    @Autowired
+    private TaxDeletionService taxDeletionService;
 
     @Test
     public void shouldCreateTax() throws Exception {
@@ -65,6 +68,8 @@ public class TaxControllerTest {
 
     @Test
     public void shouldGetTaxById() throws Exception {
+
+        taxDeletionService.deleteTaxes();
 
         Tax tax = new Tax();
         tax.setName("DEFAULT");

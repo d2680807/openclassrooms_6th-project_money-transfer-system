@@ -135,6 +135,12 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludes>
+                        <!-- Excludes Front Coverage (Thymeleaf) -->
+                        <exclude>**/*LoginController.class</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

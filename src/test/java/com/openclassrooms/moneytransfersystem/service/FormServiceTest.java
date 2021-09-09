@@ -166,6 +166,29 @@ public class FormServiceTest {
     }
 
     @Test
+    void shouldNotTransferToFriend() throws ParseException {
+
+        double amount = 0;
+
+        NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
+        Number balance = format.parse(formService
+                .getBalance("harry@jkr.com"));
+        String expectedBalance = String.format("%.2f",
+                balance.doubleValue()) ;
+
+        Requirement requirement = formService.getRequirement("harry@jkr.com");
+        requirement.setRecipient("ron@jkr.com");
+        requirement.setAmount(amount);
+        formService
+                .transferToFriend(requirement);
+
+        String actualBalance = formService
+                .getBalance("harry@jkr.com");
+
+        assertEquals(expectedBalance, actualBalance);
+    }
+
+    @Test
     void shouldAddFriend() throws ParseException, JsonProcessingException {
 
         Set<String> expectedFriendsList = new HashSet<>();
@@ -173,8 +196,7 @@ public class FormServiceTest {
 
         Requirement requirement = formService.getRequirement("harry@jkr.com");
         requirement.setRecipient("ron@jkr.com");
-        formService
-                .addFriend(requirement);
+        formService.addFriend(requirement);
 
         Set<String> actualFriendsList = formService
                 .getFriendsList("harry@jkr.com");
