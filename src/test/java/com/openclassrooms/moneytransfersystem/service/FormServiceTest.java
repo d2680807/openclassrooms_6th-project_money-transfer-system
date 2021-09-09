@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.moneytransfersystem.dao.UserRepository;
 import com.openclassrooms.moneytransfersystem.model.User;
+import com.openclassrooms.moneytransfersystem.model.utility.ListElement;
 import com.openclassrooms.moneytransfersystem.model.utility.Requirement;
 import com.openclassrooms.moneytransfersystem.service.user.UserDeletionService;
 import org.junit.jupiter.api.BeforeEach;
@@ -202,5 +203,21 @@ public class FormServiceTest {
                 .getFriendsList("harry@jkr.com");
 
         assertEquals(expectedFriendsList, actualFriendsList);
+    }
+
+    @Test
+    void shouldGetTransfers() throws ParseException, JsonProcessingException {
+
+        List<ListElement> transfersList = formService.getTransfersList("harry@jkr.com");
+
+        List<ListElement> expectedTansfersList = new ArrayList<>();
+
+        Requirement requirement = formService.getRequirement("harry@jkr.com");
+        formService.addFriend(requirement);
+
+        List<ListElement> actualTansfersList = formService
+                .getTransfersList("harry@jkr.com");
+
+        assertEquals(expectedTansfersList, actualTansfersList);
     }
 }
