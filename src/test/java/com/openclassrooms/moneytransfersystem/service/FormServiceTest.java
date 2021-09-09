@@ -3,10 +3,17 @@ package com.openclassrooms.moneytransfersystem.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.moneytransfersystem.dao.UserRepository;
+import com.openclassrooms.moneytransfersystem.model.Tax;
+import com.openclassrooms.moneytransfersystem.model.Transfer;
 import com.openclassrooms.moneytransfersystem.model.User;
 import com.openclassrooms.moneytransfersystem.model.utility.ListElement;
 import com.openclassrooms.moneytransfersystem.model.utility.Requirement;
+import com.openclassrooms.moneytransfersystem.model.utility.TransferType;
+import com.openclassrooms.moneytransfersystem.service.tax.TaxCreationService;
+import com.openclassrooms.moneytransfersystem.service.tax.TaxDeletionService;
+import com.openclassrooms.moneytransfersystem.service.transfer.TransferCreationService;
 import com.openclassrooms.moneytransfersystem.service.user.UserDeletionService;
+import com.openclassrooms.moneytransfersystem.service.user.UserReadService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,12 +41,25 @@ public class FormServiceTest {
     @Autowired
     private FormService formService;
     @Autowired
+    private UserReadService userReadService;
+    @Autowired
     private UserDeletionService userDeletionService;
+    @Autowired
+    private TaxCreationService taxCreationService;
+    @Autowired
+    private TaxDeletionService taxDeletionService;
+    @Autowired
+    private TransferCreationService transferCreationService;
 
     @BeforeEach
     public void shouldInitialize() throws Exception {
 
         userDeletionService.deleteUsers();
+        taxDeletionService.deleteTaxes();
+        Tax tax = new Tax();
+        tax.setName("DEFAULT");
+        tax.setRate(0.05);
+        taxCreationService.createTax(tax);
 
         User harry = new User();
         harry.setEmail("harry@jkr.com");
@@ -47,7 +68,7 @@ public class FormServiceTest {
         harry.setLastName("POTTER");
         harry.setIbanCode(2302447);
         harry.setBicCode(3021744);
-        harry.setFriendsList("[]");
+        harry.setFriendsList("[\"ron@jkr.com\"]");
 
         User ron = new User();
         ron.setEmail("ron@jkr.com");
@@ -56,7 +77,7 @@ public class FormServiceTest {
         ron.setLastName("WISLEY");
         ron.setIbanCode(4642775);
         ron.setBicCode(2662934);
-        ron.setFriendsList("[]");
+        ron.setFriendsList("[\"harry@jkr.com\"]");
 
         List<User> users = new ArrayList<>();
         users.add(harry);
@@ -136,6 +157,7 @@ public class FormServiceTest {
     void shouldGetFriendsList() throws JsonProcessingException {
 
         Set<String> expectedFriendsList = new HashSet<>();
+        expectedFriendsList.add("ron@jkr.com");
 
         Set<String> actualFriendsList = formService
                 .getFriendsList("harry@jkr.com");
@@ -157,6 +179,7 @@ public class FormServiceTest {
         Requirement requirement = formService.getRequirement("harry@jkr.com");
         requirement.setRecipient("ron@jkr.com");
         requirement.setAmount(amount);
+        requirement.setDescription("Pour le cine.");
         formService
                 .transferToFriend(requirement);
 
@@ -203,21 +226,5 @@ public class FormServiceTest {
                 .getFriendsList("harry@jkr.com");
 
         assertEquals(expectedFriendsList, actualFriendsList);
-    }
-
-    @Test
-    void shouldGetTransfers() throws ParseException, JsonProcessingException {
-
-        List<ListElement> transfersList = formService.getTransfersList("harry@jkr.com");
-
-        List<ListElement> expectedTansfersList = new ArrayList<>();
-
-        Requirement requirement = formService.getRequirement("harry@jkr.com");
-        formService.addFriend(requirement);
-
-        List<ListElement> actualTansfersList = formService
-                .getTransfersList("harry@jkr.com");
-
-        assertEquals(expectedTansfersList, actualTansfersList);
     }
 }

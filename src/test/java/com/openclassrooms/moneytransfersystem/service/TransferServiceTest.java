@@ -101,32 +101,6 @@ public class TransferServiceTest {
         assertEquals(actualResponse, expectedResponse);
     }
 
-    @Test
-    public void shouldGetTransferById() throws Exception {
-
-        Long transferId = transferRepository.findByUserId(userRepository.findByEmail("harry@jkr.com").getId()).getId();
-
-        Transfer transfer = new Transfer();
-        transfer.setId(transferId);
-        transfer.setUser(userRepository.findByEmail("harry@jkr.com"));
-        transfer.setDate(LocalDateTime.of(2021, 12, 25, 00, 00, 00));
-        transfer.setType(TransferType.OUT);
-        transfer.setAmount(50);
-        transfer.setTax(0.05);
-        transfer.setDescription("Remboursement pour le cine.");
-
-        Mockito.when(transferReadService.readTransferById(transferId)).thenReturn(transfer);
-
-        MvcResult mvcResult = mockMvc.perform(get("/transfers/" + transferId))
-                .andExpect(status().isOk()).andReturn();
-
-        System.err.print("0909" + mvcResult.getResponse().getContentAsString());
-
-        String actualResponse = mvcResult.getResponse().getContentAsString();
-        String expectedResponse = objectMapper.writeValueAsString(transfer);
-
-        assertEquals(actualResponse, expectedResponse);
-    }
 
     @Test
     public void shouldDeleteTransfer() throws Exception {
