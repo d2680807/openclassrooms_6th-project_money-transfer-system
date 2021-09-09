@@ -17,6 +17,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.ElementCollection;
+import javax.persistence.FetchType;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -151,7 +153,6 @@ public class FormService {
         logger.debug("[transferToFriend] use id: " + requirement.getUserId());
         logger.debug("[transferToFriend] amount: " + requirement.getAmount());
         if (requirement.getAmount() == 0) {return;}
-
         Optional<User> optionalUser = userRepository.findById(requirement.getUserId());
         User userUpdated = new User();
         User recipient = userRepository.findByEmail(requirement.getRecipient());

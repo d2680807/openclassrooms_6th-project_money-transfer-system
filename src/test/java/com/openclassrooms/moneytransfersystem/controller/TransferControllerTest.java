@@ -4,10 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.moneytransfersystem.model.Transfer;
 import com.openclassrooms.moneytransfersystem.model.User;
 import com.openclassrooms.moneytransfersystem.model.utility.TransferType;
+import com.openclassrooms.moneytransfersystem.service.transfer.TransferCreationService;
+import com.openclassrooms.moneytransfersystem.service.user.UserCreationService;
+import com.openclassrooms.moneytransfersystem.service.user.UserReadService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -27,12 +31,28 @@ public class TransferControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private UserReadService userReadService;
+    @Autowired
+    private UserCreationService userCreationService;
 
     @Test
     public void shouldCreateTransfer() throws Exception {
 
         User user = new User();
-        user.setId(57L);
+        user.setEmail("harry@jkr.com");
+        user.setPassword("1234567");
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        user.setFirstName("Harry");
+        user.setLastName("POTTER");
+        user.setIbanCode(2302447);
+        user.setBicCode(3021744);
+        user.setFriendsList("[]");
+        userCreationService.createUser(user);
+        Long userId = userReadService.readUserByEmail("harry@jkr.com").getId();
+        user.setId(userId);
 
         Transfer transfer = new Transfer();
         transfer.setUser(user);
@@ -53,7 +73,19 @@ public class TransferControllerTest {
     public void shouldCreateTransfers() throws Exception {
 
         User user = new User();
-        user.setId(57L);
+        user.setEmail("ron@jkr.com");
+        user.setPassword("1234567");
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        user.setFirstName("Ron");
+        user.setLastName("WEASLEY");
+        user.setIbanCode(4642775);
+        user.setBicCode(2662934);
+        user.setFriendsList("[]");
+        userCreationService.createUser(user);
+        Long userId = userReadService.readUserByEmail("ron@jkr.com").getId();
+        user.setId(userId);
 
         Transfer transfer = new Transfer();
         transfer.setUser(user);

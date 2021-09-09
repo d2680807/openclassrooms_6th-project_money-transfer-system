@@ -24,6 +24,13 @@ public class TaxReadService {
         return taxRepository.findById(id).get();
     }
 
+    public Tax readTaxByName(String name) {
+
+        logger.debug("[readTaxByName] name: " + name);
+
+        return taxRepository.findByName(name);
+    }
+
     public Collection<Tax> readTaxes() {
 
         logger.debug("[readTaxes] find: all");

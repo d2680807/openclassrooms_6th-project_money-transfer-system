@@ -3,6 +3,8 @@ package com.openclassrooms.moneytransfersystem.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.moneytransfersystem.model.Tax;
 import com.openclassrooms.moneytransfersystem.model.User;
+import com.openclassrooms.moneytransfersystem.service.tax.TaxCreationService;
+import com.openclassrooms.moneytransfersystem.service.tax.TaxReadService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -25,6 +27,10 @@ public class TaxControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private TaxReadService taxReadService;
+    @Autowired
+    private TaxCreationService taxCreationService;
 
     @Test
     public void shouldCreateTax() throws Exception {
@@ -60,7 +66,14 @@ public class TaxControllerTest {
     @Test
     public void shouldGetTaxById() throws Exception {
 
-        mockMvc.perform(get("/taxes/1")).andExpect(status().isOk());
+        Tax tax = new Tax();
+        tax.setName("DEFAULT");
+        tax.setRate(0.05);
+        taxCreationService.createTax(tax);
+
+        Long taxId = taxReadService.readTaxByName("DEFAULT").getId();
+
+        mockMvc.perform(get("/taxes/" + taxId)).andExpect(status().isOk());
     }
 
     @Test

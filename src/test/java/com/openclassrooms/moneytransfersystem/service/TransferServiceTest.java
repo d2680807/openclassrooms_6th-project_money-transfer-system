@@ -1,6 +1,7 @@
 package com.openclassrooms.moneytransfersystem.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.openclassrooms.moneytransfersystem.dao.TransferRepository;
 import com.openclassrooms.moneytransfersystem.dao.UserRepository;
 import com.openclassrooms.moneytransfersystem.model.Transfer;
 import com.openclassrooms.moneytransfersystem.model.User;
@@ -50,6 +51,8 @@ public class TransferServiceTest {
     private TransferDeletionService transferDeletionService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private TransferRepository transferRepository;
 
     @BeforeEach
     public void shouldInitialize() throws Exception {
@@ -68,10 +71,21 @@ public class TransferServiceTest {
         user.setBicCode(3021744);
         user.setFriendsList("[]");
         userRepository.save(user);
+
+        Transfer transfer = new Transfer();
+        transfer.setUser(user);
+        transfer.setDate(LocalDateTime.now());
+        transfer.setType(TransferType.OUT);
+        transfer.setAmount(50);
+        transfer.setTax(0.05);
+        transfer.setDescription("Remboursement pour le cine.");
+        transferRepository.save(transfer);
     }
 
     @Test
     public void shouldGetTransfers() throws Exception {
+
+        transferRepository.deleteAll();
 
         List<Transfer> transfers = new ArrayList<>();
 
@@ -88,21 +102,20 @@ public class TransferServiceTest {
     @Test
     public void shouldGetTransferById() throws Exception {
 
-        User user = userRepository.findByEmail("harry@jkr.com");
+        Transfer testTransfer = transferRepository.findByUserId(userRepository.findByEmail("harry@jkr.com").getId());
+
         Transfer transfer = new Transfer();
-        transfer.setUser(user);
+        transfer.setId(testTransfer.getId());
+        transfer.setUser(userRepository.findByEmail("harry@jkr.com"));
         transfer.setDate(LocalDateTime.now());
         transfer.setType(TransferType.OUT);
         transfer.setAmount(50);
         transfer.setTax(0.05);
         transfer.setDescription("Remboursement pour le cine.");
-        transferCreationService.createTransfer(transfer);
-        Long transferId = userRepository.findByEmail("harry@jkr.com").getTransfers().iterator().next().getId();
-        transfer.setId(transferId);
 
-        Mockito.when(transferReadService.readTransferById(transferId)).thenReturn(transfer);
+        Mockito.when(transferReadService.readTransferById(testTransfer.getId())).thenReturn(transfer);
 
-        MvcResult mvcResult = mockMvc.perform(get("/transfers/" + transferId)).andExpect(status().isOk()).andReturn();
+        MvcResult mvcResult = mockMvc.perform(get("/transfers/" + testTransfer.getId())).andExpect(status().isOk()).andReturn();
 
         String actualResponse = mvcResult.getResponse().getContentAsString();
         String expectedResponse = objectMapper.writeValueAsString(transfer);

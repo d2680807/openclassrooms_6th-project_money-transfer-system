@@ -10,7 +10,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.email = ?1")
     User findByEmail(String email);
-
-    @Query(value = "ALTER TABLE User AUTO_INCREMENT = 1", nativeQuery = true)
-    void resetIncrement();
 }

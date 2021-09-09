@@ -1,17 +1,21 @@
 package com.openclassrooms.moneytransfersystem.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.openclassrooms.moneytransfersystem.dao.TaxRepository;
 import com.openclassrooms.moneytransfersystem.model.Tax;
+import com.openclassrooms.moneytransfersystem.model.User;
 import com.openclassrooms.moneytransfersystem.service.tax.TaxCreationService;
 import com.openclassrooms.moneytransfersystem.service.tax.TaxDeletionService;
 import com.openclassrooms.moneytransfersystem.service.tax.TaxReadService;
 import com.openclassrooms.moneytransfersystem.service.tax.TaxUpdateService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -41,16 +45,31 @@ public class TaxServiceTest {
     private TaxUpdateService taxUpdateService;
     @MockBean
     private TaxDeletionService taxDeletionService;
+    @Autowired
+    private TaxRepository taxRepository;
+
+    @BeforeEach
+    public void shouldInitialize() throws Exception {
+
+        taxRepository.deleteAll();
+
+        Tax tax = new Tax();
+        tax.setName("DEFAULT");
+        tax.setRate(0.05);
+        taxRepository.save(tax);
+    }
 
     @Test
     public void shouldCreateTax() throws Exception {
 
+        taxRepository.deleteAll();
+
         Tax tax = new Tax();
-        tax.setName("Test");
+        tax.setName("DIVERSE");
         tax.setRate(0.10);
 
         Tax taxSaved = new Tax();
-        taxSaved.setName("Test");
+        taxSaved.setName("DIVERSE");
         taxSaved.setRate(0.10);
 
         Mockito.when(taxCreationService.createTax(tax)).thenReturn(taxSaved);
@@ -65,15 +84,17 @@ public class TaxServiceTest {
     @Test
     public void shouldCreateTaxes() throws Exception {
 
+        taxRepository.deleteAll();
+
         Tax tax = new Tax();
-        tax.setName("Test");
+        tax.setName("DIVERSE");
         tax.setRate(0.10);
 
         List<Tax> taxes = new ArrayList<>();
         taxes.add(tax);
 
         Tax taxSaved = new Tax();
-        taxSaved.setName("Test");
+        taxSaved.setName("DIVERSE");
         taxSaved.setRate(0.10);
 
         List<Tax> taxesSaved = new ArrayList<>();
@@ -92,9 +113,9 @@ public class TaxServiceTest {
     public void shouldGetTaxes() throws Exception {
 
         Tax tax = new Tax();
-        tax.setId(1L);
-        tax.setName("Test");
-        tax.setRate(0.10);
+        tax.setId(taxRepository.findByName("DEFAULT").getId());
+        tax.setName("DEFAULT");
+        tax.setRate(0.05);
 
         List<Tax> taxes = new ArrayList<>();
         taxes.add(tax);
@@ -112,14 +133,15 @@ public class TaxServiceTest {
     @Test
     public void shouldGetTaxById() throws Exception {
 
+        Long taxId = taxRepository.findByName("DEFAULT").getId();
         Tax tax = new Tax();
-        tax.setId(1L);
+        tax.setId(taxId);
         tax.setName("Test");
         tax.setRate(0.10);
 
-        Mockito.when(taxReadService.readTaxById(1L)).thenReturn(tax);
+        Mockito.when(taxReadService.readTaxById(taxId)).thenReturn(tax);
 
-        MvcResult mvcResult = mockMvc.perform(get("/taxes/1")).andExpect(status().isOk()).andReturn();
+        MvcResult mvcResult = mockMvc.perform(get("/taxes/" + taxId)).andExpect(status().isOk()).andReturn();
 
         String actualResponse = mvcResult.getResponse().getContentAsString();
         String expectedResponse = objectMapper.writeValueAsString(tax);
@@ -130,14 +152,16 @@ public class TaxServiceTest {
     @Test
     public void shouldUpdateTax() throws Exception {
 
+        Long taxId = taxRepository.findByName("DEFAULT").getId();
+
         Tax tax = new Tax();
-        tax.setId(1L);
-        tax.setName("Test");
+        tax.setId(taxId);
+        tax.setName("OTHER");
         tax.setRate(0.10);
 
         Tax taxUpdated = new Tax();
-        taxUpdated.setId(1L);
-        taxUpdated.setName("Test");
+        taxUpdated.setId(taxId);
+        taxUpdated.setName("OTHER");
         taxUpdated.setRate(0.10);
 
         Mockito.when(taxUpdateService.updateTax(tax)).thenReturn(taxUpdated);
@@ -152,11 +176,13 @@ public class TaxServiceTest {
     @Test
     public void shouldDeleteTax() throws Exception {
 
-        Mockito.doNothing().when(taxDeletionService).deleteTaxById(1L);
+        Long taxId = taxRepository.findByName("DEFAULT").getId();
 
-        mockMvc.perform(delete("/taxes/1")).andExpect(status().isOk());
+        Mockito.doNothing().when(taxDeletionService).deleteTaxById(taxId);
 
-        Mockito.verify(taxDeletionService, Mockito.times(1)).deleteTaxById(1L);
+        mockMvc.perform(delete("/taxes/" + taxId)).andExpect(status().isOk());
+
+        Mockito.verify(taxDeletionService, Mockito.times(1)).deleteTaxById(taxId);
     }
 
     @Test

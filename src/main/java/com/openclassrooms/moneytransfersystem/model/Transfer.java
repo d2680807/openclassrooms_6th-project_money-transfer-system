@@ -28,7 +28,7 @@ public class Transfer {
     private TransferType type;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="user_id", updatable=false)
+    @JoinColumn(name="user_id")
     private User user;
 
     public Long getId() {
@@ -98,13 +98,5 @@ public class Transfer {
                 ", type=" + type +
                 ", user=" + user +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Transfer transfer = (Transfer) o;
-        return Double.compare(transfer.amount, amount) == 0 && Double.compare(transfer.tax, tax) == 0 && Objects.equals(id, transfer.id) && Objects.equals(date, transfer.date) && Objects.equals(description, transfer.description) && type == transfer.type && Objects.equals(user, transfer.user);
     }
 }
