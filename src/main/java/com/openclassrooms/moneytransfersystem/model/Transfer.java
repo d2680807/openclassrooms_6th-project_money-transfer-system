@@ -4,6 +4,7 @@ import com.openclassrooms.moneytransfersystem.model.utility.TransferType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "transfer")
@@ -84,5 +85,26 @@ public class Transfer {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Transfer{" +
+                "id=" + id +
+                ", date=" + date +
+                ", amount=" + amount +
+                ", tax=" + tax +
+                ", description='" + description + '\'' +
+                ", type=" + type +
+                ", user=" + user +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transfer transfer = (Transfer) o;
+        return Double.compare(transfer.amount, amount) == 0 && Double.compare(transfer.tax, tax) == 0 && Objects.equals(id, transfer.id) && Objects.equals(date, transfer.date) && Objects.equals(description, transfer.description) && type == transfer.type && Objects.equals(user, transfer.user);
     }
 }

@@ -1,6 +1,7 @@
 package com.openclassrooms.moneytransfersystem.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.openclassrooms.moneytransfersystem.dao.UserRepository;
 import com.openclassrooms.moneytransfersystem.model.User;
 import com.openclassrooms.moneytransfersystem.service.user.UserCreationService;
 import com.openclassrooms.moneytransfersystem.service.user.UserDeletionService;
@@ -41,30 +42,32 @@ public class UserServiceTest {
     private UserUpdateService userUpdateService;
     @MockBean
     private UserDeletionService userDeletionService;
+    @Autowired
+    private UserRepository userRepository;
 
     @BeforeEach
     public void shouldInitialize() throws Exception {
 
-        userDeletionService.deleteUsers();
+        userRepository.deleteAll();
 
         User user = new User();
         user.setEmail("harry@jkr.com");
         user.setPassword("1234567");
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
         user.setFirstName("Harry");
         user.setLastName("POTTER");
         user.setIbanCode(2302447);
         user.setBicCode(3021744);
         user.setFriendsList("[]");
-        mockMvc.perform(post("/createUser")
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(user)));
-
+        userRepository.save(user);
     }
 
     @Test
     public void shouldCreateUser() throws Exception {
 
-        userDeletionService.deleteUsers();
+        userRepository.deleteAll();
 
         User user = new User();
         user.setEmail("harry@jkr.com");
@@ -96,7 +99,7 @@ public class UserServiceTest {
     @Test
     public void shouldCreateUsers() throws Exception {
 
-        userDeletionService.deleteUsers();
+        userRepository.deleteAll();
 
         User user = new User();
         user.setEmail("harry@jkr.com");
@@ -134,8 +137,6 @@ public class UserServiceTest {
     @Test
     public void shouldGetUsers() throws Exception {
 
-        userDeletionService.deleteUsers();
-
         User user = new User();
         user.setEmail("harry@jkr.com");
         user.setPassword("1234567");
@@ -163,7 +164,7 @@ public class UserServiceTest {
     @Test
     public void shouldGetUserById() throws Exception {
 
-        Long userId = userReadService.readUserByEmail("harry@jkr.com").getId();
+        Long userId = userRepository.findByEmail("harry@jkr.com").getId();
 
         User user = new User();
         user.setId(userId);
@@ -188,26 +189,28 @@ public class UserServiceTest {
     @Test
     public void shouldUpdateUser() throws Exception {
 
-        Long userId = userReadService.readUserByEmail("harry@jkr.com").getId();
+        User testUser = userRepository.findByEmail("harry@jkr.com");
 
         User user = new User();
-        user.setId(userId);
+        user.setId(testUser.getId());
         user.setEmail("harry@jkr.com");
-        user.setPassword("1234567");
+        user.setPassword(testUser.getPassword());
         user.setFirstName("Harry");
         user.setLastName("POTTER");
         user.setIbanCode(3021744);
         user.setBicCode(2302447);
+        user.setBalance(testUser.getBalance());
         user.setFriendsList("[]");
 
         User expectedUser = new User();
-        expectedUser.setId(userId);
+        expectedUser.setId(testUser.getId());
         expectedUser.setEmail("harry@jkr.com");
-        expectedUser.setPassword("1234567");
+        expectedUser.setPassword(testUser.getPassword());
         expectedUser.setFirstName("Harry");
         expectedUser.setLastName("POTTER");
         expectedUser.setIbanCode(3021744);
         expectedUser.setBicCode(2302447);
+        expectedUser.setBalance(testUser.getBalance());
         expectedUser.setFriendsList("[]");
 
         Mockito.when(userUpdateService.updateUser(user)).thenReturn(expectedUser);
@@ -222,7 +225,7 @@ public class UserServiceTest {
     @Test
     public void shouldDeleteUser() throws Exception {
 
-        Long userId = userReadService.readUserByEmail("harry@jkr.com").getId();
+        Long userId = userRepository.findByEmail("harry@jkr.com").getId();
 
         Mockito.doNothing().when(userDeletionService).deleteUserById(userId);
 

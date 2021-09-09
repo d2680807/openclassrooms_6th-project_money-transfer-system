@@ -2,6 +2,7 @@ package com.openclassrooms.moneytransfersystem.model;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Objects;
 
 @Entity
 @Table(name = "user")
@@ -110,5 +111,29 @@ public class User {
 
     public void setTransfers(Collection<Transfer> transfers) {
         this.transfers = transfers;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", ibanCode=" + ibanCode +
+                ", bicCode=" + bicCode +
+                ", balance=" + balance +
+                ", friendsList='" + friendsList + '\'' +
+                ", transfers=" + transfers +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return ibanCode == user.ibanCode && bicCode == user.bicCode && Double.compare(user.balance, balance) == 0 && Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(friendsList, user.friendsList) && Objects.equals(transfers, user.transfers);
     }
 }
