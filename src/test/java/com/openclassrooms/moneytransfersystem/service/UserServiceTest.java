@@ -145,8 +145,7 @@ public class UserServiceTest {
         user.setIbanCode(2302447);
         user.setBicCode(3021744);
         user.setFriendsList("[]");
-        userCreationService.createUser(user);
-        user.setId(userReadService.readUserByEmail("harry@jkr.com").getId());
+        user.setId(userRepository.findByEmail("harry@jkr.com").getId());
 
         List<User> users = new ArrayList<>();
         users.add(user);
@@ -229,7 +228,7 @@ public class UserServiceTest {
 
         Mockito.doNothing().when(userDeletionService).deleteUserById(userId);
 
-        mockMvc.perform(delete("/users/1")).andExpect(status().isOk());
+        mockMvc.perform(delete("/users/" + userId)).andExpect(status().isOk());
 
         Mockito.verify(userDeletionService, Mockito.times(1)).deleteUserById(userId);
     }

@@ -1,6 +1,7 @@
 package com.openclassrooms.moneytransfersystem.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.openclassrooms.moneytransfersystem.dao.UserRepository;
 import com.openclassrooms.moneytransfersystem.model.Transfer;
 import com.openclassrooms.moneytransfersystem.model.User;
 import com.openclassrooms.moneytransfersystem.model.utility.TransferType;
@@ -8,12 +9,14 @@ import com.openclassrooms.moneytransfersystem.service.transfer.TransferCreationS
 import com.openclassrooms.moneytransfersystem.service.transfer.TransferDeletionService;
 import com.openclassrooms.moneytransfersystem.service.transfer.TransferReadService;
 import com.openclassrooms.moneytransfersystem.service.transfer.TransferUpdateService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -45,23 +48,32 @@ public class TransferServiceTest {
     private TransferUpdateService transferUpdateService;
     @MockBean
     private TransferDeletionService transferDeletionService;
+    @Autowired
+    private UserRepository userRepository;
+
+    @BeforeEach
+    public void shouldInitialize() throws Exception {
+
+        userRepository.deleteAll();
+
+        User user = new User();
+        user.setEmail("harry@jkr.com");
+        user.setPassword("1234567");
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        user.setFirstName("Harry");
+        user.setLastName("POTTER");
+        user.setIbanCode(2302447);
+        user.setBicCode(3021744);
+        user.setFriendsList("[]");
+        userRepository.save(user);
+    }
 
     @Test
     public void shouldGetTransfers() throws Exception {
 
-        User user = new User();
-        user.setId(57L);
-
-        Transfer transfer = new Transfer();
-        transfer.setUser(user);
-        transfer.setDate(LocalDateTime.now());
-        transfer.setType(TransferType.OUT);
-        transfer.setAmount(50);
-        transfer.setTax(0.05);
-        transfer.setDescription("Remboursement pour le cine.");
-
         List<Transfer> transfers = new ArrayList<>();
-        transfers.add(transfer);
 
         Mockito.when(transferReadService.readTransfers()).thenReturn(transfers);
 
@@ -76,21 +88,21 @@ public class TransferServiceTest {
     @Test
     public void shouldGetTransferById() throws Exception {
 
-        User user = new User();
-        user.setId(57L);
-
+        User user = userRepository.findByEmail("harry@jkr.com");
         Transfer transfer = new Transfer();
-        transfer.setId(53L);
         transfer.setUser(user);
         transfer.setDate(LocalDateTime.now());
         transfer.setType(TransferType.OUT);
         transfer.setAmount(50);
         transfer.setTax(0.05);
         transfer.setDescription("Remboursement pour le cine.");
+        transferCreationService.createTransfer(transfer);
+        Long transferId = userRepository.findByEmail("harry@jkr.com").getTransfers().iterator().next().getId();
+        transfer.setId(transferId);
 
-        Mockito.when(transferReadService.readTransferById(53L)).thenReturn(transfer);
+        Mockito.when(transferReadService.readTransferById(transferId)).thenReturn(transfer);
 
-        MvcResult mvcResult = mockMvc.perform(get("/transfers/53")).andExpect(status().isOk()).andReturn();
+        MvcResult mvcResult = mockMvc.perform(get("/transfers/" + transferId)).andExpect(status().isOk()).andReturn();
 
         String actualResponse = mvcResult.getResponse().getContentAsString();
         String expectedResponse = objectMapper.writeValueAsString(transfer);
@@ -101,11 +113,13 @@ public class TransferServiceTest {
     @Test
     public void shouldDeleteTransfer() throws Exception {
 
-        Mockito.doNothing().when(transferDeletionService).deleteTransferById(1L);
+        Long userId = userRepository.findByEmail("harry@jkr.com").getId();
 
-        mockMvc.perform(delete("/transfers/1")).andExpect(status().isOk());
+        Mockito.doNothing().when(transferDeletionService).deleteTransferById(userId);
 
-        Mockito.verify(transferDeletionService, Mockito.times(1)).deleteTransferById(1L);
+        mockMvc.perform(delete("/transfers/" + userId)).andExpect(status().isOk());
+
+        Mockito.verify(transferDeletionService, Mockito.times(1)).deleteTransferById(userId);
     }
 
     @Test

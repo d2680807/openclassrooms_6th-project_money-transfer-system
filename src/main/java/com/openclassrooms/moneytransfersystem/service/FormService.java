@@ -33,18 +33,7 @@ public class FormService {
     @Autowired
     private JsonService jsonService;
 
-    Logger logger = LogManager.getLogger(UserUpdateService.class);
-
-    // Test purposes
-    public void resetData() {
-
-        transferRepository.deleteAll();
-        transferRepository.resetIncrement();
-        taxRepository.deleteAll();
-        taxRepository.resetIncrement();
-        userRepository.deleteAll();
-        userRepository.resetIncrement();
-    }
+    private Logger logger = LogManager.getLogger(UserUpdateService.class);
 
     public String getBalance(String authenticationName) {
 
@@ -159,13 +148,14 @@ public class FormService {
 
     public void transferToFriend(Requirement requirement) {
 
+        logger.debug("[transferToFriend] use id: " + requirement.getUserId());
         logger.debug("[transferToFriend] amount: " + requirement.getAmount());
         if (requirement.getAmount() == 0) {return;}
 
         Optional<User> optionalUser = userRepository.findById(requirement.getUserId());
         User userUpdated = new User();
-        User recipient = userRepository.findByEmail(requirement.getRecipient());;
-        logger.debug("[transferToFriend] optionalUser: " + optionalUser);
+        User recipient = userRepository.findByEmail(requirement.getRecipient());
+        logger.debug("[transferToFriend] optionalUser: " + optionalUser.get());
         logger.debug("[transferToFriend] recipient: " + recipient);
         if (optionalUser.isPresent() && !Objects.isNull(recipient)) {
             userUpdated.setId(optionalUser.get().getId());
