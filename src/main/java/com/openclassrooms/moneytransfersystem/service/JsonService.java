@@ -26,12 +26,10 @@ public class JsonService {
 
     private ObjectMapper mapper = getDefaultObjectMapper();
 
-    public String toJson(Set<String> list, boolean indented) throws JsonProcessingException {
+    public String toJson(Set<String> list) throws JsonProcessingException {
 
         logger.debug("[toJson] list: " + list);
-        ObjectWriter objectWriter = mapper.writer();
-        if (indented) {objectWriter = objectWriter.with(SerializationFeature.INDENT_OUTPUT);}
-        String jsonString = objectWriter.writeValueAsString(list);
+        String jsonString = mapper.writer().writeValueAsString(list);
 
         return jsonString;
     }

@@ -17,6 +17,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.ElementCollection;
+import javax.persistence.FetchType;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -30,10 +32,10 @@ public class FormService {
     private TransferRepository transferRepository;
     @Autowired
     private TaxRepository taxRepository;
-
+    @Autowired
     private JsonService jsonService;
 
-    Logger logger = LogManager.getLogger(UserUpdateService.class);
+    private Logger logger = LogManager.getLogger(UserUpdateService.class);
 
     public String getBalance(String authenticationName) {
 
@@ -122,7 +124,7 @@ public class FormService {
         logger.debug("[getTransfersList] authenticationName: " + authenticationName);
         List<ListElement> transfersList = new ArrayList<>();
         userRepository.findByEmail(authenticationName).getTransfers().stream()
-                .forEach( t -> {
+                .forEach(t -> {
                     ListElement transfer = new ListElement();
                     String prefix;
                     String relation;
@@ -130,7 +132,7 @@ public class FormService {
                         prefix = "-";
                         logger.debug("[getTransfersList] transfer id: " + t.getId());
                         relation = transferRepository.findById(t.getId() + 1).get().getUser().getFirstName();
-                        logger.debug("[getTransfersList] relation: " + relation );
+                        logger.debug("[getTransfersList] relation: " + relation);
                         transfer.setRelation(relation);
                     } else {
                         prefix = "+";
@@ -148,11 +150,14 @@ public class FormService {
 
     public void transferToFriend(Requirement requirement) {
 
+        logger.debug("[transferToFriend] use id: " + requirement.getUserId());
+        logger.debug("[transferToFriend] amount: " + requirement.getAmount());
         if (requirement.getAmount() == 0) {return;}
-
         Optional<User> optionalUser = userRepository.findById(requirement.getUserId());
         User userUpdated = new User();
-        User recipient = userRepository.findByEmail(requirement.getRecipient());;
+        User recipient = userRepository.findByEmail(requirement.getRecipient());
+        logger.debug("[transferToFriend] optionalUser: " + optionalUser.get());
+        logger.debug("[transferToFriend] recipient: " + recipient);
         if (optionalUser.isPresent() && !Objects.isNull(recipient)) {
             userUpdated.setId(optionalUser.get().getId());
             userUpdated.setEmail(optionalUser.get().getEmail());

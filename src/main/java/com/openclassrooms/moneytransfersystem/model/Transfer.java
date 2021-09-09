@@ -1,10 +1,10 @@
 package com.openclassrooms.moneytransfersystem.model;
 
 import com.openclassrooms.moneytransfersystem.model.utility.TransferType;
-import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "transfer")
@@ -28,7 +28,7 @@ public class Transfer {
     private TransferType type;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="user_id", updatable=false)
+    @JoinColumn(name="user_id")
     private User user;
 
     public Long getId() {
@@ -85,5 +85,18 @@ public class Transfer {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Transfer{" +
+                "id=" + id +
+                ", date=" + date +
+                ", amount=" + amount +
+                ", tax=" + tax +
+                ", description='" + description + '\'' +
+                ", type=" + type +
+                ", user=" + user +
+                '}';
     }
 }
