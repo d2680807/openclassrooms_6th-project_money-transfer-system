@@ -86,17 +86,19 @@ public class FormService {
                         outTransfer.setDescription("Rechargement depuis votre compte bancaire");
                         inTransfer.setType(TransferType.OUT);
                         inTransfer.setDescription("Rechargement depuis votre compte bancaire");
+                        transferRepository.save(inTransfer);
+                        transferRepository.save(outTransfer);
                     } else {
                         user.setBalance(optionalUser.get().getBalance() - requirement.getAmount());
                         outTransfer.setType(TransferType.OUT);
                         outTransfer.setDescription("Retrait de solde vers compte bancaire");
                         inTransfer.setType(TransferType.IN);
                         inTransfer.setDescription("Retrait de solde vers compte bancaire");
+                        transferRepository.save(outTransfer);
+                        transferRepository.save(inTransfer);
                     }
 
                     userRepository.save(user);
-                    transferRepository.save(outTransfer);
-                    transferRepository.save(inTransfer);
                     logger.debug("[updateBalance] updated user: " + user);
                     logger.debug("[updateBalance] outgoing: " + outTransfer);
                     logger.debug("[updateBalance] ingoing: " + inTransfer);
