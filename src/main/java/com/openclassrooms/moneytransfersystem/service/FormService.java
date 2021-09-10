@@ -237,6 +237,13 @@ public class FormService {
             userUpdated.setFriendsList(objectWriter.writeValueAsString(friendsList));
             logger.debug("[addFriend] friendsListUpdated: " + friendsList);
             userRepository.save(userUpdated);
+
+            String recipientJsonString = recipient.getFriendsList();
+            Set<String> recipientFriendsList = new HashSet<>();
+            recipientFriendsList.addAll(mapper.readValue(recipientJsonString, Set.class));
+            recipientFriendsList.add(userUpdated.getEmail());
+            recipient.setFriendsList(objectWriter.writeValueAsString(recipientFriendsList));
+            userRepository.save(recipient);
         }
     }
 }
