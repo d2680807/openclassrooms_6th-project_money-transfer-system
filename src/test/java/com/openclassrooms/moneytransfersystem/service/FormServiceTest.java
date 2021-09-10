@@ -174,7 +174,7 @@ public class FormServiceTest {
         Number balance = format.parse(formService
                 .getBalance("harry@jkr.com"));
         String expectedBalance = String.format("%.2f",
-                balance.doubleValue() - amount) ;
+                balance.doubleValue() - amount - (amount * 0.05)) ;
 
         Requirement requirement = formService.getRequirement("harry@jkr.com");
         requirement.setRecipient("ron@jkr.com");
