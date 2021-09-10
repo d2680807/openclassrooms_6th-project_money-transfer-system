@@ -55,47 +55,52 @@ public class FormService {
             Optional<User> optionalUser = userRepository.findById(requirement.getUserId());
             User user = new User();
             if (optionalUser.isPresent()) {
-                user.setId(optionalUser.get().getId());
-                user.setEmail(optionalUser.get().getEmail());
-                user.setPassword(optionalUser.get().getPassword());
-                user.setFirstName(optionalUser.get().getFirstName());
-                user.setLastName(optionalUser.get().getLastName());
-                user.setIbanCode(optionalUser.get().getIbanCode());
-                user.setBicCode(optionalUser.get().getBicCode());
-                user.setFriendsList(optionalUser.get().getFriendsList());
+                if (optionalUser.get().getBalance() - requirement.getAmount() < 0 && !isTopup) {
 
-                Transfer outTransfer = new Transfer();
-                outTransfer.setUser(user);
-                outTransfer.setDate(LocalDateTime.now());
-                outTransfer.setAmount(requirement.getAmount());
-                outTransfer.setTax(taxRepository.findByName("DEFAULT").getRate());
-
-                Transfer inTransfer = new Transfer();
-                inTransfer.setDate(LocalDateTime.now());
-                inTransfer.setAmount(requirement.getAmount());
-                inTransfer.setTax(taxRepository.findByName("DEFAULT").getRate());
-                inTransfer.setUser(userRepository.findByEmail("app@test.com"));
-
-                if (isTopup) {
-                    user.setBalance(optionalUser.get().getBalance() + requirement.getAmount());
-                    outTransfer.setType(TransferType.IN);
-                    outTransfer.setDescription("Rechargement depuis votre compte bancaire");
-                    inTransfer.setType(TransferType.OUT);
-                    inTransfer.setDescription("Rechargement depuis votre compte bancaire");
+                    return;
                 } else {
-                    user.setBalance(optionalUser.get().getBalance() - requirement.getAmount());
-                    outTransfer.setType(TransferType.OUT);
-                    outTransfer.setDescription("Retrait de solde vers compte bancaire");
-                    inTransfer.setType(TransferType.IN);
-                    inTransfer.setDescription("Retrait de solde vers compte bancaire");
-                }
+                    user.setId(optionalUser.get().getId());
+                    user.setEmail(optionalUser.get().getEmail());
+                    user.setPassword(optionalUser.get().getPassword());
+                    user.setFirstName(optionalUser.get().getFirstName());
+                    user.setLastName(optionalUser.get().getLastName());
+                    user.setIbanCode(optionalUser.get().getIbanCode());
+                    user.setBicCode(optionalUser.get().getBicCode());
+                    user.setFriendsList(optionalUser.get().getFriendsList());
 
-                userRepository.save(user);
-                transferRepository.save(outTransfer);
-                transferRepository.save(inTransfer);
-                logger.debug("[updateBalance] updated user: " + user);
-                logger.debug("[updateBalance] outgoing: " + outTransfer);
-                logger.debug("[updateBalance] ingoing: " +inTransfer);
+                    Transfer outTransfer = new Transfer();
+                    outTransfer.setUser(user);
+                    outTransfer.setDate(LocalDateTime.now());
+                    outTransfer.setAmount(requirement.getAmount());
+                    outTransfer.setTax(taxRepository.findByName("DEFAULT").getRate());
+
+                    Transfer inTransfer = new Transfer();
+                    inTransfer.setDate(LocalDateTime.now());
+                    inTransfer.setAmount(requirement.getAmount());
+                    inTransfer.setTax(taxRepository.findByName("DEFAULT").getRate());
+                    inTransfer.setUser(userRepository.findByEmail("app@test.com"));
+
+                    if (isTopup) {
+                        user.setBalance(optionalUser.get().getBalance() + requirement.getAmount());
+                        outTransfer.setType(TransferType.IN);
+                        outTransfer.setDescription("Rechargement depuis votre compte bancaire");
+                        inTransfer.setType(TransferType.OUT);
+                        inTransfer.setDescription("Rechargement depuis votre compte bancaire");
+                    } else {
+                        user.setBalance(optionalUser.get().getBalance() - requirement.getAmount());
+                        outTransfer.setType(TransferType.OUT);
+                        outTransfer.setDescription("Retrait de solde vers compte bancaire");
+                        inTransfer.setType(TransferType.IN);
+                        inTransfer.setDescription("Retrait de solde vers compte bancaire");
+                    }
+
+                    userRepository.save(user);
+                    transferRepository.save(outTransfer);
+                    transferRepository.save(inTransfer);
+                    logger.debug("[updateBalance] updated user: " + user);
+                    logger.debug("[updateBalance] outgoing: " + outTransfer);
+                    logger.debug("[updateBalance] ingoing: " + inTransfer);
+                }
             }
         }
     }
@@ -159,42 +164,48 @@ public class FormService {
         logger.debug("[transferToFriend] optionalUser: " + optionalUser.get());
         logger.debug("[transferToFriend] recipient: " + recipient);
         if (optionalUser.isPresent() && !Objects.isNull(recipient)) {
-            userUpdated.setId(optionalUser.get().getId());
-            userUpdated.setEmail(optionalUser.get().getEmail());
-            userUpdated.setPassword(optionalUser.get().getPassword());
-            userUpdated.setFirstName(optionalUser.get().getFirstName());
-            userUpdated.setLastName(optionalUser.get().getLastName());
-            userUpdated.setIbanCode(optionalUser.get().getIbanCode());
-            userUpdated.setBicCode(optionalUser.get().getBicCode());
-            userUpdated.setFriendsList(optionalUser.get().getFriendsList());
-            userUpdated.setBalance(optionalUser.get().getBalance() - requirement.getAmount());
-            userRepository.save(userUpdated);
-            logger.debug("[transferToFriend] userUpdated: " + userUpdated);
+            double amount = requirement.getAmount();
+            if (optionalUser.get().getBalance() - (amount + (amount * 0.05))  < 0) {
 
-            Transfer outTransfer = new Transfer();
-            outTransfer.setUser(userUpdated);
-            outTransfer.setDate(LocalDateTime.now());
-            outTransfer.setType(TransferType.OUT);
-            outTransfer.setAmount(requirement.getAmount());
-            outTransfer.setTax(taxRepository.findByName("DEFAULT").getRate());
-            outTransfer.setDescription(requirement.getDescription());
-            transferRepository.save(outTransfer);
-            logger.debug("[transferToFriend] outTransfer: " + outTransfer);
+                return;
+            } else {
+                userUpdated.setId(optionalUser.get().getId());
+                userUpdated.setEmail(optionalUser.get().getEmail());
+                userUpdated.setPassword(optionalUser.get().getPassword());
+                userUpdated.setFirstName(optionalUser.get().getFirstName());
+                userUpdated.setLastName(optionalUser.get().getLastName());
+                userUpdated.setIbanCode(optionalUser.get().getIbanCode());
+                userUpdated.setBicCode(optionalUser.get().getBicCode());
+                userUpdated.setFriendsList(optionalUser.get().getFriendsList());
+                userUpdated.setBalance(optionalUser.get().getBalance() - (amount + (amount * 0.05)));
+                userRepository.save(userUpdated);
+                logger.debug("[transferToFriend] userUpdated: " + userUpdated);
 
-            recipient.setBalance(optionalUser.get().getBalance() + requirement.getAmount());
-            userRepository.save(recipient);
-            logger.debug("[transferToFriend] recipient: " + recipient);
+                Transfer outTransfer = new Transfer();
+                outTransfer.setUser(userUpdated);
+                outTransfer.setDate(LocalDateTime.now());
+                outTransfer.setType(TransferType.OUT);
+                outTransfer.setAmount(requirement.getAmount());
+                outTransfer.setTax(taxRepository.findByName("DEFAULT").getRate());
+                outTransfer.setDescription(requirement.getDescription());
+                transferRepository.save(outTransfer);
+                logger.debug("[transferToFriend] outTransfer: " + outTransfer);
+
+                recipient.setBalance(optionalUser.get().getBalance() + amount);
+                userRepository.save(recipient);
+                logger.debug("[transferToFriend] recipient: " + recipient);
 
 
-            Transfer inTransfer = new Transfer();
-            inTransfer.setDate(LocalDateTime.now());
-            inTransfer.setAmount(requirement.getAmount());
-            inTransfer.setTax(taxRepository.findByName("DEFAULT").getRate());
-            inTransfer.setDescription(requirement.getDescription());
-            inTransfer.setUser(recipient);
-            inTransfer.setType(TransferType.IN);
-            transferRepository.save(inTransfer);
-            logger.debug("[transferToFriend] inTransfer: " + inTransfer);
+                Transfer inTransfer = new Transfer();
+                inTransfer.setDate(LocalDateTime.now());
+                inTransfer.setAmount(requirement.getAmount());
+                inTransfer.setTax(taxRepository.findByName("DEFAULT").getRate());
+                inTransfer.setDescription(requirement.getDescription());
+                inTransfer.setUser(recipient);
+                inTransfer.setType(TransferType.IN);
+                transferRepository.save(inTransfer);
+                logger.debug("[transferToFriend] inTransfer: " + inTransfer);
+            }
         }
     }
 
