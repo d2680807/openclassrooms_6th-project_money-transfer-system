@@ -1,7 +1,10 @@
 package com.openclassrooms.moneytransfersystem.controller;
 
+import com.openclassrooms.moneytransfersystem.model.utility.Requirement;
 import com.openclassrooms.moneytransfersystem.model.User;
+import com.openclassrooms.moneytransfersystem.service.FormService;
 import com.openclassrooms.moneytransfersystem.service.user.UserCreationService;
+import com.openclassrooms.moneytransfersystem.service.user.UserDeletionService;
 import com.openclassrooms.moneytransfersystem.service.user.UserReadService;
 import com.openclassrooms.moneytransfersystem.service.user.UserUpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +17,14 @@ public class UserController {
 
     @Autowired
     private UserCreationService userCreationService;
-
     @Autowired
     private UserReadService userReadService;
-
     @Autowired
     private UserUpdateService userUpdateService;
+    @Autowired
+    private UserDeletionService userDeletionService;
+    @Autowired
+    private FormService formService;
 
     @PostMapping("/createUser")
     public User createUser(@RequestBody User user) {
@@ -39,7 +44,7 @@ public class UserController {
         return userReadService.readUserById(id);
     }
 
-    @GetMapping("/users")
+    @GetMapping("/user")
     public User readUserByEmail(@RequestParam String email) {
 
         return userReadService.readUserByEmail(email);
@@ -55,5 +60,33 @@ public class UserController {
     public User updateUser(@RequestBody User user) {
 
         return userUpdateService.updateUser(user);
+    }
+
+    @PutMapping("/balanceBack")
+    public void getBalanceBack(@RequestParam double amount) {
+
+        Requirement requirement = new Requirement();
+        requirement.setAmount(amount);
+        formService.updateBalance(requirement, false);
+    }
+
+    @PutMapping("/topup")
+    public void getTopup(@RequestParam double amount) {
+
+        Requirement requirement = new Requirement();
+        requirement.setAmount(amount);
+        formService.updateBalance(requirement, true);
+    }
+
+    @DeleteMapping("/users/{id}")
+    public void deleteUser(@PathVariable Long id) {
+
+        userDeletionService.deleteUserById(id);
+    }
+
+    @DeleteMapping("/users")
+    public void deleteUsers() {
+
+        userDeletionService.deleteUsers();
     }
 }
