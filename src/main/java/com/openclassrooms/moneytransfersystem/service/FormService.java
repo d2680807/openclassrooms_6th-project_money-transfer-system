@@ -191,7 +191,7 @@ public class FormService {
                 transferRepository.save(outTransfer);
                 logger.debug("[transferToFriend] outTransfer: " + outTransfer);
 
-                recipient.setBalance(optionalUser.get().getBalance() + amount);
+                recipient.setBalance(recipient.getBalance() + amount);
                 userRepository.save(recipient);
                 logger.debug("[transferToFriend] recipient: " + recipient);
 
