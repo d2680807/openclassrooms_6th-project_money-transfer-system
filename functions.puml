@@ -1,0 +1,131 @@
+@startuml
+
+class User {
+
+    - Long id;
+    - String email;
+    - String password;
+    - String firstName;
+    - String lastName;
+    - int ibanCode;
+    - int bicCode;
+    - double balance;
+    - String friendsList;
+    - Collection<Transfer> transfers;
+
+    + Long getId()
+    + void setId(Long id)
+    + String getEmail()
+    + void setEmail(String email)
+    + String getPassword()
+    + void setPassword(String password)
+    + String getFirstName()
+    + void setFirstName(String firstName)
+    + String getLastName()
+    + void setLastName(String lastName)
+    + int getIbanCode()
+    + void setIbanCode(int ibanCode)
+    + int getBicCode()
+    + void setBicCode(int bicCode)
+    + double getBalance()
+    + void setBalance(double balance)
+    + String getFriendsList()
+    + void setFriendsList(String friendsList)
+    + Collection<Transfer> getTransfers()
+    + void setTransfers(Collection<Transfer> transfers)
+}
+
+class Transfer {
+
+    - Long id;
+    - LocalDateTime date;
+    - double amount;
+    - double tax;
+    - String description;
+    - TransferType type;
+    - User user;
+
+    + Long getId()
+    + void setId(Long id)
+    + LocalDateTime getDate()
+    + void setDate(LocalDateTime date)
+    + double getAmount()
+    + void setAmount(double amount)
+    + double getTax()
+    + void setTax(double tax)
+    + String getDescription()
+    + void setDescription(String description)
+    + TransferType getType()
+    + void setType(TransferType type)
+    + User getUser()
+    + void setUser(User user)
+    + String toString()
+}
+
+class Tax {
+
+    - Long id;
+    - String name;
+    - double rate;
+
+    + Long getId()
+    + void setId(Long id)
+    + String getName()
+    + void setName(String name)
+    + double getRate()
+    + void setRate(double rate)
+    + String toString()
+    + boolean equals(Object o)
+}
+
+interface UserRepository {
+
+    + User findByEmail(String email)
+}
+
+interface TransferRepository {
+
+    + Transfer findByUserId(Long userId)
+}
+
+interface TaxRepository {
+
+    + Tax findByName(String name)
+}
+
+class UserService {
+
+    - UserRepository userRepository;
+
+    + User createUser(User user)
+    + Collection<User> createUsers(Collection<User> users)
+    + User readUserById(Long id)
+    + User readUserByEmail(String email)
+    + Collection<User> readUsers()
+    + User updateUser(User user)
+    + void deleteUserById(Long id)
+    + void deleteUsers()
+}
+
+class UserController {
+
+    - UserCreationService userCreationService;
+    - UserReadService userReadService;
+    - UserUpdateService userUpdateService;
+    - UserDeletionService userDeletionService;
+    - FormService formService;
+
+    + User createUser(@RequestBody User user)
+    + Collection<User> createUsers(@RequestBody Collection<User> users)
+    + User readUserById(@PathVariable Long id)
+    + User readUserByEmail(@RequestParam String email)
+    + Collection<User> readUsers()
+    + User updateUser(@RequestBody User user)
+    + void getBalanceBack(@RequestParam double amount)
+    + void getTopup(@RequestParam double amount)
+    + void deleteUser(@PathVariable Long id)
+    + void deleteUsers()
+}
+
+@enduml
+'credits: https://plantuml.com/class-diagram
