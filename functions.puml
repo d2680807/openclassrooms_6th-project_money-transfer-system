@@ -127,10 +127,76 @@ class UserController {
     + void deleteUsers()
 }
 
+class TransferService {
+
+    - TransferRepository transferRepository
+
+    + Transfer createTransfer(Transfer transfer)
+    + Collection<Transfer> createTransfers(Collection<Transfer> transfers)
+    + Transfer readTransferById(Long id)
+    + Collection<Transfer> readTransfers()
+    + Transfer updateTransfer(Transfer transfer)
+    + void deleteTransferById(Long id)
+    + void deleteTransfers()
+}
+
+class TransferController {
+
+    - TransferCreationService transferCreationService;
+    - TransferReadService transferReadService;
+    - TransferUpdateService transferUpdateService;
+    - TransferDeletionService transferDeletionService;
+
+    + Transfer createTransfer(@RequestBody Transfer transfer)
+    + Collection<Transfer> createTransfers(@RequestBody Collection<Transfer> transfers)
+    + Transfer readTransferById(@PathVariable Long id)
+    + Collection<Transfer> readTransfers()
+    + Transfer updateTransfer(@RequestBody Transfer transfer)
+    + void deleteTransfer(@PathVariable Long id)
+    + void deleteTransfers() 
+}
+
+class TaxService {
+
+    - TaxRepository taxRepository;
+
+    + Tax createTax(Tax tax)
+    + Tax readTaxById(Long id)
+    + Tax readTaxByName(String name)
+    + Collection<Tax> readTaxes()
+    + Collection<Tax> createTaxes(Collection<Tax> taxes)
+    + Tax updateTax(Tax tax)
+    + void deleteTaxById(Long id)
+    + void deleteTaxes()
+}
+
+class TaxController {
+
+    - TaxCreationService taxCreationService;
+    - TaxReadService taxReadService;
+    - TaxUpdateService taxUpdateService;
+    - TaxDeletionService taxDeletionService;
+
+    + Tax createTax(@RequestBody Tax tax)
+    + Collection<Tax> createTax(@RequestBody Collection<Tax>  taxes)
+    + Tax readTaxById(@PathVariable Long id)
+    + Collection<Tax> readTaxes()
+    + Tax updateTax(@RequestBody Tax tax)
+    + void deleteTax(@PathVariable Long id)
+    + void deleteTaxes()
+}
+
 User --|> UserService
 UserService --> UserController
 UserController --> UserRepository
 
+Transfer --|> TransferService
+TransferService --> TransferController
+TransferController --> TransferRepository
+
+Tax --|> TaxService
+TaxService --> TaxController
+TaxController --> TaxRepository
 
 @enduml
 'credits: https://plantuml.com/class-diagram
