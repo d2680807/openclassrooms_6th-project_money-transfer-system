@@ -93,16 +93,34 @@ interface TaxRepository {
     + Tax findByName(String name)
 }
 
-class UserService {
+class UserCreationService {
 
     - UserRepository userRepository;
 
     + User createUser(User user)
     + Collection<User> createUsers(Collection<User> users)
+}
+
+class UserReadService {
+
+    - UserRepository userRepository;
+
     + User readUserById(Long id)
     + User readUserByEmail(String email)
     + Collection<User> readUsers()
+}
+
+class UserUpdateService {
+
+    - UserRepository userRepository;
+
     + User updateUser(User user)
+}
+
+class UserDeletionService {
+
+    - UserRepository userRepository;
+
     + void deleteUserById(Long id)
     + void deleteUsers()
 }
@@ -127,15 +145,33 @@ class UserController {
     + void deleteUsers()
 }
 
-class TransferService {
+class TransferCreationService {
 
     - TransferRepository transferRepository
 
     + Transfer createTransfer(Transfer transfer)
     + Collection<Transfer> createTransfers(Collection<Transfer> transfers)
+}
+
+class TransferReadService {
+
+    - TransferRepository transferRepository
+
     + Transfer readTransferById(Long id)
     + Collection<Transfer> readTransfers()
+}
+
+class TransferUpdateService {
+
+    - TransferRepository transferRepository
+
     + Transfer updateTransfer(Transfer transfer)
+}
+
+class TransferDeletionService {
+
+    - TransferRepository transferRepository
+
     + void deleteTransferById(Long id)
     + void deleteTransfers()
 }
@@ -156,16 +192,33 @@ class TransferController {
     + void deleteTransfers() 
 }
 
-class TaxService {
+class TaxCreationService {
+
+    - TaxRepository taxRepository;
+
+    + Tax readTaxById(Long id)
+    + Tax readTaxByName(String name)
+}
+
+class TaxReadService {
 
     - TaxRepository taxRepository;
 
     + Tax createTax(Tax tax)
-    + Tax readTaxById(Long id)
-    + Tax readTaxByName(String name)
-    + Collection<Tax> readTaxes()
     + Collection<Tax> createTaxes(Collection<Tax> taxes)
+}
+
+class TaxUpdateService {
+
+    - TaxRepository taxRepository;
+
     + Tax updateTax(Tax tax)
+}
+
+class TaxDeletionService {
+
+    - TaxRepository taxRepository;
+
     + void deleteTaxById(Long id)
     + void deleteTaxes()
 }
@@ -186,16 +239,34 @@ class TaxController {
     + void deleteTaxes()
 }
 
-User --|> UserService
-UserService --> UserController
+User --|> UserCreationService
+User --|> UserReadService
+User --|> UserUpdateService
+User --|> UserDeletionService
+UserCreationService --> UserController
+UserReadService --> UserController
+UserUpdateService --> UserController
+UserDeletionService --> UserController
 UserController --> UserRepository
 
-Transfer --|> TransferService
-TransferService --> TransferController
+Transfer --|> TransferCreationService
+Transfer --|> TransferReadService
+Transfer --|> TransferUpdateService
+Transfer --|> TransferDeletionService
+TransferCreationService --> TransferController
+TransferReadService --> TransferController
+TransferUpdateService --> TransferController
+TransferDeletionService --> TransferController
 TransferController --> TransferRepository
 
-Tax --|> TaxService
-TaxService --> TaxController
+Tax --|> TaxCreationService
+Tax --|> TaxReadService
+Tax --|> TaxUpdateService
+Tax --|> TaxDeletionService
+TaxCreationService --> TaxController
+TaxReadService --> TaxController
+TaxUpdateService --> TaxController
+TaxDeletionService --> TaxController
 TaxController --> TaxRepository
 
 @enduml
