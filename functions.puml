@@ -127,5 +127,10 @@ class UserController {
     + void deleteUsers()
 }
 
+User --|> UserService
+UserService --> UserController
+UserController --> UserRepository
+
+
 @enduml
 'credits: https://plantuml.com/class-diagram
