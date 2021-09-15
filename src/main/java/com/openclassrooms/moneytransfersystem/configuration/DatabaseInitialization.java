@@ -10,7 +10,6 @@ import javax.annotation.PostConstruct;
 @Component
 public class DatabaseInitialization {
 
-
     @Autowired
     private UserRepository userRepository;
 
