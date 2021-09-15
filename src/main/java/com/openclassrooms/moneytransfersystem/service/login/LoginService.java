@@ -1,4 +1,4 @@
-package com.openclassrooms.moneytransfersystem.service;
+package com.openclassrooms.moneytransfersystem.service.login;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +11,7 @@ import com.openclassrooms.moneytransfersystem.model.User;
 import com.openclassrooms.moneytransfersystem.model.utility.ListElement;
 import com.openclassrooms.moneytransfersystem.model.utility.Requirement;
 import com.openclassrooms.moneytransfersystem.model.utility.TransferType;
+import com.openclassrooms.moneytransfersystem.service.JsonService;
 import com.openclassrooms.moneytransfersystem.service.user.UserUpdateService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
-public class FormService {
+public class LoginService {
 
     @Autowired
     private UserRepository userRepository;
