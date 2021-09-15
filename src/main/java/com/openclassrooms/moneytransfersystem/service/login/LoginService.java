@@ -17,6 +17,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.FetchType;
@@ -47,6 +48,7 @@ public class LoginService {
         return balance;
     }
 
+    @Transactional
     public void updateBalance(Requirement requirement, boolean isTopup) {
 
         if (requirement.getAmount() == 0) {
@@ -156,6 +158,7 @@ public class LoginService {
         return transfersList;
     }
 
+    @Transactional
     public void transferToFriend(Requirement requirement) {
 
         logger.debug("[transferToFriend] use id: " + requirement.getUserId());
@@ -212,6 +215,7 @@ public class LoginService {
         }
     }
 
+    @Transactional
     public void addFriend(Requirement requirement) throws JsonProcessingException {
 
         Optional<User> optionalUser = userRepository.findById(requirement.getUserId());
