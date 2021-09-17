@@ -1,327 +1,332 @@
 @startuml
 
-package com.openclassrooms.moneytransfersystem {
+package com.moneytransfersystem {
 
-    package model {
+    class User {
 
-        class User {
+        - Long id;
+        - String email;
+        - String password;
+        - String firstName;
+        - String lastName;
+        - int ibanCode;
+        - int bicCode;
+        - double balance;
+        - String friendsList;
+        - Collection<Transfer> transfers;
 
-            - Long id;
-            - String email;
-            - String password;
-            - String firstName;
-            - String lastName;
-            - int ibanCode;
-            - int bicCode;
-            - double balance;
-            - String friendsList;
-            - Collection<Transfer> transfers;
-
-            + Long getId()
-            + void setId(Long id)
-            + String getEmail()
-            + void setEmail(String email)
-            + String getPassword()
-            + void setPassword(String password)
-            + String getFirstName()
-            + void setFirstName(String firstName)
-            + String getLastName()
-            + void setLastName(String lastName)
-            + int getIbanCode()
-            + void setIbanCode(int ibanCode)
-            + int getBicCode()
-            + void setBicCode(int bicCode)
-            + double getBalance()
-            + void setBalance(double balance)
-            + String getFriendsList()
-            + void setFriendsList(String friendsList)
-            + Collection<Transfer> getTransfers()
-            + void setTransfers(Collection<Transfer> transfers)
-        }
-
-        class Transfer {
-
-            - Long id;
-            - LocalDateTime date;
-            - double amount;
-            - double tax;
-            - String description;
-            - TransferType type;
-            - User user;
-
-            + Long getId()
-            + void setId(Long id)
-            + LocalDateTime getDate()
-            + void setDate(LocalDateTime date)
-            + double getAmount()
-            + void setAmount(double amount)
-            + double getTax()
-            + void setTax(double tax)
-            + String getDescription()
-            + void setDescription(String description)
-            + TransferType getType()
-            + void setType(TransferType type)
-            + User getUser()
-            + void setUser(User user)
-            + String toString()
-        }
-
-        class Tax {
-
-            - Long id;
-            - String name;
-            - double rate;
-
-            + Long getId()
-            + void setId(Long id)
-            + String getName()
-            + void setName(String name)
-            + double getRate()
-            + void setRate(double rate)
-            + String toString()
-            + boolean equals(Object o)
-        }
-
-        User -right-> Transfer : 1..*
-        Transfer -left-> User : 1..*
-        Transfer -right-> Tax : 1..1
+        + Long getId()
+        + void setId(Long id)
+        + String getEmail()
+        + void setEmail(String email)
+        + String getPassword()
+        + void setPassword(String password)
+        + String getFirstName()
+        + void setFirstName(String firstName)
+        + String getLastName()
+        + void setLastName(String lastName)
+        + int getIbanCode()
+        + void setIbanCode(int ibanCode)
+        + int getBicCode()
+        + void setBicCode(int bicCode)
+        + double getBalance()
+        + void setBalance(double balance)
+        + String getFriendsList()
+        + void setFriendsList(String friendsList)
+        + Collection<Transfer> getTransfers()
+        + void setTransfers(Collection<Transfer> transfers)
     }
 
-    package repository {
+    class Transfer {
 
-        interface UserRepository {
+        - Long id;
+        - LocalDateTime date;
+        - double amount;
+        - double tax;
+        - String description;
+        - TransferType type;
+        - User user;
 
-             + User findByEmail(String email)
-         }
-
-         interface TransferRepository {
-
-             + Transfer findByUserId(Long userId)
-         }
-
-         interface TaxRepository {
-
-             + Tax findByName(String name)
-         }
+        + Long getId()
+        + void setId(Long id)
+        + LocalDateTime getDate()
+        + void setDate(LocalDateTime date)
+        + double getAmount()
+        + void setAmount(double amount)
+        + double getTax()
+        + void setTax(double tax)
+        + String getDescription()
+        + void setDescription(String description)
+        + TransferType getType()
+        + void setType(TransferType type)
+        + User getUser()
+        + void setUser(User user)
+        + String toString()
     }
 
+    class Tax {
 
+        - Long id;
+        - String name;
+        - double rate;
 
-    package service {
-
-        package user {
-
-            class UserCreationService {
-
-                - UserRepository userRepository;
-
-                + User createUser(User user)
-                + Collection<User> createUsers(Collection<User> users)
-            }
-
-            class UserReadService {
-
-                - UserRepository userRepository;
-
-                + User readUserById(Long id)
-                + User readUserByEmail(String email)
-                + Collection<User> readUsers()
-            }
-
-            class UserUpdateService {
-
-                - UserRepository userRepository;
-
-                + User updateUser(User user)
-            }
-
-            class UserDeletionService {
-
-                - UserRepository userRepository;
-
-                + void deleteUserById(Long id)
-                + void deleteUsers()
-            }
-        }
-
-        package transfer {
-
-            class TransferCreationService {
-
-                - TransferRepository transferRepository
-
-                + Transfer createTransfer(Transfer transfer)
-                + Collection<Transfer> createTransfers(Collection<Transfer> transfers)
-            }
-
-            class TransferReadService {
-
-                - TransferRepository transferRepository
-
-                + Transfer readTransferById(Long id)
-                + Collection<Transfer> readTransfers()
-            }
-
-            class TransferUpdateService {
-
-                - TransferRepository transferRepository
-
-                + Transfer updateTransfer(Transfer transfer)
-            }
-
-            class TransferDeletionService {
-
-                - TransferRepository transferRepository
-
-                + void deleteTransferById(Long id)
-                + void deleteTransfers()
-            }
-        }
-
-        package tax {
-
-            class TaxCreationService {
-
-                - TaxRepository taxRepository;
-
-                + Tax readTaxById(Long id)
-                + Tax readTaxByName(String name)
-            }
-
-            class TaxReadService {
-
-                - TaxRepository taxRepository;
-
-                + Tax createTax(Tax tax)
-                + Collection<Tax> createTaxes(Collection<Tax> taxes)
-            }
-
-            class TaxUpdateService {
-
-                - TaxRepository taxRepository;
-
-                + Tax updateTax(Tax tax)
-            }
-
-            class TaxDeletionService {
-
-                - TaxRepository taxRepository;
-
-                + void deleteTaxById(Long id)
-                + void deleteTaxes()
-            }
-        }
-
-        package login {
-            class LoginService {
-    
-                - UserRepository userRepository;
-                - TransferRepository transferRepository;
-                - TaxRepository taxRepository;
-                - JsonService jsonService;
-    
-                + String getBalance(String authenticationName)
-                + void updateBalance(Requirement requirement, boolean isTopup)
-                + Requirement getRequirement(String authenticationName)
-                + Set<String> getFriendsList(String authenticationName)
-                + List<ListElement> getTransfersList(String authenticationName)
-                + void transferToFriend(Requirement requirement)
-                + void addFriend(Requirement requirement)
-            }
-        }
-
-        class JsonService {
-
-            - ObjectMapper mapper
-
-            + ObjectMapper getDefaultObjectMapper()
-            + String toJson(Set<String> list)
-            + Set<String> toSetOfString(String jsonString)
-        }
-
-        login --> JsonService
+        + Long getId()
+        + void setId(Long id)
+        + String getName()
+        + void setName(String name)
+        + double getRate()
+        + void setRate(double rate)
+        + String toString()
+        + boolean equals(Object o)
     }
 
-    package controller {
-
-        class UserController {
-
-            - UserCreationService userCreationService;
-            - UserReadService userReadService;
-            - UserUpdateService userUpdateService;
-            - UserDeletionService userDeletionService;
-            - FormService formService;
-
-            + User createUser(User user)
-            + Collection<User> createUsers(Collection<User> users)
-            + User readUserById(Long id)
-            + User readUserByEmail(String email)
-            + Collection<User> readUsers()
-            + User updateUser(User user)
-            + void getBalanceBack(double amount)
-            + void getTopup(double amount)
-            + void deleteUser(Long id)
-            + void deleteUsers()
-        }
-
-        class TransferController {
-
-            - TransferCreationService transferCreationService;
-            - TransferReadService transferReadService;
-            - TransferUpdateService transferUpdateService;
-            - TransferDeletionService transferDeletionService;
-
-            + Transfer createTransfer(Transfer transfer)
-            + Collection<Transfer> createTransfers(Collection<Transfer> transfers)
-            + Transfer readTransferById(Long id)
-            + Collection<Transfer> readTransfers()
-            + Transfer updateTransfer(Transfer transfer)
-            + void deleteTransfer(Long id)
-            + void deleteTransfers()
-        }
-
-        class TaxController {
-
-            - TaxCreationService taxCreationService;
-            - TaxReadService taxReadService;
-            - TaxUpdateService taxUpdateService;
-            - TaxDeletionService taxDeletionService;
-
-            + Tax createTax(Tax tax)
-            + Collection<Tax> createTax(Collection<Tax>  taxes)
-            + Tax readTaxById(Long id)
-            + Collection<Tax> readTaxes()
-            + Tax updateTax(Tax tax)
-            + void deleteTax(Long id)
-            + void deleteTaxes()
-        }
-        
-        class LoginController {
-            - UserRepository userRepository;
-            - TransferRepository transferRepository;
-            - TaxRepository taxRepository;
-            - JsonService jsonService;
-        
-            + String getBalance(String authenticationName)
-            + void updateBalance(Requirement requirement, boolean isTopup)
-            + Requirement getRequirement(String authenticationName)
-            + Set<String> getFriendsList(String authenticationName)
-            + List<ListElement> getTransfersList(String authenticationName)
-            + void transferToFriend(Requirement requirement)
-            + void addFriend(Requirement requirement)
-        }
+    enum TransferType {
+        + IN,
+        + OUT
     }
 
-    class Application {
+    interface UserRepository {
 
-        + static void main(String[] args)
+         + User findByEmail(String email)
+     }
+
+     interface TransferRepository {
+
+         + Transfer findByUserId(Long userId)
+     }
+
+     interface TaxRepository {
+
+         + Tax findByName(String name)
+     }
+
+    class UserCreationService {
+
+        - UserRepository userRepository;
+
+        + User createUser(User user)
+        + Collection<User> createUsers(Collection<User> users)
     }
 
-    Application -down-> controller
-    controller -down-> Application
-    controller --* service
-    service --* repository
-    repository --* model
+    class UserReadService {
+
+        - UserRepository userRepository;
+
+        + User readUserById(Long id)
+        + User readUserByEmail(String email)
+        + Collection<User> readUsers()
+    }
+
+    class UserUpdateService {
+
+        - UserRepository userRepository;
+
+        + User updateUser(User user)
+    }
+
+    class UserDeletionService {
+
+        - UserRepository userRepository;
+
+        + void deleteUserById(Long id)
+        + void deleteUsers()
+    }
+
+    class TransferCreationService {
+
+        - TransferRepository transferRepository
+
+        + Transfer createTransfer(Transfer transfer)
+        + Collection<Transfer> createTransfers(Collection<Transfer> transfers)
+    }
+
+    class TransferReadService {
+
+        - TransferRepository transferRepository
+
+        + Transfer readTransferById(Long id)
+        + Collection<Transfer> readTransfers()
+    }
+
+    class TransferUpdateService {
+
+        - TransferRepository transferRepository
+
+        + Transfer updateTransfer(Transfer transfer)
+    }
+
+    class TransferDeletionService {
+
+        - TransferRepository transferRepository
+
+        + void deleteTransferById(Long id)
+        + void deleteTransfers()
+    }
+
+    class TaxCreationService {
+
+        - TaxRepository taxRepository;
+
+        + Tax readTaxById(Long id)
+        + Tax readTaxByName(String name)
+    }
+
+    class TaxReadService {
+
+        - TaxRepository taxRepository;
+
+        + Tax createTax(Tax tax)
+        + Collection<Tax> createTaxes(Collection<Tax> taxes)
+    }
+
+    class TaxUpdateService {
+
+        - TaxRepository taxRepository;
+
+        + Tax updateTax(Tax tax)
+    }
+
+    class TaxDeletionService {
+
+        - TaxRepository taxRepository;
+
+        + void deleteTaxById(Long id)
+        + void deleteTaxes()
+    }
+
+    class LoginService {
+
+        - UserRepository userRepository;
+        - TransferRepository transferRepository;
+        - TaxRepository taxRepository;
+        - JsonService jsonService;
+
+        + String getBalance(String authenticationName)
+        + void updateBalance(Requirement requirement, boolean isTopup)
+        + Requirement getRequirement(String authenticationName)
+        + Set<String> getFriendsList(String authenticationName)
+        + List<ListElement> getTransfersList(String authenticationName)
+        + void transferToFriend(Requirement requirement)
+        + void addFriend(Requirement requirement)
+    }
+
+    class JsonService {
+
+        - ObjectMapper mapper
+
+        + ObjectMapper getDefaultObjectMapper()
+        + String toJson(Set<String> list)
+        + Set<String> toSetOfString(String jsonString)
+    }
+
+    class UserController {
+
+        - UserCreationService userCreationService;
+        - UserReadService userReadService;
+        - UserUpdateService userUpdateService;
+        - UserDeletionService userDeletionService;
+        - FormService formService;
+
+        + User createUser(User user)
+        + Collection<User> createUsers(Collection<User> users)
+        + User readUserById(Long id)
+        + User readUserByEmail(String email)
+        + Collection<User> readUsers()
+        + User updateUser(User user)
+        + void getBalanceBack(double amount)
+        + void getTopup(double amount)
+        + void deleteUser(Long id)
+        + void deleteUsers()
+    }
+
+    class TransferController {
+
+        - TransferCreationService transferCreationService;
+        - TransferReadService transferReadService;
+        - TransferUpdateService transferUpdateService;
+        - TransferDeletionService transferDeletionService;
+
+        + Transfer createTransfer(Transfer transfer)
+        + Collection<Transfer> createTransfers(Collection<Transfer> transfers)
+        + Transfer readTransferById(Long id)
+        + Collection<Transfer> readTransfers()
+        + Transfer updateTransfer(Transfer transfer)
+        + void deleteTransfer(Long id)
+        + void deleteTransfers()
+    }
+
+    class TaxController {
+
+        - TaxCreationService taxCreationService;
+        - TaxReadService taxReadService;
+        - TaxUpdateService taxUpdateService;
+        - TaxDeletionService taxDeletionService;
+
+        + Tax createTax(Tax tax)
+        + Collection<Tax> createTax(Collection<Tax>  taxes)
+        + Tax readTaxById(Long id)
+        + Collection<Tax> readTaxes()
+        + Tax updateTax(Tax tax)
+        + void deleteTax(Long id)
+        + void deleteTaxes()
+    }
+
+    class LoginController {
+        - UserRepository userRepository;
+        - TransferRepository transferRepository;
+        - TaxRepository taxRepository;
+        - JsonService jsonService;
+
+        + String getBalance(String authenticationName)
+        + void updateBalance(Requirement requirement, boolean isTopup)
+        + Requirement getRequirement(String authenticationName)
+        + Set<String> getFriendsList(String authenticationName)
+        + List<ListElement> getTransfersList(String authenticationName)
+        + void transferToFriend(Requirement requirement)
+        + void addFriend(Requirement requirement)
+    }
+
+    User -right--> Transfer : 1..*
+    Transfer -left-> User : .*..1
+    Transfer -right- Tax : 1..1
+    Transfer -up- TransferType : 1..1
+
+    UserRepository -right-|> User
+    TransferRepository -down-|> Transfer
+    TaxRepository -left-|> Tax
+
+    UserCreationService -down-> UserRepository
+    UserReadService -right-> UserRepository
+    UserUpdateService -up-> UserRepository
+    UserDeletionService -up-> UserRepository
+
+    TransferCreationService -down-> TransferRepository
+    TransferReadService -down-> TransferRepository
+    TransferUpdateService -down-> TransferRepository
+    TransferDeletionService -down-> TransferRepository
+
+    TaxCreationService -down-> TaxRepository
+    TaxReadService -left-> TaxRepository
+    TaxUpdateService -up-> TaxRepository
+    TaxDeletionService -up-> TaxRepository
+
+    UserController --> UserCreationService
+    UserController -right-> UserReadService
+    UserController --> UserUpdateService
+    UserController --> UserDeletionService
+
+    TransferController --> TransferCreationService
+    TransferController -down-> TransferReadService
+    TransferController --> TransferUpdateService
+    TransferController --> TransferDeletionService
+
+    TaxController --> TaxCreationService
+    TaxController -left-> TaxReadService
+    TaxController --> TaxUpdateService
+    TaxController --> TaxDeletionService
+
+    LoginService --> JsonService
+    LoginController --> LoginService
 }
 
 @enduml
