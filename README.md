@@ -97,11 +97,11 @@ send money with *Pay My Buddy* it feels like the money is going straight into th
 
 ### Business Domain Model
 
-[![Business Domain Model][doc-001]](#)
+[![Business Domain Model][doc-001]](https://github.com/s2680854/openclassrooms_6th-project_money-transfer-system/blob/develop/docs/data-model/1-functions.png)
 
 ### Physical Data Model
 
-[![Physical Data Model][doc-002]](#)
+[![Physical Data Model][doc-002]](https://github.com/s2680854/openclassrooms_6th-project_money-transfer-system/blob/develop/docs/data-model/2-data.png)
 
 <!-- ACKNOWLEDGEMENTS -->
 
