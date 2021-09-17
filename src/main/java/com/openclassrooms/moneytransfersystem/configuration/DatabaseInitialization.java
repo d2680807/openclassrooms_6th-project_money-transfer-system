@@ -16,6 +16,8 @@ public class DatabaseInitialization {
     @PostConstruct
     private void postConstruct() {
 
+        userRepository.deleteAll();
+
         User user = new User();
         user.setEmail("app@test.com");
         user.setPassword("1234567");
@@ -24,7 +26,6 @@ public class DatabaseInitialization {
         user.setIbanCode(2641874);
         user.setBicCode(63215472);
         user.setFriendsList("[]");
-
         userRepository.save(user);
     }
 }
