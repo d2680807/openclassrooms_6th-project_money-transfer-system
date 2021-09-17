@@ -14,7 +14,6 @@ class ApplicationTest {
     void shouldLogMyMessage() {
 
         String myMessage = "test";
-
         logger.debug(myMessage);
     }
 }
