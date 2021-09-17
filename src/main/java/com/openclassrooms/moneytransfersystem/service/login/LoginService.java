@@ -171,7 +171,7 @@ public class LoginService {
         logger.debug("[transferToFriend] recipient: " + recipient);
         if (optionalUser.isPresent() && !Objects.isNull(recipient)) {
             double amount = requirement.getAmount();
-            if (optionalUser.get().getBalance() - (amount + (amount * 0.05))  < 0) {
+            if (optionalUser.get().getBalance() - (amount + (amount * 0.005))  < 0) {
 
                 return;
             } else {

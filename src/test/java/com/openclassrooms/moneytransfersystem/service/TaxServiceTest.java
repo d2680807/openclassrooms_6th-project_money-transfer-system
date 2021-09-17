@@ -55,7 +55,7 @@ public class TaxServiceTest {
 
         Tax tax = new Tax();
         tax.setName("DEFAULT");
-        tax.setRate(0.05);
+        tax.setRate(0.005);
         taxRepository.save(tax);
     }
 
@@ -66,11 +66,11 @@ public class TaxServiceTest {
 
         Tax tax = new Tax();
         tax.setName("DIVERSE");
-        tax.setRate(0.10);
+        tax.setRate(0.01);
 
         Tax taxSaved = new Tax();
         taxSaved.setName("DIVERSE");
-        taxSaved.setRate(0.10);
+        taxSaved.setRate(0.01);
 
         Mockito.when(taxCreationService.createTax(tax)).thenReturn(taxSaved);
 
@@ -88,14 +88,14 @@ public class TaxServiceTest {
 
         Tax tax = new Tax();
         tax.setName("DIVERSE");
-        tax.setRate(0.10);
+        tax.setRate(0.01);
 
         List<Tax> taxes = new ArrayList<>();
         taxes.add(tax);
 
         Tax taxSaved = new Tax();
         taxSaved.setName("DIVERSE");
-        taxSaved.setRate(0.10);
+        taxSaved.setRate(0.01);
 
         List<Tax> taxesSaved = new ArrayList<>();
         taxesSaved.add(taxSaved);
@@ -115,7 +115,7 @@ public class TaxServiceTest {
         Tax tax = new Tax();
         tax.setId(taxRepository.findByName("DEFAULT").getId());
         tax.setName("DEFAULT");
-        tax.setRate(0.05);
+        tax.setRate(0.005);
 
         List<Tax> taxes = new ArrayList<>();
         taxes.add(tax);
@@ -137,7 +137,7 @@ public class TaxServiceTest {
         Tax tax = new Tax();
         tax.setId(taxId);
         tax.setName("Test");
-        tax.setRate(0.10);
+        tax.setRate(0.01);
 
         Mockito.when(taxReadService.readTaxById(taxId)).thenReturn(tax);
 
@@ -157,12 +157,12 @@ public class TaxServiceTest {
         Tax tax = new Tax();
         tax.setId(taxId);
         tax.setName("OTHER");
-        tax.setRate(0.10);
+        tax.setRate(0.01);
 
         Tax taxUpdated = new Tax();
         taxUpdated.setId(taxId);
         taxUpdated.setName("OTHER");
-        taxUpdated.setRate(0.10);
+        taxUpdated.setRate(0.01);
 
         Mockito.when(taxUpdateService.updateTax(tax)).thenReturn(taxUpdated);
 
