@@ -2,13 +2,10 @@ package com.openclassrooms.moneytransfersystem.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.openclassrooms.moneytransfersystem.dao.UserRepository;
 import com.openclassrooms.moneytransfersystem.model.Tax;
-import com.openclassrooms.moneytransfersystem.model.Transfer;
 import com.openclassrooms.moneytransfersystem.model.User;
-import com.openclassrooms.moneytransfersystem.model.utility.ListElement;
 import com.openclassrooms.moneytransfersystem.model.utility.Requirement;
-import com.openclassrooms.moneytransfersystem.model.utility.TransferType;
+import com.openclassrooms.moneytransfersystem.service.login.LoginService;
 import com.openclassrooms.moneytransfersystem.service.tax.TaxCreationService;
 import com.openclassrooms.moneytransfersystem.service.tax.TaxDeletionService;
 import com.openclassrooms.moneytransfersystem.service.transfer.TransferCreationService;
@@ -19,12 +16,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,14 +27,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class FormServiceTest {
+public class LoginServiceTest {
 
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private FormService formService;
+    private LoginService loginService;
     @Autowired
     private UserReadService userReadService;
     @Autowired
@@ -86,16 +81,16 @@ public class FormServiceTest {
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(users)));
 
-        Requirement requirement = formService
+        Requirement requirement = loginService
                 .getRequirement("harry@jkr.com");
         requirement.setAmount(10000);
-        formService
+        loginService
                 .updateBalance(requirement, true);
 
-        requirement = formService
+        requirement = loginService
                 .getRequirement("ron@jkr.com");
         requirement.setAmount(1000);
-        formService
+        loginService
                 .updateBalance(requirement, true);
     }
 
@@ -103,7 +98,7 @@ public class FormServiceTest {
     void shouldGetBalance() {
 
         String expectedBalance = "10000,00";
-        String actualBalance = formService
+        String actualBalance = loginService
                 .getBalance("harry@jkr.com");
 
         assertEquals(expectedBalance, actualBalance);
@@ -115,18 +110,18 @@ public class FormServiceTest {
         double amount = 50;
 
         NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
-        Number balance = format.parse(formService
+        Number balance = format.parse(loginService
                 .getBalance("harry@jkr.com"));
         String expectedBalance = String.format("%.2f",
                 balance.doubleValue() - amount) ;
 
-        Requirement requirement = formService
+        Requirement requirement = loginService
                 .getRequirement("harry@jkr.com");
         requirement.setAmount(amount);
-        formService
+        loginService
                 .updateBalance(requirement, false);
 
-        String actualBalance = formService
+        String actualBalance = loginService
                 .getBalance("harry@jkr.com");
 
         assertEquals(expectedBalance, actualBalance);
@@ -136,18 +131,18 @@ public class FormServiceTest {
     void shouldCancelBalanceBack() throws ParseException {
 
         NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
-        Number balance = format.parse(formService
+        Number balance = format.parse(loginService
                 .getBalance("harry@jkr.com"));
         String expectedBalance = String.format("%.2f",
                 balance.doubleValue()) ;
 
-        Requirement requirement = formService
+        Requirement requirement = loginService
                 .getRequirement("harry@jkr.com");
         requirement.setAmount(0);
-        formService
+        loginService
                 .updateBalance(requirement, false);
 
-        String actualBalance = formService
+        String actualBalance = loginService
                 .getBalance("harry@jkr.com");
 
         assertEquals(expectedBalance, actualBalance);
@@ -159,7 +154,7 @@ public class FormServiceTest {
         Set<String> expectedFriendsList = new HashSet<>();
         expectedFriendsList.add("ron@jkr.com");
 
-        Set<String> actualFriendsList = formService
+        Set<String> actualFriendsList = loginService
                 .getFriendsList("harry@jkr.com");
 
         assertEquals(expectedFriendsList, actualFriendsList);
@@ -171,19 +166,19 @@ public class FormServiceTest {
         double amount = 200;
 
         NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
-        Number balance = format.parse(formService
+        Number balance = format.parse(loginService
                 .getBalance("harry@jkr.com"));
         String expectedBalance = String.format("%.2f",
                 balance.doubleValue() - amount - (amount * 0.05)) ;
 
-        Requirement requirement = formService.getRequirement("harry@jkr.com");
+        Requirement requirement = loginService.getRequirement("harry@jkr.com");
         requirement.setRecipient("ron@jkr.com");
         requirement.setAmount(amount);
         requirement.setDescription("Pour le cine.");
-        formService
+        loginService
                 .transferToFriend(requirement);
 
-        String actualBalance = formService
+        String actualBalance = loginService
                 .getBalance("harry@jkr.com");
 
         assertEquals(expectedBalance, actualBalance);
@@ -195,18 +190,18 @@ public class FormServiceTest {
         double amount = 0;
 
         NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
-        Number balance = format.parse(formService
+        Number balance = format.parse(loginService
                 .getBalance("harry@jkr.com"));
         String expectedBalance = String.format("%.2f",
                 balance.doubleValue()) ;
 
-        Requirement requirement = formService.getRequirement("harry@jkr.com");
+        Requirement requirement = loginService.getRequirement("harry@jkr.com");
         requirement.setRecipient("ron@jkr.com");
         requirement.setAmount(amount);
-        formService
+        loginService
                 .transferToFriend(requirement);
 
-        String actualBalance = formService
+        String actualBalance = loginService
                 .getBalance("harry@jkr.com");
 
         assertEquals(expectedBalance, actualBalance);
@@ -218,11 +213,11 @@ public class FormServiceTest {
         Set<String> expectedFriendsList = new HashSet<>();
         expectedFriendsList.add("ron@jkr.com");
 
-        Requirement requirement = formService.getRequirement("harry@jkr.com");
+        Requirement requirement = loginService.getRequirement("harry@jkr.com");
         requirement.setRecipient("ron@jkr.com");
-        formService.addFriend(requirement);
+        loginService.addFriend(requirement);
 
-        Set<String> actualFriendsList = formService
+        Set<String> actualFriendsList = loginService
                 .getFriendsList("harry@jkr.com");
 
         assertEquals(expectedFriendsList, actualFriendsList);

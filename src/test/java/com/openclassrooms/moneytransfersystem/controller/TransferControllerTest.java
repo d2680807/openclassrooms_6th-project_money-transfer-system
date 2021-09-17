@@ -58,7 +58,7 @@ public class TransferControllerTest {
         transfer.setDate(LocalDateTime.now());
         transfer.setType(TransferType.OUT);
         transfer.setAmount(50);
-        transfer.setTax(0.05);
+        transfer.setTax(0.005);
         transfer.setDescription("Remboursement pour le ciné.");
 
         mockMvc.perform(post("/createTransfer")
@@ -91,7 +91,7 @@ public class TransferControllerTest {
         transfer.setDate(LocalDateTime.now());
         transfer.setType(TransferType.OUT);
         transfer.setAmount(50);
-        transfer.setTax(0.05);
+        transfer.setTax(0.005);
         transfer.setDescription("Remboursement pour le ciné.");
 
         List<Transfer> transfers = new ArrayList<>();
@@ -121,7 +121,7 @@ public class TransferControllerTest {
         transfer.setDate(LocalDateTime.now());
         transfer.setType(TransferType.OUT);
         transfer.setAmount(50);
-        transfer.setTax(0.05);
+        transfer.setTax(0.005);
         transfer.setDescription("Remboursement pour le restaurant.");
 
         mockMvc.perform(put("/updateTransfer")

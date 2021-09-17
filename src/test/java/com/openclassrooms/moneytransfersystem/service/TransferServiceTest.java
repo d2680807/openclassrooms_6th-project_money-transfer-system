@@ -79,7 +79,7 @@ public class TransferServiceTest {
         transfer.setDate(LocalDateTime.of(2021, 12, 25, 00, 00, 00));
         transfer.setType(TransferType.OUT);
         transfer.setAmount(50);
-        transfer.setTax(0.05);
+        transfer.setTax(0.005);
         transfer.setDescription("Remboursement pour le cine.");
         transferRepository.save(transfer);
     }

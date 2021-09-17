@@ -5,7 +5,7 @@ import com.openclassrooms.moneytransfersystem.dao.TransferRepository;
 import com.openclassrooms.moneytransfersystem.model.*;
 import com.openclassrooms.moneytransfersystem.model.utility.ListElement;
 import com.openclassrooms.moneytransfersystem.model.utility.Requirement;
-import com.openclassrooms.moneytransfersystem.service.FormService;
+import com.openclassrooms.moneytransfersystem.service.login.LoginService;
 import com.openclassrooms.moneytransfersystem.service.user.UserCreationService;
 import com.openclassrooms.moneytransfersystem.service.user.UserReadService;
 import com.openclassrooms.moneytransfersystem.service.user.UserUpdateService;
@@ -37,7 +37,7 @@ public class LoginController {
     private TransferRepository transferRepository;
 
     @Autowired
-    private FormService formService;
+    private LoginService loginService;
 
     Logger logger = LogManager.getLogger(LoginController.class);
 
@@ -74,19 +74,19 @@ public class LoginController {
         String authenticationName = authentication.getName();
         logger.debug("[viewApplication] authentication: " + authenticationName);
 
-        String balance = formService.getBalance(authenticationName);
+        String balance = loginService.getBalance(authenticationName);
         model.addAttribute("balance", balance);
         logger.debug("[viewApplication] balance: " + balance);
 
-        Requirement requirement = formService.getRequirement(authenticationName);
+        Requirement requirement = loginService.getRequirement(authenticationName);
         model.addAttribute("requirement", requirement);
         logger.debug("[viewApplication] user id: " + requirement.getUserId());
 
-        Set<String> friendsList = formService.getFriendsList(authenticationName);
+        Set<String> friendsList = loginService.getFriendsList(authenticationName);
         model.addAttribute("friendsList", friendsList);
         logger.debug("[viewApplication] friendsList: " + friendsList);
 
-        List<ListElement> transfersList = formService.getTransfersList(authentication.getName());
+        List<ListElement> transfersList = loginService.getTransfersList(authentication.getName());
         model.addAttribute("transfersList", transfersList);
         logger.debug("[viewApplication] transfersList: " + friendsList);
 
@@ -100,7 +100,7 @@ public class LoginController {
 
         logger.debug("[processTopup] user id: " + requirement.getUserId());
         logger.debug("[processTopup] amount: " + requirement.getAmount());
-        formService.updateBalance(requirement, true);
+        loginService.updateBalance(requirement, true);
 
         return "index";
     }
@@ -110,7 +110,7 @@ public class LoginController {
 
         logger.debug("[processBalanceBack] user id: " + requirement.getUserId());
         logger.debug("[processBalanceBack] amount: " + requirement.getAmount());
-        formService.updateBalance(requirement, false);
+        loginService.updateBalance(requirement, false);
 
         return "index";
     }
@@ -120,7 +120,7 @@ public class LoginController {
 
         logger.debug("[processFriendship] user id: " + requirement.getUserId());
         logger.debug("[processFriendship] recipient: " + requirement.getRecipient());
-        formService.addFriend(requirement);
+        loginService.addFriend(requirement);
 
         return "index";
     }
@@ -132,7 +132,7 @@ public class LoginController {
         logger.debug("[processTransfer] recipient: " + requirement.getRecipient());
         logger.debug("[processTransfer] amount: " + requirement.getAmount());
         logger.debug("[processTransfer] description: " + requirement.getDescription());
-        formService.transferToFriend(requirement);
+        loginService.transferToFriend(requirement);
 
         return "index";
     }

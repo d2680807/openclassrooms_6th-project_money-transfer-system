@@ -26,7 +26,13 @@
 <details open="open">
 <summary id="summary">Table of Contents</summary>
   <ol>
-    <li><a href="#about-the-project">About The Project</a></li>
+    <li>
+        <a href="#about-the-project">About The Project</a>
+        <ul>
+            <li><a href="#documentation">Concept Models</a></li>
+            <li><a href="#prerequisites">Prerequisites</a></li>        
+        </ul>
+    </li>
     <li>
       <a href="#documentation">Documentation</a>
       <ul>
@@ -47,12 +53,41 @@
 
 <p id="about-the-project"></p>
 
+*Pay My Buddy* provides an online account where you can send money to your entourage or get paid by them. When you want to
+send money with *Pay My Buddy* it feels like the money is going straight into the recipient’s account ! 🎉
+
+### Concept Models
+
+#### Login Page
+
 [![Maquette 001][model-001]](#)
+
+#### Dashboard
 
 [![Maquette 002][model-002]](#)
 
-Pay My Buddy provides an online account where you can send money to your entourage or get paid by them. When you want to
-send money with Pay My Buddy it feels like the money is going straight into the recipient’s account ! 🎉
+<p id="prerequisites"></p>
+
+### Prerequisites
+
+#### Java Development Kit (JDK)
+
+- **Version:** 11.0.12
+
+#### MySQL
+
+- **Version:** 8.0.25
+- **Port (localhost):** 3306
+
+> If different port, replace it by your port in:
+> 
+> * `src/main/resourcesMapplication.properties`
+
+#### Integrated Development Environment (IDE)
+
+> Don't forget to add your  Data Source
+
+- Maven installation required for commands:`mvn site`/`mvn test`
 
 <!-- DOCUMENTATION -->
 
@@ -62,11 +97,11 @@ send money with Pay My Buddy it feels like the money is going straight into the 
 
 ### Business Domain Model
 
-[![Business Domain Model][doc-001]](#)
+[![Business Domain Model][doc-001]](https://github.com/s2680854/openclassrooms_6th-project_money-transfer-system/blob/develop/docs/data-model/1-functions.png)
 
 ### Physical Data Model
 
-[![Physical Data Model][doc-002]](#)
+[![Physical Data Model][doc-002]](https://github.com/s2680854/openclassrooms_6th-project_money-transfer-system/blob/develop/docs/data-model/2-data.png)
 
 <!-- ACKNOWLEDGEMENTS -->
 

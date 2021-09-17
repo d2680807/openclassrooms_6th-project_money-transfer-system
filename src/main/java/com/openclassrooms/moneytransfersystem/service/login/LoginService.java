@@ -1,4 +1,4 @@
-package com.openclassrooms.moneytransfersystem.service;
+package com.openclassrooms.moneytransfersystem.service.login;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,11 +11,13 @@ import com.openclassrooms.moneytransfersystem.model.User;
 import com.openclassrooms.moneytransfersystem.model.utility.ListElement;
 import com.openclassrooms.moneytransfersystem.model.utility.Requirement;
 import com.openclassrooms.moneytransfersystem.model.utility.TransferType;
+import com.openclassrooms.moneytransfersystem.service.JsonService;
 import com.openclassrooms.moneytransfersystem.service.user.UserUpdateService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.FetchType;
@@ -24,7 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
-public class FormService {
+public class LoginService {
 
     @Autowired
     private UserRepository userRepository;
@@ -46,6 +48,7 @@ public class FormService {
         return balance;
     }
 
+    @Transactional
     public void updateBalance(Requirement requirement, boolean isTopup) {
 
         if (requirement.getAmount() == 0) {
@@ -155,6 +158,7 @@ public class FormService {
         return transfersList;
     }
 
+    @Transactional
     public void transferToFriend(Requirement requirement) {
 
         logger.debug("[transferToFriend] use id: " + requirement.getUserId());
@@ -167,7 +171,7 @@ public class FormService {
         logger.debug("[transferToFriend] recipient: " + recipient);
         if (optionalUser.isPresent() && !Objects.isNull(recipient)) {
             double amount = requirement.getAmount();
-            if (optionalUser.get().getBalance() - (amount + (amount * 0.05))  < 0) {
+            if (optionalUser.get().getBalance() - (amount + (amount * 0.005))  < 0) {
 
                 return;
             } else {
@@ -211,6 +215,7 @@ public class FormService {
         }
     }
 
+    @Transactional
     public void addFriend(Requirement requirement) throws JsonProcessingException {
 
         Optional<User> optionalUser = userRepository.findById(requirement.getUserId());

@@ -40,7 +40,7 @@ public class TaxControllerTest {
 
         Tax tax = new Tax();
         tax.setName("Test");
-        tax.setRate(0.10);
+        tax.setRate(0.01);
 
         mockMvc.perform(post("/createTax")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
@@ -54,7 +54,7 @@ public class TaxControllerTest {
 
         Tax tax = new Tax();
         tax.setName("Test2");
-        tax.setRate(0.10);
+        tax.setRate(0.01);
 
         List<Tax> taxes = new ArrayList<>();
         taxes.add(tax);
@@ -73,7 +73,7 @@ public class TaxControllerTest {
 
         Tax tax = new Tax();
         tax.setName("DEFAULT");
-        tax.setRate(0.05);
+        tax.setRate(0.005);
         taxCreationService.createTax(tax);
 
         Long taxId = taxReadService.readTaxByName("DEFAULT").getId();
@@ -87,7 +87,7 @@ public class TaxControllerTest {
         Tax tax = new Tax();
         tax.setId(1L);
         tax.setName("DEFAULT");
-        tax.setRate(0.05);
+        tax.setRate(0.005);
 
         mockMvc.perform(put("/updateTax")
                         .contentType("application/json")
